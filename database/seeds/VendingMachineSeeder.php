@@ -59,7 +59,7 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_vending_machine' => '15000',
                 'capacity' => '5',
                 'stock' => '5',
-                'expired_date' => date('Y-m-d 18:00:00')
+                'expired_date' => date('Y-m-d') . ' 18:00:00'
             ],
             [
                 'vending_machine_id' => 1,
@@ -73,7 +73,7 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_vending_machine' => '15000',
                 'capacity' => '5',
                 'stock' => '5',
-                'expired_date' => date('Y-m-d 18:00:00')
+                'expired_date' => date('Y-m-d') . ' 18:00:00'
             ],
             [
                 'vending_machine_id' => 1,
@@ -87,7 +87,7 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_vending_machine' => '15000',
                 'capacity' => '5',
                 'stock' => '5',
-                'expired_date' => date('Y-m-d 18:00:00')
+                'expired_date' => date('Y-m-d') . ' 18:00:00'
             ],
             [
                 'vending_machine_id' => 1,
@@ -101,7 +101,7 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_vending_machine' => '15000',
                 'capacity' => '5',
                 'stock' => '5',
-                'expired_date' => date('Y-m-d 18:00:00')
+                'expired_date' => date('Y-m-d') . ' 18:00:00'
             ],
             
         );
@@ -121,7 +121,6 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_client' => '12000',
                 'stock' => '5',
                 'type' => 'stock_mutation',
-                'expired_date' => date('Y-m-d 18:00:00'),
                 'created_by' => 1
             ],
             [
@@ -133,7 +132,6 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_client' => '13000',
                 'stock' => '5',
                 'type' => 'stock_mutation',
-                'expired_date' => date('Y-m-d 18:00:00'),
                 'created_by' => 1
             ],
             [
@@ -145,7 +143,6 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_client' => '12000',
                 'stock' => '5',
                 'type' => 'stock_mutation',
-                'expired_date' => date('Y-m-d 18:00:00'),
                 'created_by' => 1
             ],
             [
@@ -157,7 +154,6 @@ class VendingMachineSeeder extends Seeder
                 'selling_price_client' => '12000',
                 'stock' => '5',
                 'type' => 'stock_mutation',
-                'expired_date' => date('Y-m-d 18:00:00'),
                 'created_by' => 1
             ],
         );
