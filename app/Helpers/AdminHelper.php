@@ -8,7 +8,7 @@ use App\Models\Item;
 use App\Models\PTPP;
 use App\Models\Client;
 use App\Models\Vendor;
-use App\Models\Periode;
+use App\Models\Customer;
 use App\Models\Category;
 use App\Models\PTPPFile;
 use App\Models\Inventory;
@@ -91,20 +91,21 @@ class AdminHelper
         return $user;
     }
 
-    public static function createCategory($request, $id='')
+    public static function createCustomer($request, $id='')
     {
         DB::beginTransaction();
-        $category = $id ? Category::findOrFail($id) : new Category;
-        $category->name = $request->input('name');
-        $category->type = $request->input('type');
+        $customer = $id ? Customer::findOrFail($id) : new Customer;
+        $customer->name = $request->input('name');
+        $customer->identity_type = $request->input('identity_type');
+        $customer->identity_number = $request->input('identity_number');
         try{
-            $category->save();
+            $customer->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
         
         DB::commit();
-        return $category;
+        return $customer;
     }
 
     public static function createItem($request, $id='')
