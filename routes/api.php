@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 // API
-Route::get('vendors', 'ApiController@getVendor');
+Route::get('clients', 'ApiController@getClient');
 Route::get('inventories', 'ApiController@getInventory');
 Route::get('items', 'ApiController@getItem');
 Route::get('item-maintenance-activity/{item_id}', 'ApiController@getItemMaintenanceActivity');

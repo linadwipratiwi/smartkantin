@@ -26,8 +26,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 
     Route::resource('client', 'ClientController');
     Route::resource('customer', 'CustomerController');
-    Route::resource('vending-machine', 'VendingMachineController');
-    Route::group(['vending-machine' => 'checklist'], function () {
+    Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
+    Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
         Route::post('slot', 'VendingMachineController@store');
     });
     

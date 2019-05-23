@@ -8,8 +8,8 @@ use App\Models\Item;
 use App\Models\PTPP;
 use App\Models\Client;
 use App\Models\Vendor;
-use App\Models\Customer;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\PTPPFile;
 use App\Models\Inventory;
 use App\Models\Submission;
@@ -19,6 +19,7 @@ use App\Helpers\AdminHelper;
 use App\Models\PTPPFollowUp;
 use Bican\Roles\Models\Role;
 use App\Models\SubmissionFile;
+use App\Models\VendingMachine;
 use App\Models\PTPPVerificator;
 use App\Exceptions\AppException;
 use App\Models\InventoryHistory;
@@ -108,30 +109,24 @@ class AdminHelper
         return $customer;
     }
 
-    public static function createItem($request, $id='')
+    public static function createVendingMachine($request, $id='')
     {
         DB::beginTransaction();
-        $item = $id ? Item::findOrFail($id) : new Item;
-        $item->name = $request->input('name');
-        $item->brand = $request->input('brand');
-        $item->type = $request->input('type');
-        $item->notes = $request->input('notes');
-        $item->production_year = $request->input('production_year');
-        $item->location_of_use = $request->input('location_of_use');
-
-        $file = $request->file('file');
-        if (isset($file)) {
-            $item->photo = FileHelper::upload($file, 'uploads/item/');
-        }
+        $vending_machine = $id ? VendingMachine::findOrFail($id) : new VendingMachine;
+        $vending_machine->name = $request->input('name');
+        $vending_machine->production_year = $request->input('production_year');
+        $vending_machine->location = $request->input('location');
+        $vending_machine->ip = $request->input('ip');
+        $vending_machine->client_id = $request->input('client_id');
 
         try {
-            $item->save();
+            $vending_machine->save();
         } catch (\Exception $e){
             throw new AppException("Failed to save data", 503);
         }
 
         DB::commit();
-        return $item;
+        return $vending_machine;
     }
 
     public static function createInventory($request, $id='')
