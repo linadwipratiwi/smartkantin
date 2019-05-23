@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use App\User;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\PTPP;
+use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Periode;
 use App\Models\Category;
@@ -15,6 +17,7 @@ use App\Helpers\FileHelper;
 use App\Models\Certificate;
 use App\Helpers\AdminHelper;
 use App\Models\PTPPFollowUp;
+use Bican\Roles\Models\Role;
 use App\Models\SubmissionFile;
 use App\Models\PTPPVerificator;
 use App\Exceptions\AppException;
@@ -38,36 +41,54 @@ class AdminHelper
         }
     }
 
-    public static function createVendor($request, $id='')
+    public static function createClient($request, $id='')
     {
+        if (!$id) {
+            $user = User::where('username', $request->username)->first();
+            if ($user) {
+                throw new AppException("Username ini sudah dipakai, silahkan pakai yang lain", 503);
+            }
+
+            $user = self::createUserFromClient($request);
+        }
+
         DB::beginTransaction();
-        $vendor = $id ? Vendor::findOrFail($id) : new Vendor;
-        $vendor->name = $request->input('name');
-        $vendor->pic = $request->input('pic');
-        $vendor->phone = $request->input('phone');
+        $client = $id ? Client::findOrFail($id) : new Client;
+        $client->name = $request->input('name');
+        $client->address = $request->input('address');
+        $client->company = $request->input('company');
+        $client->phone = $request->input('phone');
+        $client->user_id = $user->id;
         try{
-            $vendor->save();
+            $client->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
         
         DB::commit();
-        return $vendor;
+        return $client;
     }
 
-    public static function createPeriode($request, $id='')
+    public static function createUserFromClient($request)
     {
         DB::beginTransaction();
-        $periode = $id ? Periode::findOrFail($id) : new Periode;
-        $periode->name = $request->input('name');
+
+        $user = new User;
+        $user->name = $request->name;
+        $user->password = bcrypt($request->password);
+        $user->username = $request->username;
         try{
-            $periode->save();
-        } catch (\Exception $e) {
+            $user->save();
+        }catch (\Exception $e){
             throw new AppException("Failed to save data", 503);
         }
-        
+
+        // set role client
+        $user->attachRole(2);
+        $role = Role::find(2);
         DB::commit();
-        return $periode;
+        
+        return $user;
     }
 
     public static function createCategory($request, $id='')

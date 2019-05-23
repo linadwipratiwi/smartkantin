@@ -3,16 +3,16 @@
 @section('content')
     <!-- Title -->
     @include('backend._bread-crumb', [
-        'title' => 'Pengguna',
+        'title' => 'Client',
         'breadcrumbs' => [
             0 => [
-                'link' => url('dashboard'),
+                'link' => url('/'),
                 'label' => 'dashboard'
             ],
             1 => [
-                'link' => url('user'),
-                'label' => 'Pengguna'
-            ]
+                'link' => '#',
+                'label' => 'Client'
+            ],
         ]
     ])
     
@@ -25,7 +25,7 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <div class="dt-buttons">
-                            <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('user/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a>
+                            <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('client/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a>
                         </div>
                         <h6 class="panel-title txt-dark"></h6>
                     </div>
@@ -39,28 +39,20 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
+                                            <th>Client</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($users as $row => $user)
-                                        <?php if($user->id == 1 ) continue;?>
-                                        <tr id="tr-{{$user->id}}">
-                                            <td>{{$row++}}</td>
-                                            <td><a href="{{url('user/'.$user->id.'/'.$user->roleUser->role_id)}}">{{$user->name}}</a></td>
-                                            <td>{{$user->email}}</td>
-                                            <td>{{$user->roleUser->role->name}}</td>
+                                        @foreach($clients as $row => $client)
+                                        <tr id="tr-{{$client->id}}">
+                                            <td>{{$row + 1}}</td>
+                                            <td>{{$client->name}}</td>
                                             <td>
-                                                <a href="{{url('user/'.$user->id.'/'.$user->roleUser->role_id)}}" data-toggle="tooltip" data-original-title="Edit">
-                                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="fa fa-lock"></i></button>
-                                                </a>
-                                                <a href="{{url('user/'.$user->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
+                                                <a href="{{url('client/'.$client->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                                 </a>
-                                                <a onclick="secureDelete('{{url('user/'.$user->id)}}', '#tr-{{$user->id}}')" onclick="document.getElementById('form-delete-{{$user->id}}').submit();"  data-toggle="tooltip" data-original-title="Close">
+                                                <a onclick="secureDelete('{{url('client/'.$client->id)}}', '#tr-{{$client->id}}')" data-toggle="tooltip" data-original-title="Close">
                                                     <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
                                                 </a>
                                             </td>
