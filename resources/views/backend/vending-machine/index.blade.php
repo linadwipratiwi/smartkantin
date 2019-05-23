@@ -63,6 +63,9 @@
                                                 <a onclick="secureDelete('{{url('vending-machine/'.$vending_machine->id)}}', '#tr-{{$vending_machine->id}}')" data-toggle="tooltip" data-original-title="Close">
                                                     <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
                                                 </a>
+                                                <a onclick="showDetail('{{url("vending-machine/".$vending_machine->id."/slot")}}')" data-toggle="modal" data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
+                                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="fa fa-eye"></i></button>
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach

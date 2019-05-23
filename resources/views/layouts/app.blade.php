@@ -67,7 +67,7 @@
 		{{-- Modal From --}}
 		<div class="row">
 			<div class="modal fade detail-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-				<div class="modal-dialog modal-lg" id="modal-detail">
+				<div class="modal-dialog modal-lg" style="width:90% !important" id="modal-detail">
 		
 				</div>
 			</div>

@@ -13,4 +13,9 @@ class VendingMachine extends Model
     {
         return $this->belongsTo('App\Models\Client', 'client_id');
     }
+
+    public function slots()
+    {
+        return $this->hasMany('App\Models\VendingMachineSlot', 'vending_machine_id');
+    }
 }
