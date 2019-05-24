@@ -27,10 +27,10 @@ class CustomerSeeder extends Seeder
         $this->output->writeln('<info>--- Customer Seeder Started ---</info>');
         $data = array(
             [
-                'name' => 'Pringgo Juni S', 'identity_type' => 'KTP', 'identity_number' => '12345'
+                'name' => 'Pringgo Juni S', 'identity_type' => 'KTP', 'identity_number' => '12345', 'register_at_client_id' => 1, 'register_at_vending_machine_id' => 1
             ],
             [
-                'name' => 'Mugiwara No Luffy', 'identity_type' => 'KTP', 'identity_number' => '54321'
+                'name' => 'Mugiwara No Luffy', 'identity_type' => 'KTP', 'identity_number' => '54321', 'register_at_client_id' => 1, 'register_at_vending_machine_id' => 1
             ]
         );
         

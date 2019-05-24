@@ -42,6 +42,7 @@
                                             <th>Nama</th>
                                             <th>Identity Type</th>
                                             <th>Identity Number</th>
+                                            <th>Daftar</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
