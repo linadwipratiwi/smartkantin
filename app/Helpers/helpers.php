@@ -219,6 +219,17 @@ if (! function_exists('format_quantity')) {
     }
 }
 
+if (! function_exists('format_db')) {
+    /**
+     * @param $value
+     * @return string
+     */
+    function format_db($value)
+    {
+        return NumberHelper::formatDB($value);
+    }
+}
+
 /**
  * Date Helper
  */

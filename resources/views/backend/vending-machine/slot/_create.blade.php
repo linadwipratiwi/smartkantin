@@ -1,4 +1,3 @@
-
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -13,53 +12,27 @@
                     <input type='text' name="name" id="name" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('alias', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
+                    <label class="control-label mb-10">{!! label('alias', 'alias') !!}</label>
+                    <input type='text' name="alias" id="alias" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
+                    <label class="control-label mb-10">{!! label('makanan', 'food name') !!}</label>
+                    <input type='text' name="food_name" id="food_name" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
+                    <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
+                    <input type='text' name="profit_platform" id="profit_platform" required class="form-control format-price" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label class="control-label mb-10 text-left">{!! label('Kategori', 'Category') !!}</label>
-                    <select name="category_id" id="" required class="form-control">
-                        <option disabled selected>Pilih satu</option>
-                        @foreach ($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label mb-10 text-left">{!! label('periode', 'period') !!}</label>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="number" max="12" min="1" name="periode_value" class="form-control" placeholder="Misal. 1">
+                    <div class="form-group">
+                        <label class="control-label mb-10">{!! label('tanggal exp', 'expired date') !!}</label>
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type='text' name="expired_date" value="{{date('Y-m-d H:i:s')}}" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="fa fa-calendar"></span>
+                            </span>
                         </div>
-                        <span class="col-md-6">
-                            <select name="periode_id" id="" required class="form-control">
-                                @foreach ($periodes as $periode)
-                                    <option value="{{$periode->id}}">{{$periode->name}}</option>
-                                @endforeach
-                            </select>
-                        </span>
                     </div>
-                    
                 </div>
             </form>
         </div>
@@ -73,15 +46,20 @@
 </div>
 
 <script>
-
+    // init format number    
+    initFormatNumber();
+    // init datepicker
+    initDatetime('#datetimepicker1');
+    
     function store() {
         var data = $( '#form-item-maintenance-activity' ).serialize();
         $.ajax({
-            url: '{{url("master/item/maintenance-activity")}}',
+            url: '{{url("vending-machine/".$vending_machine->id."/slot")}}',
             method: 'POST',
             data: data,
             success: function(res) {
                 $("#modal-detail").html(res);
+                notification('Success');
             },
             error: function(res) {
                 swal('Opps, something went wrong. Please try again');

@@ -25,6 +25,7 @@ use App\Exceptions\AppException;
 use App\Models\InventoryHistory;
 use App\Models\PTPPFollowUpFile;
 use App\Models\PTPPFollowUpDetail;
+use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Models\MaintenanceActivity;
 use App\Models\ItemMaintenanceActivity;
@@ -122,6 +123,28 @@ class AdminHelper
         try {
             $vending_machine->save();
         } catch (\Exception $e){
+            throw new AppException("Failed to save data", 503);
+        }
+
+        DB::commit();
+        return $vending_machine;
+    }
+
+    public static function createVendingMachineSlot($request, $id='')
+    {
+        DB::beginTransaction();
+        $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
+        $vending_machine->name = $request->input('name');
+        $vending_machine->vending_machine_id = $request->input('vending_machine_id');
+        $vending_machine->alias = $request->input('alias');
+        $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->profit_platform = format_db($request->input('profit_platform'));
+        $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
+
+        try {
+            $vending_machine->save();
+        } catch (\Exception $e){
+            info($e);
             throw new AppException("Failed to save data", 503);
         }
 

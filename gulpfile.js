@@ -66,6 +66,8 @@ elixir((mix) => {
         '../dist/js/form-picker-data.js',
         '../dist/js/init.js',
         // '../dist/js/dashboard-data.js',
+        'autoNumeric.js',
+        'autoNumeric-function.js',
         'function.js',
 
     ], 'public/js');
