@@ -4,24 +4,21 @@ namespace App\Http\Controllers\Backend;
 
 use App\User;
 use Carbon\Carbon;
-use App\Models\Item;
-use App\Models\PTPP;
-use App\Models\Vendor;
-use App\Models\PTPPFollowUp;
-use App\Models\Submission;
-use App\Models\Certificate;
-use App\Models\PTPPVerificator;
+use App\Models\Client;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\MaintenanceActivity;
+use App\Models\VendingMachine;
 use App\Http\Controllers\Controller;
-use App\Models\MaintenanceActivityHistory;
 
 class BackendController extends Controller
 {
     public function index(Request $request)
     {
         $view = view('backend.dashboard.index');
-        
+        $view->total_client = Client::count();
+        $view->total_customer = Customer::count();
+        $view->total_vending_machine = VendingMachine::count();
+        $view->total_user = User::count();
         return $view;
     }
 }

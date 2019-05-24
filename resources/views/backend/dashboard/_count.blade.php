@@ -8,7 +8,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
-                                    <span class="txt-light block counter"><span class="counter-anim">12</span></span>
+                                    <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_client)}}</span></span>
                                     <span class="weight-500 uppercase-font txt-light block font-13">Client</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
@@ -31,7 +31,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
-                                    <span class="txt-light block counter"><span class="counter-anim">12</span></span>
+                                    <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_customer)}}</span></span>
                                     <span class="weight-500 uppercase-font txt-light block">Customer</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
@@ -55,11 +55,11 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
-                                    <span class="txt-light block counter"><span class="counter-anim">12</span></span>
+                                    <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_vending_machine)}}</span></span>
                                     <span class="weight-500 uppercase-font txt-light block">Vending Machine</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
-                                    <i class="fa fa-first-order txt-light data-right-rep-icon"></i>
+                                    <i class="fa fa-cubes txt-light data-right-rep-icon"></i>
                                 </div>
                             </div>	
                         </div>
@@ -79,11 +79,11 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
-                                    <span class="txt-light block counter"><span class="counter-anim">12</span></span>
+                                    <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_user)}}</span></span>
                                     <span class="weight-500 uppercase-font txt-light block">User</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 pt-25  data-wrap-right">
-                                    <i class="fa fa-hashtag txt-light data-right-rep-icon"></i>
+                                    <i class="fa fa-user txt-light data-right-rep-icon"></i>
                                 </div>
                             </div>	
                         </div>
