@@ -31,10 +31,6 @@
                                     <input type="text" class="form-control" value="" name="name" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">Position</label>
-                                    <input type="text" class="form-control" name="position">
-                                </div>
-                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">Email</label>
                                     <input type="email" class="form-control" value="" name="email" required>
                                 </div>
