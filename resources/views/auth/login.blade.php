@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>EPM Activity ​</title>
+		<title>Smart Canteen ​</title>
 		<meta name="description" content="Selamat datang di Website resmi Smart Canteen" />
 		<meta name="keywords" content="Smart Canteen" />
 		<meta name="author" content="Pringgo Juni Saputro | odyinggo@gmail.com"/>
