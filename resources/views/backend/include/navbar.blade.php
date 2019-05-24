@@ -1,10 +1,9 @@
-use App\Helpers\FileHelper;
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="mobile-only-brand pull-left">
 				<div class="nav-header pull-left">
 					<div class="logo-wrap">
 						<a href="{{url('/')}}">
-							<img class="brand-img" style="height:30px; width: auto" src="{{asset('dist/img/pertamina.png')}}" alt="brand"/>
+							<img class="brand-img" style="height:30px; width: auto" src="{{asset('dist/img/vending-navbar.png')}}" alt="brand"/>
 							<span class="brand-text"></span>
 						</a>
 					</div>

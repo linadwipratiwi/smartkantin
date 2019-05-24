@@ -25,7 +25,7 @@
 			<header class="sp-header">
 				<div class="sp-logo-wrap pull-left">
 					<a href="index.html">
-						<img class="brand-img mr-10" style="height:50px; width: auto" src="{{asset('dist/img/pertamina.png')}}" alt="brand"/>
+						<img class="brand-img mr-10" style="height:250px; width: auto" src="{{asset('dist/img/vending.png')}}" alt="brand"/>
 						<span class="brand-text"></span>
 					</a>
 				</div>
@@ -43,7 +43,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xs-12">
 										<div class="mb-30">
-											<h3 class="text-center txt-dark mb-10">Sign in to <br> <strong>EPM Activity</strong></h3>
+											<h3 class="text-center txt-dark mb-10">Sign in to <br> <strong>SMART CANTEEN</strong></h3>
 										</div>	
 										<div class="form-wrap">
                                             <form role="form" method="POST" action="{{ url('/login') }}">
