@@ -25,7 +25,7 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <div class="dt-buttons">
-                            <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('customer/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a>
+                            {{-- <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('customer/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a> --}}
                         </div>
                         <h6 class="panel-title txt-dark"></h6>
                     </div>
