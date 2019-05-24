@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>EPM Activity ​</title>
-	<meta name="description" content="Selamat datang di Website resmi EPM Activity Pertamina Depot Tanjung Perak Surabaya" />
-	<meta name="keywords" content="EPM Activity Pertamina" />
+	<meta name="description" content="Selamat datang di Website resmi Smart Canteen" />
+	<meta name="keywords" content="Smart Canteen" />
 	<meta name="author" content="Pringgo Juni Saputro | odyinggo@gmail.com"/>
 	
 	<!-- Favicon -->
