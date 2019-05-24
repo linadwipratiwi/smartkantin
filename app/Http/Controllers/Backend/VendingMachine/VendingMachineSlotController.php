@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\VendingMachine;
 use Illuminate\Http\Request;
 use App\Helpers\AdminHelper;
 use App\Models\VendingMachine;
+use App\Models\VendingMachineSlot;
 use App\Http\Controllers\Controller;
 
 class VendingMachineSlotController extends Controller
@@ -45,28 +46,29 @@ class VendingMachineSlotController extends Controller
         return $view;
     }
 
-    public function edit($id)
+    public function edit($vending_machine_id, $id)
     {
-        $view = view('backend.vending-machine.edit');
-        $view->vending_machine = VendingMachine::findOrFail($id);
+        $view = view('backend.vending-machine.slot._edit');
+        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        $view->vending_machine_slot = VendingMachineSlot::findOrFail($id);
 
         return $view;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $vending_machine_id)
     {
         $validator = \Validator::make($request->all(), [
             'name' => 'required'
         ]);
 
-        AdminHelper::createVendingMachineSlot($request, $id);
+        AdminHelper::createVendingMachineSlot($request);
         toaster_success('create form success');
         return redirect('vending-machine');
     }
 
-    public function destroy($id)
+    public function destroy($vending_machine_id, $id)
     {
-        $vending_machine = VendingMachine::findOrFail($id);
+        $vending_machine = VendingMachineSlot::findOrFail($id);
         // remove client
         $delete = AdminHelper::delete($vending_machine);
         

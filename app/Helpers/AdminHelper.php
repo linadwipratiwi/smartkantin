@@ -130,9 +130,10 @@ class AdminHelper
         return $vending_machine;
     }
 
-    public static function createVendingMachineSlot($request, $id='')
+    public static function createVendingMachineSlot($request)
     {
         DB::beginTransaction();
+        $id = $request->vending_machine_slot_id;
         $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
         $vending_machine->name = $request->input('name');
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');

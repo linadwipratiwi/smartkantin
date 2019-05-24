@@ -30,10 +30,10 @@
                                 <tr id="tr-slot-{{$slot->id}}">
                                     <td class="">{{++$i}}</td>
                                     <td>
-                                        <a  onclick="showDetail('{{url("vending-machine/slot/".$slot->id)}}')"data-toggle="tooltip" data-original-title="Edit">
+                                        <a  onclick="showDetail('{{url("vending-machine/".$vending_machine->id."/slot/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                         </a>
-                                        <a onclick="secureDelete('{{url('vending-machine/slot/'.$slot->id)}}', '#tr-slot-{{$slot->id}}')" data-toggle="tooltip" data-original-title="Delete"> 
+                                        <a onclick="secureDelete('{{url('vending-machine/".$vending_machine->id."/slot/'.$slot->id)}}', '#tr-slot-{{$slot->id}}')" data-toggle="tooltip" data-original-title="Delete"> 
                                             <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
                                         </a>
                                     </td>

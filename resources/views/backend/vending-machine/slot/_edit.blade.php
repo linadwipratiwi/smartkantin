@@ -6,29 +6,29 @@
         <div class="col-lg-12" id="form-item">
             <form id="form-item-maintenance-activity">
                 {!! csrf_field() !!}
-                <input type="hidden" id="vending_machine_slot_id" name="vending_machine_slot_id" value="">
+                <input type="hidden" id="vending_machine_slot_id" name="vending_machine_slot_id" value="{{$vending_machine_slot->id}}">
                 <input type="hidden" id="vending_machine_id" name="vending_machine_id" value="{{$vending_machine->id}}">
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('nama', 'name') !!}</label>
-                    <input type='text' name="name" id="name" required class="form-control" />
+                    <input type='text' name="name" id="name" required class="form-control" value="{{$vending_machine_slot->name}}" />
                 </div>
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('alias', 'alias') !!}</label>
-                    <input type='text' name="alias" id="alias" required class="form-control" />
+                    <input type='text' name="alias" id="alias" required class="form-control" value="{{$vending_machine_slot->alias}}"/>
                 </div>
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('makanan', 'food name') !!}</label>
-                    <input type='text' name="food_name" id="food_name" required class="form-control" />
+                    <input type='text' name="food_name" id="food_name" required class="form-control" value="{{$vending_machine_slot->food_name}}"/>
                 </div>
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
-                    <input type='text' name="profit_platform" id="profit_platform" required class="form-control format-price" />
+                    <input type='text' name="profit_platform" id="profit_platform" required class="form-control format-price" value="{{$vending_machine_slot->profit_platform}}" />
                 </div>
                 <div class="form-group mt-20 ">
                     <div class="form-group">
                         <label class="control-label mb-10">{!! label('tanggal exp', 'expired date') !!}</label>
                         <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' name="expired_date" value="{{date('Y-m-d H:i:s')}}" class="form-control" />
+                            <input type='text' name="expired_date" value="{{date('m-d-Y a', strtotime($vending_machine_slot->expired_date))}}" class="form-control" />
                             <span class="input-group-addon">
                                 <span class="fa fa-calendar"></span>
                             </span>
