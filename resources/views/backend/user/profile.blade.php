@@ -31,10 +31,6 @@
                                     <input type="text" class="form-control" value="{{$user->name}}" name="name" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">Position</label>
-                                    <input type="text" class="form-control" value="{{$user->position}}" name="position">
-                                </div>
-                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">Email</label>
                                     <input type="email" class="form-control" value="{{$user->email}}" name="email" required>
                                 </div>
