@@ -18,4 +18,9 @@ class VendingMachine extends Model
     {
         return $this->hasMany('App\Models\VendingMachineSlot', 'vending_machine_id');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany('App\Models\StockMutation', 'vending_machine_id')->orderBy('created_at', 'desc');
+    }
 }

@@ -122,6 +122,9 @@ function showDetail(url) {
     });
 }
 
+function initSelect2(el) {
+    $(el).select2();
+}
 function initItemSelect2(el, url) {
     $(el).select2({
         placeholder: 'Cari berdasarkan nama item ...',
