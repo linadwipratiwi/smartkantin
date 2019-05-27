@@ -41,7 +41,7 @@
 			<header class="sp-header">
 				<div class="sp-logo-wrap pull-left">
 					<a href="index.html">
-						<img class="brand-img mr-10" style="height:250px; width: auto" src="{{asset('dist/img/vending.png')}}" alt="brand"/>
+						<img class="brand-img mr-10" style="height:50px; width: auto" src="{{asset('dist/img/vending-navbar.png')}}" alt="brand"/>
 						<span class="brand-text"></span>
 					</a>
 				</div>
