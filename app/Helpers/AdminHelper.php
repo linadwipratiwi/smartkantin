@@ -176,6 +176,32 @@ class AdminHelper
         return $vending_machine;
     }
 
+    /**
+     * Client
+     */
+    public static function createVendingMachineSlotByClient($request)
+    {
+        DB::beginTransaction();
+        $id = $request->vending_machine_slot_id;
+        $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
+        $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->hpp = format_db($request->input('hpp'));
+        $vending_machine->selling_price_client = format_db($request->input('selling_price_client'));
+        $vending_machine->profit_client = $vending_machine->selling_price_client - $vending_machine->hpp;
+        $vending_machine->selling_price_vending_machine = format_db($request->input('selling_price_vending_machine'));
+        $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
+
+        try {
+            $vending_machine->save();
+        } catch (\Exception $e){
+            info($e);
+            throw new AppException("Failed to save data", 503);
+        }
+
+        DB::commit();
+        return $vending_machine;
+    }
+
     public static function createInventory($request, $id='')
     {
         DB::beginTransaction();

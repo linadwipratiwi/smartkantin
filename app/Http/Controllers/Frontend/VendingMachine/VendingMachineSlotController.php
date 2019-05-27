@@ -27,18 +27,8 @@ class VendingMachineSlotController extends Controller
 
     public function store(Request $request, $vending_machine_id)
     {
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            toaster_error('create form failed');
-            return redirect('vending-machine/create')->withErrors($validator)
-                ->withInput();
-        }
-
         // store
-        AdminHelper::createVendingMachineSlot($request);
+        AdminHelper::createVendingMachineSlotByClient($request);
 
         // show index
         $view = view('frontend.vending-machine.slot._index');
@@ -55,17 +45,6 @@ class VendingMachineSlotController extends Controller
         return $view;
     }
 
-    public function update(Request $request, $vending_machine_id)
-    {
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        AdminHelper::createVendingMachineSlot($request);
-        toaster_success('create form success');
-        return redirect('vending-machine');
-    }
-
     public function destroy($vending_machine_id, $id)
     {
         $vending_machine = VendingMachineSlot::findOrFail($id);
@@ -73,6 +52,6 @@ class VendingMachineSlotController extends Controller
         $delete = AdminHelper::delete($vending_machine);
         
         toaster_success('delete form success');
-        return redirect('vending-machine');
+        return redirect('front/vending-machine');
     }
 }

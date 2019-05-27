@@ -11,8 +11,8 @@ class VendingMachineController extends Controller
 {
     public function index(Request $request)
     {
-        $view = view('frontend.vending-machine.index');
-        $view->vending_machines = VendingMachine::paginate(25);
+        $view = view('frontend.vending-machine.card');
+        $view->vending_machines = VendingMachine::clientId(client()->id)->paginate(25);
         return $view;
     }
 
