@@ -3,7 +3,7 @@
 @section('content')
     <!-- Title -->
     @include('backend._bread-crumb', [
-        'title' => 'Pengguna',
+        'title' => 'User',
         'breadcrumbs' => [
             0 => [
                 'link' => url('dashboard'),
@@ -11,7 +11,7 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Ubah Pengguna'
+                'label' => 'Update Profile'
             ],
         ]
     ])
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">Email</label>
-                                    <input type="email" class="form-control" value="{{$user->email}}" name="email" required>
+                                    <input type="email" class="form-control" value="{{$user->email}}" name="email">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">Username </label>
