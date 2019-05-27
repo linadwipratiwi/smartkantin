@@ -3,7 +3,8 @@
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
             <p>List mutasi stok vending machine</p>
-            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" href="{{url("vending-machine/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-file-text"></i> </span><span class="btn-text">Download Laporan</span></a>
+            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" href="{{url("front/vending-machine/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-file-text"></i> </span><span class="btn-text">Download Laporan</span></a> 
+            <a class="btn btn-primary btn-sm btn-lable-wrap left-label pull-right mr-5" onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/stock/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Buat Baru</span></a> 
         </div>
         <div class="col-lg-12">
             <div class="modal-body">

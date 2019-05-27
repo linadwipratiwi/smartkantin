@@ -34,18 +34,8 @@ class StockMutationController extends Controller
 
     public function store(Request $request, $vending_machine_id)
     {
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            toaster_error('create form failed');
-            return redirect('vending-machine/create')->withErrors($validator)
-                ->withInput();
-        }
-
         // store
-        AdminHelper::createVendingMachineStock($request);
+        AdminHelper::createVendingMachineStockByClient($request);
 
         // show index
         $view = view('frontend.vending-machine.stock._index');
@@ -64,13 +54,14 @@ class StockMutationController extends Controller
 
     public function update(Request $request, $vending_machine_id)
     {
-        $validator = \Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
+        // store
+        AdminHelper::createVendingMachineStockByClient($request);
 
-        AdminHelper::createVendingMachineStock($request);
-        toaster_success('create form success');
-        return redirect('vending-machine');
+        // show index
+        $view = view('frontend.vending-machine.stock._index');
+        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+
+        return $view;
     }
 
     public function destroy($vending_machine_id, $id)

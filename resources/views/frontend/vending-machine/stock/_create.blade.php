@@ -5,9 +5,9 @@
         </div>
         <div class="col-lg-12" id="form-item">
             <form id="form-item-maintenance-activity">
-                <div class="alert alert-warning alert-dismissable mt-20" id="alert">
+                {{-- <div class="alert alert-warning alert-dismissable mt-20" id="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Hi! Lasttwo days left form the trial.
-                </div>
+                </div> --}}
                 {!! csrf_field() !!}
                 <input type="hidden" id="vending_machine_stock_id" name="vending_machine_stock_id" value="">
                 <input type="hidden" id="vending_machine_id" name="vending_machine_id" value="{{$vending_machine->id}}">
@@ -47,11 +47,39 @@
     initFormatNumber();
     // init datepicker
     initSelect2('#slot-id');
-    var current_stock = 0;    
+    var current_stock = 0;   
+    var capacity = 0; 
     function store() {
+        // validate
+        var slot = $('#slot-id :selected').val();
+        if (slot == '') {
+            notification('Error, slot harus diisi');
+            return false;
+        }
+        
+        var stock = parseInt($('#stock').val());
+        if (stock == '') {
+            notification('Error, stok harus diisi');
+            return false;
+        }
+        
+        if (stock < 1) {
+            var x_stock = stock + current_stock;
+            console.log(x_stock);
+            if ((stock + current_stock) < 0) {
+                notification('Error, jumlah stok yang anda masukan melebihi batas');
+                return false;
+            }
+        }
+        
+        if ((stock + current_stock) > capacity) {
+            notification('Error, jumlah stok yang anda masukan melebihi batas');
+            return false;
+        }
+
         var data = $( '#form-item-maintenance-activity' ).serialize();
         $.ajax({
-            url: '{{url("vending-machine/".$vending_machine->id."/stock")}}',
+            url: '{{url("front/vending-machine/".$vending_machine->id."/stock")}}',
             method: 'POST',
             data: data,
             success: function(res) {
@@ -67,11 +95,14 @@
     /** Get Stok **/
     function getStock(id) {
         $.ajax({
-            url: '{{url("vending-machine/".$vending_machine->id."/stock")}}/'+id,
+            url: '{{url("front/vending-machine/".$vending_machine->id."/stock")}}/'+id,
             method: 'get',
             success: function(res) {
-                console.log(res)
+                console.log(res);
                 current_stock = res.stock;
+                capacity = res.capacity;
+                console.log(current_stock);
+                console.log(capacity);
                 var info = 'Stok sekarang '+res.stock+' item';
                 $('#info-stock').html(info);
             },

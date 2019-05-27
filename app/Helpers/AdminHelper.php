@@ -27,7 +27,7 @@ use App\Models\PTPPFollowUpFile;
 use App\Models\PTPPFollowUpDetail;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
-use App\Models\MaintenanceActivity;
+use App\Models\StockMutation;
 use App\Models\ItemMaintenanceActivity;
 use App\Models\MaintenanceActivityHistory;
 
@@ -200,6 +200,36 @@ class AdminHelper
 
         DB::commit();
         return $vending_machine;
+    }
+
+    public static function createVendingMachineStockByClient($request)
+    {
+        $vending_machine_slot = VendingMachineSlot::findOrFail($request->input('slot_id'));
+
+        DB::beginTransaction();
+        $id = $request->vending_machine_stock_id;
+        $stock_mutation = $id ? StockMutation::findOrFail($id) : new StockMutation;
+        $stock_mutation->vending_machine_id = $request->input('vending_machine_id');
+        $stock_mutation->vending_machine_slot_id = $request->input('slot_id');
+        $stock_mutation->stock = $request->input('stock');
+        $stock_mutation->type = 'stock_mutation';
+        $stock_mutation->food_name = $vending_machine_slot->food_name;
+        $stock_mutation->hpp = $vending_machine_slot->hpp;
+        $stock_mutation->selling_price_client = $vending_machine_slot->selling_price_client;
+        $stock_mutation->created_by = auth()->user()->id;
+
+        $vending_machine_slot->stock = $vending_machine_slot->stock + $stock_mutation->stock;
+        $vending_machine_slot->save();
+        
+        try {
+            $stock_mutation->save();
+        } catch (\Exception $e){
+            info($e);
+            throw new AppException("Failed to save data", 503);
+        }
+
+        DB::commit();
+        return $stock_mutation;
     }
 
     public static function createInventory($request, $id='')
