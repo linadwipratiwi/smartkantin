@@ -35,6 +35,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     
     // Setting
     Route::resource('setting', 'SettingController');
+    Route::get('report', 'ReportController');
 
     // User
     Route::post('profile', 'UserController@updateProfile');
@@ -43,7 +44,6 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::group(['prefix' => 'user'], function () {
         Route::get('set-permission', 'UserController@setPermission');
         Route::get('{user_id}/{role_id}', 'UserController@permission');
-        
     });
 
 });
