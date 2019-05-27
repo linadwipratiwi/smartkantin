@@ -26,6 +26,7 @@ class UserController extends Controller
         $view = view('backend.user.create');
         $view->roles =  Role::all();
         $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu' )
+            ->select('users.*')
             ->groupBy('type')
             ->orderBy('type')
             ->get();

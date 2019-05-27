@@ -67,7 +67,7 @@ class UserSeeder extends Seeder
         $user->email = null;
         $user->password = bcrypt('ydfs');
         $user->save();
-        $user->attachRole(1);
+        $user->attachRole(2);
 
         $this->output->writeln('<info>--- User Seeder Finished ---</info>');
     }
