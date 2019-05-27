@@ -7,7 +7,7 @@
 					<i class="zmdi zmdi-more"></i>
 				</li>
 				<li>
-					<a @if(\Request::segment(1) == '') class="active" @endif  href="{{url('/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Beranda</span></div><div class="clearfix"></div></a>
+					<a @if(\Request::segment(1) == '') class="active" @endif  href="{{url('/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="clearfix"></div></a>
 				</li>
 				
 				<li>
