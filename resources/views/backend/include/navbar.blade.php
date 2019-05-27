@@ -22,7 +22,6 @@
 			</div>
 			<div id="mobile_only_nav" class="mobile-only-nav pull-right">
 				<ul class="nav navbar-right top-nav pull-right">
-					@role('administrator')
 					
 					<li class="dropdown auth-drp">
 						<a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown" aria-expanded="true"><img src="{{auth()->user()->photo ? asset(auth()->user()->photo) : asset('dist/img/user1.png')}}" alt="user_auth" class="user-auth-img img-circle"><span class="user-online-status"></span></a>
@@ -37,7 +36,6 @@
 							</li>
 						</ul>
 					</li>
-					@endrole
 
 				</ul>
 			</div>	

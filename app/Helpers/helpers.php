@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Client;
 use App\Models\Setting;
 use App\Helpers\AccessHelper;
 use App\Helpers\ToasterHelper;
@@ -244,3 +245,17 @@ if (! function_exists('date_format_view')) {
         return DateHelper::formatView($date, $time);
     }
 }
+
+
+
+if (! function_exists('client')) {
+    /**
+     * @return object
+     */
+    function client()
+    {
+        return Client::where('user_id', auth()->user()->id)->first();
+    }
+}
+
+

@@ -56,4 +56,38 @@
 				
 			</ul>
 			@endrole
+
+			@role('client')
+			<ul class="nav navbar-nav side-nav nicescroll-bar">
+				<li class="navigation-header">
+					<span>Main</span> 
+					<i class="zmdi zmdi-more"></i>
+				</li>
+				<li>
+					<a @if((\Request::segment(2) == '') && (\Request::segment(1) != 'profile')) class="active" @endif  href="{{url('front/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
+					<a @if(\Request::segment(2) == 'customer') class="active" @endif href="{{ url('front/customer') }}"><div class="pull-left"><i class="fa fa-support mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
+					<a @if(\Request::segment(2) == 'vending-machine') class="active" @endif href="{{ url('front/vending-machine') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
+					<a @if(\Request::segment(2) == 'report') class="active" @endif href="{{ url('front/report') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="clearfix"></div></a>
+				</li>
+				
+				<li><hr class="light-grey-hr mb-10"/></li>
+				<li class="navigation-header">
+					<span>Account</span> 
+					<i class="zmdi zmdi-more"></i>
+				</li>
+				<li>
+					<a @if(\Request::segment(1) == 'profile') class="active" @endif href="{{url('profile')}}"><div class="pull-left"><i class="fa fa-user  mr-20"></i><span class="right-nav-text">Profile </span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
+					<a href="{{url('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" data-toggle="collapse" data-target="#ui_dr"><div class="pull-left"><i class="fa fa-lock mr-20"></i><span class="right-nav-text">Logout</span></div><div class="clearfix"></div></a>
+				</li>
+				
+			</ul>
+			@endrole
         </div>

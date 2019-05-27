@@ -18,4 +18,9 @@ class Customer extends Model
     {
         return $this->belongsTo('App\Models\VendingMachine', 'register_at_vending_machine_id');
     }
+
+    public function scopeClientId($q, $client_id)
+    {
+        $q->where('register_at_client_id', $client_id);
+    }
 }

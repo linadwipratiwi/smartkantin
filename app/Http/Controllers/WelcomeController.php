@@ -11,5 +11,7 @@ class WelcomeController extends Controller
         if (auth()->user()->isRole('administrator')) {
             return redirect('/');
         }
+
+        return redirect('front');
     }
 }

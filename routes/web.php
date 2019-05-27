@@ -18,6 +18,8 @@ Route::get('camera', 'CameraController@camera');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/check-user', 'WelcomeController@checkUser');
+    Route::post('profile', 'Backend\UserController@updateProfile');
+    Route::get('profile', 'Backend\UserController@profile');
 });
 
 // Full Administrator
@@ -38,8 +40,6 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::get('report', 'ReportController@index');
 
     // User
-    Route::post('profile', 'UserController@updateProfile');
-    Route::get('profile', 'UserController@profile');
     Route::resource('user', 'UserController', ['except' => ['show']]);
     Route::group(['prefix' => 'user'], function () {
         Route::get('set-permission', 'UserController@setPermission');
@@ -48,5 +48,21 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 
 });
 
+// Client
+Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
+    Route::get('/', 'FrontendController@index');
+
+    Route::get('customer/download', 'CustomerController@download');
+    Route::resource('customer', 'CustomerController');
+    Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
+    Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
+        Route::resource('{id}/slot', 'VendingMachineSlotController');
+        Route::get('{id}/stock/export', 'StockMutationController@export');
+        Route::resource('{id}/stock', 'StockMutationController');
+    });
+    
+    // Setting
+    Route::get('report', 'ReportController@index');
+});
 
 Auth::routes();
