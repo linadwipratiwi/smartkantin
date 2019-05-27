@@ -173,7 +173,6 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->username = $request->username;
-        $user->position = $request->position;
         $file = $request->file('file');
         if (isset($file)) {
             $user->photo = FileHelper::upload($file, 'uploads/users/');
