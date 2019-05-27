@@ -14,6 +14,11 @@ class Client extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function vendingMachines()
+    {
+        return $this->hasMany('App\Models\VendingMachine', 'client_id');
+    }
+
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');

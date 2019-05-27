@@ -17,15 +17,15 @@
 					<a @if(\Request::segment(1) == 'customer') class="active" @endif href="{{ url('customer') }}"><div class="pull-left"><i class="fa fa-support mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
-					<a @if(\Request::segment(1) == 'vending-machine') class="active" @endif href="javascript:void(0);" data-toggle="collapse" data-target="#menu-vending-machine"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
-					<ul id="menu-vending-machine" class="collapse @if(\Request::segment(1) == 'vending-machine') in @endif  collapse-level-1">
+					<a @if(\Request::segment(1) == 'vending-machine') class="active" @endif href="{{ url('vending-machine') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="clearfix"></div></a>
+					{{-- <ul id="menu-vending-machine" class="collapse @if(\Request::segment(1) == 'vending-machine') in @endif  collapse-level-1">
 						<li>
 							<a href="{{url('vending-machine')}}">Vending Machine</a>
 						</li>
 						<li>
 							<a href="{{url('inventory/history')}}">Stock Opname</a>
 						</li>
-					</ul>
+					</ul> --}}
 				</li>
 				<li>
 					<a @if(\Request::segment(1) == 'transaction') class="active" @endif href="{{ url('transaction') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Transaction </span></div><div class="clearfix"></div></a>

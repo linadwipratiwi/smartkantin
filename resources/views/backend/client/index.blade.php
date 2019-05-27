@@ -39,7 +39,11 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Client</th>
+                                            <th>Nama</th>
+                                            <th>Perusahaan</th>
+                                            <th>Telepon</th>
+                                            <th>Alamat</th>
+                                            <th>Jumlah Vending Machine</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -48,6 +52,10 @@
                                         <tr id="tr-{{$client->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{$client->name}}</td>
+                                            <td>{{$client->company}}</td>
+                                            <td>{{$client->phone}}</td>
+                                            <td>{{$client->address}}</td>
+                                            <td>{{$client->vendingMachines->count()}} unit</td>
                                             <td>
                                                 <a href="{{url('client/'.$client->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
