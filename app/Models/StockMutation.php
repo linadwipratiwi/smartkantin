@@ -23,4 +23,15 @@ class StockMutation extends Model
     {
         return $this->belongsTo('App\Models\VendingMachineSlot', 'vending_machine_slot_id');
     }
+
+    public function typeTransaction($type=null)
+    {
+        if ($this->type == 'stock_mutation') {
+            if ($type == 'excel') return 'Stock Opname';
+            return '<span class="label label-info capitalize-font inline-block ml-10">Stock Opname</span>';
+        }
+        
+        if ($type == 'excel') return 'Transaction';
+        return '<span class="label label-success capitalize-font inline-block ml-10">Transaction</span>';
+    }
 }

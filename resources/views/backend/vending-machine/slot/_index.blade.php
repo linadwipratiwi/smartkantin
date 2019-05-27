@@ -2,6 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
+            <p>Pengaturan slot untuk setiap vending machine</p>
             <button class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" onclick="showDetail('{{url("vending-machine/".$vending_machine->id."/slot/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Buat baru</span></button>
         </div>
         <div class="col-lg-12">

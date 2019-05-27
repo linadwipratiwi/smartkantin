@@ -47,7 +47,7 @@
     initFormatNumber();
     // init datepicker
     initSelect2('#slot-id');
-    
+    var current_stock = 0;    
     function store() {
         var data = $( '#form-item-maintenance-activity' ).serialize();
         $.ajax({
@@ -65,7 +65,6 @@
     }
 
     /** Get Stok **/
-    var current_stock = 0;
     function getStock(id) {
         $.ajax({
             url: '{{url("vending-machine/".$vending_machine->id."/stock")}}/'+id,

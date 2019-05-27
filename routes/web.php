@@ -29,6 +29,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
         Route::resource('{id}/slot', 'VendingMachineSlotController');
+        Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
     });
     

@@ -8,6 +8,7 @@ use App\Models\StockMutation;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Helpers\AdminHelper;
+use App\Helpers\ExcelHelper;
 
 class StockMutationController extends Controller
 {
@@ -80,5 +81,20 @@ class StockMutationController extends Controller
         
         toaster_success('delete form success');
         return redirect('vending-machine');
+    }
+
+    public function export(Request $request, $vending_machine_id) 
+    {
+        $vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        $list_stock = StockMutation::where('vending_machine_id', $vending_machine_id)->orderBy('created_at', 'desc')->get();
+        $content = array(array('VENDING MACHINE', 'NAMA MAKANAN', 'QUANTITY', 'SLOT VENDING MACHINE', 'HPP', 'HARGA JUAL CLIENT', 'TANGGAL', 'JENIS TRANSAKSI'));
+        foreach ($list_stock as $stock) {
+            array_push($content, [$stock->vendingMachine->name, $stock->food_name, $stock->stock, $stock->vendingMachineSlot->name, format_price($stock->hpp),
+            format_price($stock->selling_price_client), $stock->created_at ? date_format_view($stock->created_at) : '-', $stock->typeTransaction('excel')]);
+        }
+
+        $file_name = 'REPORT TRANSACTION' .date('YmdHis');
+        $header = $vending_machine->name;
+        ExcelHelper::excel($file_name, $content, $header);
     }
 }
