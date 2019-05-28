@@ -46,7 +46,7 @@
                                     <td>{{format_price($slot->selling_price_client)}}</td>
                                     <td>{{format_price($slot->selling_price_vending_machine)}}</td>
                                     <td>{{format_price($slot->profit_client)}}</td>
-                                    <td>{{format_price($slot->profit_platform)}}</td>
+                                    <td>{{$slot->profitPlatform()}}</td>
                                     <td>{{$slot->capacity}}</td>
                                     <td>{{$slot->expired_date}}</td>
                                     

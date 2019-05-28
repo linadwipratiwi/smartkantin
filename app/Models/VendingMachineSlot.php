@@ -18,4 +18,12 @@ class VendingMachineSlot extends Model
     {
         return $this->belongsTo('App\Models\Client', 'client_id');
     }
+
+    public function profitPlatform()
+    {
+        $type = $this->profit_platform_type;
+        if ($type == 'value') {
+            return $type;
+        }
+    }
 }
