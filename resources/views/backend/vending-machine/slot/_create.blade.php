@@ -22,7 +22,14 @@
                 </div>
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
-                    <input type='text' name="profit_platform" id="profit_platform" required class="form-control format-price" />
+                    <select name="profit_platform_type" id="" class="form-control">
+                        <option value="value">Value</option>
+                        <option value="percent">Percent</option>
+                    </select>
+                </div>
+                <div class="form-group mt-20" id="">
+                    <label class="control-label mb-10">{!! label('Presentase profit / dengan set value', 'Jika Anda memilih type percent, maka isi dengan percent (max: 100). Jika dengan value, maka isi dengan harga (3000)') !!}</label>
+                    <input type='text' name="profit_platform_value" id="profit_platform_value" required class="form-control format-price" />
                 </div>
                 <div class="form-group mt-20 ">
                     <div class="form-group">
