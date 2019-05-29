@@ -31,8 +31,8 @@ class CreateVendingMachineTransactionsTable extends Migration
             $table->decimal('profit_platform_percent')->nullable();  // jika type persen, berapa persen ? misal 10
             $table->decimal('profit_platform_value')->nullable();  // jika type value, berapa value ? misal 10000
             $table->decimal('selling_price_vending_machine')->nullable(); // harga jual = harga jual dari client + profit dari setiap transaksi
-            $table->integer('capacity')->nullable(); // jumlah maxsimal untuk setiap slot
-            $table->integer('stock')->default(0); // stok sekarang
+            $table->integer('quantity')->default(1); // jumlah item yg diambil, default
+            $table->integer('status_transaction')->nullable(); // 1: success, 2: gagal, 
             $table->timestamps();
         });
     }

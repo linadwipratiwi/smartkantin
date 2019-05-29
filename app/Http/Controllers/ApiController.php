@@ -12,58 +12,6 @@ use App\Models\ItemMaintenanceActivity;
 
 class ApiController extends Controller
 {
-    /** Get item maintenance by Item ID in Select2 */
-    public function getItemMaintenanceActivity($item_id)
-    {
-        $json_output = [];
-        $categories = ItemMaintenanceActivity::joinCategory()->where('item_id', $item_id)->groupBy('category_id')->select('categories.*')->get();
-        foreach ($categories as $category) {
-            $items = ItemMaintenanceActivity::where('category_id', $category->id)->where('item_id', $item_id)->get();
-            $json_item = [];
-            foreach ($items as $item) {
-                array_push($json_item, [
-                    'id' => $item->id,
-                    'text' => $item->name
-                ]);
-            }
-
-            array_push($json_output, [
-                'id' => md5(Str::random(20)),
-                'text' => $category->name,
-                'children' => $json_item
-            ]);
-        }
-
-        return $json_output;
-    }
-
-    /** Get Item for Select2 */
-    public function getItem(Request $request)
-    {
-        $page = \Input::get('page');
-        $resultCount = 100;
-
-        $offset = ($page - 1) * $resultCount;
-        
-        $items = Item::where('name', 'like', '%' . \Input::get('search') . '%')
-            ->orderBy('name')
-            ->skip($offset)
-            ->take($resultCount)
-            ->get(['id', \DB::raw('name AS text')]);
-        
-        $count = Item::get()->count();
-        $endCount = $offset + $resultCount;
-        $morePages = $endCount > $count;
-
-        $results = [
-            "results" => $items,
-            "pagination" => [
-                "more" => $morePages
-            ]
-        ];
-        return response()->json($results);
-    }
-
     /** Get Client for Select2 */
     public function getClient(Request $request)
     {
@@ -91,30 +39,33 @@ class ApiController extends Controller
         return response()->json($results);
     }
 
-    /** Get Item for Select2 */
-    public function getInventory(Request $request)
+    public function transaction(Request $request)
     {
-        $page = \Input::get('page');
-        $resultCount = 100;
+        $status = ApiHelper::transaction($request);
+        if (!$status) {
+            ApiHelper::failed($request);
+            return 0;
+        }
 
-        $offset = ($page - 1) * $resultCount;
+        // save to report gate transaction
+        $card = CardAccess::where('card_number', $card_id)->first();
+        $gate_transaction_report = GateTransportationReport::where('card_access_id', $card->id)
+            ->where('gate_id', $gate_id)
+            ->where('type', 'in')
+            ->where('status', 0)
+            ->first();
         
-        $items = Inventory::where('name', 'like', '%' . \Input::get('search') . '%')
-            ->orderBy('name')
-            ->skip($offset)
-            ->take($resultCount)
-            ->get(['id', \DB::raw('name AS text')]);
-        
-        $count = Inventory::get()->count();
-        $endCount = $offset + $resultCount;
-        $morePages = $endCount > $count;
 
-        $results = [
-            "results" => $items,
-            "pagination" => [
-                "more" => $morePages
-            ]
-        ];
-        return response()->json($results);
+        $gate_transaction_report = $gate_transaction_report ? : new GateTransportationReport;
+        $gate_transaction_report->gate_id = $gate_id;
+        $gate_transaction_report->card_access_id = $card->id;
+        $gate_transaction_report->photo = FileHelper::createImg($photo, 'public/uploads/parkir/');
+        $gate_transaction_report->police_number = FileHelper::createImg($police_number, 'public/uploads/parkir/');
+        $gate_transaction_report->type = 'in';
+        $gate_transaction_report->status = 0;
+        $gate_transaction_report->save();
+
+        return $gate_transaction_report;
+        return 1;
     }
 }
