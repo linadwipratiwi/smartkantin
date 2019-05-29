@@ -22,8 +22,18 @@
                     <input type='text' name="selling_price_client" id="selling_price_client" onchange="updateSellingPriceVM()" required class="form-control format-price" value="{{$vending_machine_slot->selling_price_client}}" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('Keuntungan Platform', 'Keuntungan vendor dari setiap transaksi yang berhasil') !!}</label>
-                    <input type='text' name="profit_platform" id="profit_platform" readonly required class="form-control format-price" value="{{$vending_machine_slot->profit_platform}}" />
+                    <input type="hidden" id="profit-platform-type" value="{{$vending_machine_slot->profit_platform_type}}">
+                    <label class="control-label mb-10">{!! label('Profit Platform', 'keuntungan untuk platform / pengembang alat') !!}</label>
+                    <div class="input-group"> 
+                        <span class="input-group-addon" id="lb-type">@if($vending_machine_slot->profit_platform_type == 'value') Rp. @else % @endif</span>
+                        <?php
+                            $value_profit = $vending_machine_slot->profit_platform_value;
+                            if ($vending_machine_slot->profit_platform_type == 'percent') {
+                                $value_profit = $vending_machine_slot->profit_platform_percent;
+                            }
+                        ?>
+                        <input type="text" id="profit_platform_value" readonly name="profit_platform_value" class="form-control format-price" value="{{$value_profit}}" placeholder="">
+                    </div>
                 </div>
                 <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('Harga Jual dari Vending Machine', 'Adalah harga yang akan dikenakan customer ketika membeli item ini') !!}</label>
@@ -74,9 +84,20 @@
     }
 
     function updateSellingPriceVM() {
+        var profit_platform_type = $('#profit-platform-type').val();
+
         var selling_price_client = dbNum($('#selling_price_client').val());
-        var profit_platform = dbNum($('#profit_platform').val());
-        var selling_price_vending_machine = selling_price_client + profit_platform;
+        var profit_platform_value = dbNum($('#profit_platform_value').val());
+        
+        var selling_price_vending_machine = 0;
+        if (profit_platform_type == 'value') {
+            selling_price_vending_machine = selling_price_client + profit_platform_value;
+        }
+
+        if (profit_platform_type == 'percent') {
+            selling_price_vending_machine = (selling_price_client * profit_platform_value / 100) + selling_price_client;
+        }
+        
 
         $('#selling_price_vending_machine').val(appNum(selling_price_vending_machine));
     }
