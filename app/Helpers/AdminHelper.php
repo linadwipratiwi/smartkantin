@@ -139,8 +139,15 @@ class AdminHelper
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');
         $vending_machine->alias = $request->input('alias');
         $vending_machine->food_name = $request->input('food_name');
-        $vending_machine->profit_platform = format_db($request->input('profit_platform'));
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
+        $vending_machine->profit_platform_type = $request->input('profit_platform_type');
+        if ($vending_machine->profit_platform_type == 'value') {
+            $vending_machine->profit_platform_value = format_db($request->input('profit_platform_value'));
+        }
+
+        if ($vending_machine->profit_platform_type == 'percent') {
+            $vending_machine->profit_platform_percent = format_db($request->input('profit_platform_value'));
+        }
 
         try {
             $vending_machine->save();
@@ -162,7 +169,15 @@ class AdminHelper
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');
         $vending_machine->alias = $request->input('alias');
         $vending_machine->food_name = $request->input('food_name');
-        $vending_machine->profit_platform = format_db($request->input('profit_platform'));
+        $vending_machine->profit_platform_type = $request->input('profit_platform_type');
+        if ($vending_machine->profit_platform_type == 'value') {
+            $vending_machine->profit_platform_value = format_db($request->input('profit_platform_value'));
+        }
+
+        if ($vending_machine->profit_platform_type == 'percent') {
+            $vending_machine->profit_platform_percent = format_db($request->input('profit_platform_value'));
+        }
+
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
 
         try {

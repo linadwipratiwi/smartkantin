@@ -27,7 +27,7 @@ class CreateVendingMachineTransactionsTable extends Migration
             $table->string('food_name')->nullable(); // copy dari VM Slot
             $table->decimal('selling_price_client')->nullable(); // harga jual dari client
             $table->decimal('profit_client')->nullable(); // profit dari setiap transaksi jika client menetapkan hpp
-            $table->decimal('profit_platform_type')->nullable();  // percent or value
+            $table->string('profit_platform_type')->nullable();  // percent or value
             $table->decimal('profit_platform_percent')->nullable();  // jika type persen, berapa persen ? misal 10
             $table->decimal('profit_platform_value')->nullable();  // jika type value, berapa value ? misal 10000
             $table->decimal('selling_price_vending_machine')->nullable(); // harga jual = harga jual dari client + profit dari setiap transaksi
