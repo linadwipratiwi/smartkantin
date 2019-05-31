@@ -35,6 +35,13 @@ class ApiHelper
             ]);
         }
 
+        if ($vending_machine_slot->stock < 1) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+            ]);
+        }
+
         \DB::beginTransaction();
         $transaction = new VendingMachineTransaction;
         $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
