@@ -39,6 +39,7 @@ class ApiController extends Controller
         return response()->json($results);
     }
 
+    /** Store data transaction */
     public function transaction(Request $request)
     {
         $status = ApiHelper::transaction($request);
@@ -67,5 +68,11 @@ class ApiController extends Controller
 
         return $gate_transaction_report;
         return 1;
+    }
+
+    /** Store data customer */
+    public function customer(Request $request)
+    {
+        return ApiHelper::createCustomer($request);
     }
 }

@@ -31,6 +31,10 @@
                                     <input type="text" class="form-control" value="" name="name" required>
                                 </div>
                                 <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('alias', 'digunakan untuk request API') !!}</label>
+                                    <input type="text" class="form-control" value="" name="alias" required>
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Client', 'Client') !!} </label>
                                     <select name="client_id" class="form-control" id="client-id">
                                     </select>

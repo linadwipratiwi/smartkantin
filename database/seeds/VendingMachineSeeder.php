@@ -29,7 +29,7 @@ class VendingMachineSeeder extends Seeder
         $this->output->writeln('<info>--- VendingMachine Seeder Started ---</info>');
         $data = array(
             [
-                'name' => 'Vending Machine V1 2019', 'production_year' => '2019', 'client_id' => 1, 'location' => 'Lokasi 1', 'ip' => '127.0.0.1'
+                'name' => 'Vending Machine V1 2019', 'alias' => 'vm_ydfs_01', 'production_year' => '2019', 'client_id' => 1, 'location' => 'Lokasi 1', 'ip' => '127.0.0.1'
             ]
         );
         

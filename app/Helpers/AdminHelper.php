@@ -119,6 +119,7 @@ class AdminHelper
         $vending_machine->location = $request->input('location');
         $vending_machine->ip = $request->input('ip');
         $vending_machine->client_id = $request->input('client_id');
+        $vending_machine->alias = $request->input('alias');
 
         try {
             $vending_machine->save();

@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Vending Machine</th>
+                                            <th>Alias</th>
                                             <th>Client</th>
                                             <th>Tahun Produksi</th>
                                             <th>Lokasi</th>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\VendingMachine;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -16,6 +17,7 @@ class CreateVendingMachinesTable extends Migration
         Schema::create('vending_machines', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('alias'); // untuk api : vm_client_xx_xx
             $table->string('production_year')->nullable();
             $table->integer('client_id')->unsigned()->index()->nullable();
             $table->foreign('client_id')->references('id')->on('users')->onDelete('cascade');

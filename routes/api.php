@@ -16,3 +16,4 @@ use Illuminate\Http\Request;
 // API
 Route::get('clients', 'ApiController@getClient');
 Route::post('transaction', 'ApiController@transaction');
+Route::post('customer', 'ApiController@customer');
