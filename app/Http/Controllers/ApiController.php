@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Inventory;
+use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\ItemMaintenanceActivity;
 
 class ApiController extends Controller
 {
@@ -42,32 +41,7 @@ class ApiController extends Controller
     /** Store data transaction */
     public function transaction(Request $request)
     {
-        $status = ApiHelper::transaction($request);
-        if (!$status) {
-            ApiHelper::failed($request);
-            return 0;
-        }
-
-        // save to report gate transaction
-        $card = CardAccess::where('card_number', $card_id)->first();
-        $gate_transaction_report = GateTransportationReport::where('card_access_id', $card->id)
-            ->where('gate_id', $gate_id)
-            ->where('type', 'in')
-            ->where('status', 0)
-            ->first();
-        
-
-        $gate_transaction_report = $gate_transaction_report ? : new GateTransportationReport;
-        $gate_transaction_report->gate_id = $gate_id;
-        $gate_transaction_report->card_access_id = $card->id;
-        $gate_transaction_report->photo = FileHelper::createImg($photo, 'public/uploads/parkir/');
-        $gate_transaction_report->police_number = FileHelper::createImg($police_number, 'public/uploads/parkir/');
-        $gate_transaction_report->type = 'in';
-        $gate_transaction_report->status = 0;
-        $gate_transaction_report->save();
-
-        return $gate_transaction_report;
-        return 1;
+        return ApiHelper::transaction($request);
     }
 
     /** Store data customer */

@@ -11,7 +11,7 @@ class VendingMachineSlot extends Model
 
     public function vendingMachine()
     {
-        return $this->belongsTo('App\Models\VendigMachine', 'vending_machine_id');
+        return $this->belongsTo('App\Models\VendingMachine', 'vending_machine_id');
     }
 
     public function client()
