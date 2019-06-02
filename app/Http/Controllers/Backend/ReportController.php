@@ -9,10 +9,12 @@ use App\Http\Controllers\Controller;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function transaction()
     {
-        $view = view('backend.report.index');
-        $view->list_transaction =  VendingMachineTransaction::all();
+        $view = view('backend.transaction.transaction');
+        $view->list_transaction =  VendingMachineTransaction::search()->orderBy('created_at', 'desc')->paginate(50);
+        $view->total_profit =  VendingMachineTransaction::search()->sum('profit_platform');
+        $view->total_transaction =  VendingMachineTransaction::search()->count();
         return $view;
     }
 

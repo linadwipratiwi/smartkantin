@@ -46,6 +46,10 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
         Route::get('{user_id}/{role_id}', 'UserController@permission');
     });
 
+    // Report
+    Route::get('transaction', 'ReportController@transaction');
+    Route::get('report', 'ReportController@report');
+    
 });
 
 // Client
