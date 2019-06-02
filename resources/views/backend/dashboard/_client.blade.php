@@ -1,10 +1,10 @@
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel panel-default card-view pa-0 weather-info">
+        <div class="panel panel-default card-view pa-0">
             <div class="panel-wrapper collapse in">
                 <div class="panel-body pa-0">
                     <div class="row ma-0">
-                        <div class="col-xs-4 pa-0">
+                        <div class="col-xs-4 pa-0" style="background:#eee !important">
                             <div class="left-block-wrap pa-30">
                                 <p class="block">Profit share 1000 / transaction</p>
                                 <span class="block">1 pcs vending machine</span>
@@ -29,11 +29,11 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="panel panel-default card-view pa-0 weather-info">
+        <div class="panel panel-default card-view pa-0">
             <div class="panel-wrapper collapse in">
                 <div class="panel-body pa-0">
                     <div class="row ma-0">
-                        <div class="col-xs-4 pa-0">
+                        <div class="col-xs-4 pa-0" style="background:#eee !important">
                             <div class="left-block-wrap pa-30">
                                 <p class="block">Profit share 13% / transaction</p>
                                 <span class="block">5 pcs vending machine</span>
