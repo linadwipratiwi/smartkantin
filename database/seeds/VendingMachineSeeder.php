@@ -49,7 +49,7 @@ class VendingMachineSeeder extends Seeder
         $data = array(
             [
                 'vending_machine_id' => 1,
-                'name' => 'SLOT A1',
+                'name' => 'A1',
                 'alias' => 'slot_a_1',
                 'food_name' => 'Nasi Goreng',
                 'hpp' => '8000',
@@ -65,7 +65,7 @@ class VendingMachineSeeder extends Seeder
             ],
             [
                 'vending_machine_id' => 1,
-                'name' => 'SLOT A2',
+                'name' => 'A2',
                 'alias' => 'slot_a_2',
                 'food_name' => 'Sate',
                 'hpp' => '10000',
@@ -81,7 +81,7 @@ class VendingMachineSeeder extends Seeder
             ],
             [
                 'vending_machine_id' => 1,
-                'name' => 'SLOT A3',
+                'name' => 'A3',
                 'alias' => 'slot_a_3',
                 'food_name' => 'Nasi Ayam Panggang',
                 'hpp' => '8000',
@@ -97,7 +97,7 @@ class VendingMachineSeeder extends Seeder
             ],
             [
                 'vending_machine_id' => 1,
-                'name' => 'SLOT A4',
+                'name' => 'A4',
                 'alias' => 'slot_a_4',
                 'food_name' => 'Nasi Bebek Bakar',
                 'hpp' => '8000',

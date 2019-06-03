@@ -71,4 +71,9 @@ class ClientController extends Controller
         toaster_success('delete form success');
         return redirect('client');
     }
+
+    public function grid()
+    {
+        return view('backend.client.grid');
+    }
 }
