@@ -25,10 +25,7 @@ class CategorySeeder extends Seeder
     {
         $this->output->writeln('<info>--- Category Seeder Started ---</info>');
         $array_data = array(
-            'item' => ['Operator check', 'Predictive Maintenance', 'Preventive Maintenance'],
-            'submission' => ['Engineering Planning Maintenance', 'Sales General Admin', 'Receiving Storage Distribution', 'Healthy Safety Security Environment' ],
-            'certificate' => ['SKPP', 'SKPA', 'Grounding'],
-            'ptpp' => ['Keluhan Pelanggan', 'Audit Internal', 'Tinjauan Manajemen', 'Saran/Keluhan Masyarakat', 'Usulan/Saran', 'Penggantian/Perbaikan']
+            'version vending machine' => ['V.1.0']
         );
 
         DB::beginTransaction();
