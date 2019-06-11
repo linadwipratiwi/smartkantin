@@ -72,7 +72,7 @@ class ApiHelper
 
             return json_encode([
                 'status' => 1,
-                'data' => $transaction
+                'data' => $transaction->with('customer')->first()
             ]);
 
         } catch (\Throwable $th) {
