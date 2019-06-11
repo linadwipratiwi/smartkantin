@@ -22,6 +22,8 @@ class CreateCustomersTable extends Migration
             $table->foreign('register_at_client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->integer('register_at_vending_machine_id')->unsigned()->index()->nullable();
             $table->foreign('register_at_vending_machine_id')->references('id')->on('vending_machines')->onDelete('cascade');
+            $table->decimal('saldo')->nullable()->default(0); // saldo. Khusus YDFS: saldo 0
+
             $table->timestamps();
         });
     }

@@ -96,10 +96,15 @@ class AdminHelper
     public static function createCustomer($request, $id='')
     {
         DB::beginTransaction();
+        $saldo = $request->input('saldo');
         $customer = $id ? Customer::findOrFail($id) : new Customer;
         $customer->name = $request->input('name');
         $customer->identity_type = $request->input('identity_type');
         $customer->identity_number = $request->input('identity_number');
+        if ($saldo) {
+            $customer->saldo = format_db($saldo);
+        }
+        
         try{
             $customer->save();
         } catch (\Exception $e) {
