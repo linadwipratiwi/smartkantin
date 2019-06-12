@@ -21,6 +21,10 @@
                     <input type='text' name="food_name" id="food_name" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
+                    <input type='number' min="1" name="capacity" id="capacity" required class="form-control" />
+                </div>
+                <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
                     <select name="profit_platform_type" id="" onchange="setType(this.value)" class="form-control">
                         <option value="value" selected>Value</option>

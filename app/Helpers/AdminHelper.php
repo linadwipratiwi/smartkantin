@@ -145,6 +145,7 @@ class AdminHelper
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');
         $vending_machine->alias = $request->input('alias');
         $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->capacity = $request->input('capacity');
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
         $vending_machine->profit_platform_type = $request->input('profit_platform_type');
         if ($vending_machine->profit_platform_type == 'value') {
