@@ -207,6 +207,7 @@ class AdminHelper
         $id = $request->vending_machine_slot_id;
         $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
         $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->capacity = $request->input('capacity');
         $vending_machine->hpp = format_db($request->input('hpp'));
         $vending_machine->selling_price_client = format_db($request->input('selling_price_client'));
         $vending_machine->profit_client = $vending_machine->selling_price_client - $vending_machine->hpp;

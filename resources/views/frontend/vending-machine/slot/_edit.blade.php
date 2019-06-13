@@ -14,6 +14,10 @@
                     <input type='text' name="food_name" id="food_name" required class="form-control" value="{{$vending_machine_slot->food_name}}"/>
                 </div>
                 <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
+                    <input type='number' min="1" name="capacity" id="capacity" required class="form-control" value="{{$vending_machine_slot->capacity}}"/>
+                </div>
+                <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('HPP', 'Harga Pokok Penjualan') !!}</label>
                     <input type='text' name="hpp" id="hpp" required class="form-control format-price" value="{{$vending_machine_slot->hpp}}" />
                 </div>

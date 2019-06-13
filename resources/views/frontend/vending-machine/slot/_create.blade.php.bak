@@ -21,6 +21,10 @@
                     <input type='text' name="food_name" id="food_name" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
+                    <input type='number' min="1" name="capacity" id="capacity" required class="form-control" />
+                </div>
+                <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
                     <input type='text' name="profit_platform" id="profit_platform" required class="form-control format-price" />
                 </div>
