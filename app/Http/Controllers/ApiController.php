@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
 use App\Models\VendingMachineSlot;
+use App\Models\VendingMachine;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
@@ -83,6 +84,23 @@ class ApiController extends Controller
         return response()->json([
             'status' => 1,
             'data' => $slot
+        ]);
+    }
+
+    /** Find firmware */
+    public function getFirmware($alias)
+    {
+        $vending_machine = VendingMachine::where('alias', $alias)->with('firmware')->first();
+        if (!$vending_machine) {
+            return response()->json([
+                'status' => 0,
+                'data' => 'Data not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'data' => $vending_machine
         ]);
     }
 }
