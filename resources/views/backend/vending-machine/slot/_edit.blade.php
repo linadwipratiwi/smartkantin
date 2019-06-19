@@ -21,6 +21,10 @@
                     <input type='text' name="food_name" id="food_name" required class="form-control" value="{{$vending_machine_slot->food_name}}"/>
                 </div>
                 <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
+                    <input type='number' min="1" name="capacity" id="capacity" required class="form-control" value="{{$vending_machine_slot->capacity}}"/>
+                </div>
+                <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
                     <select name="profit_platform_type" id="profit_platform_type" onchange="setType(this.value)" class="form-control">
                         <option value="value" @if($vending_machine_slot->profit_platform_type == 'value') selected @endif>Value</option>

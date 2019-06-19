@@ -24,7 +24,7 @@
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="form-wrap">
-                            <form method="post" action="{{url('customer')}}">
+                            <form method="post" action="{{url('front/customer')}}">
                                 {!! csrf_field() !!}
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('nama', 'name') !!} </label>

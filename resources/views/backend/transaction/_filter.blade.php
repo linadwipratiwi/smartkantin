@@ -85,15 +85,10 @@
         if (value == 'custom') {
             $('#date-range').removeClass('hidden');
             $('#select-month').addClass('hidden');
-            console.log(1)
         } else if (value == 'select-month') {
             $('#select-month').removeClass('hidden');
             $('#date-range').addClass('hidden');
-            console.log(2)
-            
         } else {
-            console.log(3)
-            
             $('#date-range').addClass('hidden');
             $('#select-month').addClass('hidden');
         }

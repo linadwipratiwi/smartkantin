@@ -96,10 +96,15 @@ class AdminHelper
     public static function createCustomer($request, $id='')
     {
         DB::beginTransaction();
+        $saldo = $request->input('saldo');
         $customer = $id ? Customer::findOrFail($id) : new Customer;
         $customer->name = $request->input('name');
         $customer->identity_type = $request->input('identity_type');
         $customer->identity_number = $request->input('identity_number');
+        if ($saldo) {
+            $customer->saldo = format_db($saldo);
+        }
+        
         try{
             $customer->save();
         } catch (\Exception $e) {
@@ -140,6 +145,7 @@ class AdminHelper
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');
         $vending_machine->alias = $request->input('alias');
         $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->capacity = $request->input('capacity');
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
         $vending_machine->profit_platform_type = $request->input('profit_platform_type');
         if ($vending_machine->profit_platform_type == 'value') {
@@ -201,6 +207,7 @@ class AdminHelper
         $id = $request->vending_machine_slot_id;
         $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
         $vending_machine->food_name = $request->input('food_name');
+        $vending_machine->capacity = $request->input('capacity');
         $vending_machine->hpp = format_db($request->input('hpp'));
         $vending_machine->selling_price_client = format_db($request->input('selling_price_client'));
         $vending_machine->profit_client = $vending_machine->selling_price_client - $vending_machine->hpp;

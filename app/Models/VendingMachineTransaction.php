@@ -34,7 +34,7 @@ class VendingMachineTransaction extends Model
     public function scopeSearch($q)
     {
         $type = \Input::get('type');
-        if ($type == 'today') {
+        if ($type == 'today' || $type == null) {
             $q->whereDate('created_at', Carbon::today());
         }
 

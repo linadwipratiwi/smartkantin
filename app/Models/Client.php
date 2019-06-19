@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\VendingMachineTransaction;
 
 class Client extends Model
 {
@@ -22,5 +23,37 @@ class Client extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User', 'created_by');
+    }
+
+    /** Get profit yang dibagi dari setiap transaksi. Diambil dari slot */
+    public function profitShare()
+    {
+        $vending_machine = $this->vendingMachines->first();
+        if (!$vending_machine) return null;
+
+        $slot = $vending_machine->slots->first();
+        if (!$slot) return null;
+
+        return $slot->profitPlatform();
+    }
+
+    /** Get total income dari client */
+    public function shareIncome()
+    {
+        return VendingMachineTransaction::search()->where('client_id', $this->id)->sum('profit_platform');
+    }
+
+    /** Get total transaksi dari client
+     * @param $status [1, 2, 3] ['success', 'failed', 'all']
+     */
+    public function totalTransaction($status=3)
+    {
+        return VendingMachineTransaction::search()->where('client_id', $this->id)
+            ->where(function($q) use ($status) {
+                if ($status != 3) {
+                    $q->where('status_transaction', $status);
+                }
+            })
+            ->count();
     }
 }

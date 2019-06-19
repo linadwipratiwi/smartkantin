@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Vendor;
+use App\Models\Customer;
+use App\Models\VendingMachineSlot;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
@@ -48,5 +50,39 @@ class ApiController extends Controller
     public function customer(Request $request)
     {
         return ApiHelper::createCustomer($request);
+    }
+
+    /** Find customer by ID */
+    public function findCustomer($identity_number)
+    {
+        $customer = Customer::where('identity_number', $identity_number)->first();
+        if (!$customer) {
+            return response()->json([
+                'status' => 0,
+                'data' => 'Data not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'data' => $customer
+        ]);
+    }
+
+    /** Find slot by alias */
+    public function findSlot($alias)
+    {
+        $slot = VendingMachineSlot::where('alias', $alias)->first();
+        if (!$slot) {
+            return response()->json([
+                'status' => 0,
+                'data' => 'Data not found'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'data' => $slot
+        ]);
     }
 }
