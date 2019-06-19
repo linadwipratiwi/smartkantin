@@ -51,7 +51,7 @@
                                             <td>{{$row + 1}}</td>
                                             <td>{{$firmware->name}}</td>
                                             <td>{{$firmware->code_version}}</td>
-                                            <td><a href="{{asset($firmware->file)}}"><i class="fa fa-download"></i> Download</a></td>
+                                            <td><a href="{{asset($firmware->link)}}"><i class="fa fa-download"></i> Download</a></td>
                                             <td>
                                                 <a href="{{url('firmware/'.$firmware->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>

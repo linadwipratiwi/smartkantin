@@ -52,7 +52,7 @@ class AdminHelper
         $firmware->name = $request->input('name');
         $firmware->code_version = $request->input('code_version');
         if (asset($file)) {
-            $firmware->link = FileHelper::upload($file, 'public/uploads/firmware/');
+            $firmware->link = FileHelper::upload($file, 'uploads/firmware/');
         }
         
         try{

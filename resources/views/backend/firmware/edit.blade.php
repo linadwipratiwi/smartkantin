@@ -24,7 +24,7 @@
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="form-wrap">
-                            <form method="post" action="{{url('firmware/'.$firmware->id)}}">
+                            <form method="post" action="{{url('firmware/'.$firmware->id)}}" enctype="multipart/form-data">
                                 {!! csrf_field() !!}
                                 <input name="_method" type="hidden" value="PUT">
                                 <div class="form-group">
