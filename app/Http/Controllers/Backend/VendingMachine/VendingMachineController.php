@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\VendingMachine;
 use Illuminate\Http\Request;
 use App\Helpers\AdminHelper;
 use App\Models\VendingMachine;
+use App\Models\Firmware;
 use App\Http\Controllers\Controller;
 
 class VendingMachineController extends Controller
@@ -18,7 +19,9 @@ class VendingMachineController extends Controller
 
     public function create()
     {
-        return view('backend.vending-machine.create');
+        $view = view('backend.vending-machine.create');
+        $view->firmwares = Firmware::all();
+        return $view;
     }
 
     public function store(Request $request)
@@ -42,7 +45,7 @@ class VendingMachineController extends Controller
     {
         $view = view('backend.vending-machine.edit');
         $view->vending_machine = VendingMachine::findOrFail($id);
-
+        $view->firmwares = Firmware::all();
         return $view;
     }
 

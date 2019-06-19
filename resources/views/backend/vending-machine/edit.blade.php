@@ -53,6 +53,14 @@
                                     <label class="control-label mb-10 text-left">{!! label('Alamat IP', 'IP Address') !!} </label>
                                     <input type="text" name="ip" class="form-control" id="" value="{{$vending_machine->ip}}">
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Firmware', 'Firmware') !!} </label>
+                                    <select name="firmware_id" id="" class="form-control">
+                                        @foreach ($firmwares as $firmware)
+                                            <option value="{{$firmware->id}}" @if($firmware->id == $vending_machine->firmware_id) @endif>{{$firmware->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group mb-0">
                                     <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">submit</span></button>
                                 </div>
