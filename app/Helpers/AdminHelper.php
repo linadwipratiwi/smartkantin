@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\User;
 use Carbon\Carbon;
 use App\Models\Item;
+use App\Models\Firmware;
 use App\Models\PTPP;
 use App\Models\Client;
 use App\Models\Vendor;
@@ -41,6 +42,27 @@ class AdminHelper
         } catch (\Exception $e) {
             throw new AppException("Woops, data can't be delete because is used by another form", 503);
         }
+    }
+
+    public static function createFirmware($request, $id='')
+    {
+        DB::beginTransaction();
+        $file = $request->file('file');
+        $firmware = $id ? Firmware::findOrFail($id) : new Firmware;
+        $firmware->name = $request->input('name');
+        $firmware->code_version = $request->input('code_version');
+        if (asset($file)) {
+            $firmware->link = FileHelper::upload($file, 'public/uploads/firmware/');
+        }
+        
+        try{
+            $firmware->save();
+        } catch (\Exception $e) {
+            throw new AppException("Failed to save data", 503);
+        }
+        
+        DB::commit();
+        return $firmware;
     }
 
     public static function createClient($request, $id='')

@@ -21,6 +21,8 @@ class CreateVendingMachinesTable extends Migration
             $table->string('production_year')->nullable();
             $table->integer('client_id')->unsigned()->index()->nullable();
             $table->foreign('client_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('firmware_id')->unsigned()->index()->nullable();
+            $table->foreign('firmware_id')->references('id')->on('firmwares')->onDelete('cascade');
             $table->string('location')->nullable();
             $table->string('ip')->nullable();
             $table->timestamps();

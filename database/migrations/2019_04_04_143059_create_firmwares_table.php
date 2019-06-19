@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModelsFirmwaresTable extends Migration
+class CreateFirmwaresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateModelsFirmwaresTable extends Migration
      */
     public function up()
     {
-        Schema::create('models_firmwares', function (Blueprint $table) {
+        Schema::create('firmwares', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name'); // Versi 1
+            $table->string('link'); // link download
+            $table->string('code_version'); // V.1.2.0
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateModelsFirmwaresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('models_firmwares');
+        Schema::dropIfExists('firmwares');
     }
 }

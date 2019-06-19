@@ -28,6 +28,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 
     Route::get('client/grid', 'ClientController@grid');
     Route::resource('client', 'ClientController');
+    Route::resource('firmware', 'FirmwareController');
     Route::resource('category', 'CategoryController');
     Route::resource('customer', 'CustomerController');
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
@@ -72,3 +73,4 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
 });
 
 Auth::routes();
+    
