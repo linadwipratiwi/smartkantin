@@ -109,6 +109,9 @@ class ApiHelper
         $name = $request->input('name');
         $identity_type = $request->input('identity_type') ? : 'ktp';
         $identity_number = $request->input('identity_number');
+        $email = $request->input('email') ? : null;
+        $phone = $request->input('phone')  ? : null;
+        $address = $request->input('address') ? : null;
         $vending_machine_alias = $request->input('vending_machine_alias');
 
         
@@ -132,6 +135,9 @@ class ApiHelper
         $customer->name = $name;
         $customer->identity_type = $identity_type;
         $customer->identity_number = $identity_number;
+        $customer->email = $email;
+        $customer->address = $address;
+        $customer->phone = $phone;
         $customer->register_at_client_id = $vending_machine->client_id;
         $customer->register_at_vending_machine_id = $vending_machine->id;
         $customer->save();

@@ -42,6 +42,9 @@
                                             <th>Nama</th>
                                             <th>Identity Type</th>
                                             <th>Identity Number</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Address</th>
                                             <th>Register di Client</th>
                                             <th>Register di Vending Machine</th>
                                             <th>Action</th>
@@ -54,6 +57,9 @@
                                             <td>{{$customer->name}}</td>
                                             <td>{{$customer->identity_type}}</td>
                                             <td>{{$customer->identity_number}}</td>
+                                            <td>{{$customer->email}}</td>
+                                            <td>{{$customer->phone}}</td>
+                                            <td>{{$customer->address}}</td>
                                             <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->vendingMachine ? $customer->vendingMachine->name : 'SYSTEM'}}</td>
                                             <td>
