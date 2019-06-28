@@ -101,7 +101,7 @@ class ApiController extends Controller
     /** Find firmware */
     public function getFirmware($alias)
     {
-        $vending_machine = VendingMachine::where('alias', $alias)->with('firmware')->first();
+        $vending_machine = VendingMachine::where('alias', $alias)->with(['firmware', 'ui'])->first();
         if (!$vending_machine) {
             return response()->json([
                 'status' => 0,
