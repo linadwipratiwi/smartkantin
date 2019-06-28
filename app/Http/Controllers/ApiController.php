@@ -71,14 +71,25 @@ class ApiController extends Controller
     }
 
     /** Find slot by alias */
-    public function findSlot($alias)
+    public function findSlot(Request $request)
     {
+        $type = $request->type ? : 'mini';
+        $alias = $request->alias ? : 'null';
+
         $slot = VendingMachineSlot::where('alias', $alias)->first();
         if (!$slot) {
+            if ($type == 'mini') {
+                return '0:Data not found';
+            }
+
             return response()->json([
                 'status' => 0,
                 'data' => 'Data not found'
             ]);
+        }
+
+        if ($type == 'mini') {
+            return '1:'.$slot->food_name.':'.$slot->selling_price_vending_machine;
         }
 
         return response()->json([

@@ -155,7 +155,7 @@ class ApiHelper
         if ($customer) {
 
             if ($type == 'mini') {
-                return '1:'.$customer->name;
+                return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
             }
 
             return json_encode([
@@ -176,9 +176,9 @@ class ApiHelper
         $customer->save();
         
         if ($type == 'mini') {
-            return '1:'.$customer->name;
+            return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
         }
-        
+
         return json_encode([
             'status' => 1, // return true
             'data' => $customer
