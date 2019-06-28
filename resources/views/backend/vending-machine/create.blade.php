@@ -52,10 +52,18 @@
                                     <input type="text" name="ip" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Firmware', 'Firmware') !!} </label>
-                                    <select name="firmware_id" id="" class="form-control">
-                                        @foreach ($firmwares as $firmware)
+                                    <label class="control-label mb-10 text-left">{!! label('Versi Firmware', 'Firmware') !!} </label>
+                                    <select name="version_firmware_id" id="" class="form-control">
+                                        @foreach ($list_firmware as $firmware)
                                             <option value="{{$firmware->id}}">{{$firmware->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Versi UI', 'UI') !!} </label>
+                                    <select name="version_ui_id" id="" class="form-control">
+                                        @foreach ($list_ui as $ui)
+                                            <option value="{{$ui->id}}">{{$ui->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

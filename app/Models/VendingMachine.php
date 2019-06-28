@@ -16,7 +16,12 @@ class VendingMachine extends Model
 
     public function firmware()
     {
-        return $this->belongsTo('App\Models\Firmware', 'firmware_id');
+        return $this->belongsTo('App\Models\Firmware', 'version_firmware_id');
+    }
+
+    public function ui()
+    {
+        return $this->belongsTo('App\Models\Firmware', 'version_ui_id');
     }
 
     public function slots()

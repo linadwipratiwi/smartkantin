@@ -54,10 +54,18 @@
                                     <input type="text" name="ip" class="form-control" id="" value="{{$vending_machine->ip}}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Firmware', 'Firmware') !!} </label>
-                                    <select name="firmware_id" id="" class="form-control">
-                                        @foreach ($firmwares as $firmware)
-                                            <option value="{{$firmware->id}}" @if($firmware->id == $vending_machine->firmware_id) @endif>{{$firmware->name}}</option>
+                                    <label class="control-label mb-10 text-left">{!! label('Versi Firmware', 'Firmware') !!} </label>
+                                    <select name="version_firmware_id" id="" class="form-control">
+                                        @foreach ($list_firmware as $firmware)
+                                            <option value="{{$firmware->id}}" @if($firmware->id == $vending_machine->version_firmware_id) @endif>{{$firmware->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Versi UI', 'UI') !!} </label>
+                                    <select name="version_ui_id" id="" class="form-control">
+                                        @foreach ($list_ui as $ui)
+                                            <option value="{{$ui->id}}" @if($ui->id == $vending_machine->version_ui_id) @endif>{{$ui->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

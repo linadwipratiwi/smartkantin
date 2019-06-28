@@ -27,7 +27,10 @@ class FirmwareSeeder extends Seeder
         $this->output->writeln('<info>--- Firmware Seeder Started ---</info>');
         $data = array(
             [
-                'name' => 'Version 1', 'code_version' => 'v.1.0', 'link' => url('upload/firmware/v1.exe')
+                'name' => 'Version Firmware 1', 'code_version' => 'vFirmware.1.0', 'link' => url('upload/firmware/v1.exe'), 'type' => 'firmware'
+            ],
+            [
+                'name' => 'Version UI 1', 'code_version' => 'vUI.1.0', 'link' => url('upload/firmware/v1.exe'), 'type' => 'ui'
             ]
         );
         

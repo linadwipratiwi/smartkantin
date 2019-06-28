@@ -147,7 +147,8 @@ class AdminHelper
         $vending_machine->ip = $request->input('ip');
         $vending_machine->client_id = $request->input('client_id');
         $vending_machine->alias = $request->input('alias');
-        $vending_machine->firmware_id = $request->input('firmware_id');
+        $vending_machine->version_firmware_id = $request->input('version_firmware_id');
+        $vending_machine->version_ui_id = $request->input('version_ui_id');
 
         try {
             $vending_machine->save();

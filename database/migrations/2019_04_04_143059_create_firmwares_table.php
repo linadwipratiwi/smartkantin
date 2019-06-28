@@ -18,6 +18,7 @@ class CreateFirmwaresTable extends Migration
             $table->string('name'); // Versi 1
             $table->string('link'); // link download
             $table->string('code_version'); // V.1.2.0
+            $table->string('type')->default('firmware'); // firmware: ui
             $table->timestamps();
         });
     }

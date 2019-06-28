@@ -20,7 +20,8 @@ class VendingMachineController extends Controller
     public function create()
     {
         $view = view('backend.vending-machine.create');
-        $view->firmwares = Firmware::all();
+        $view->list_firmware = Firmware::firmware()->get();
+        $view->list_ui = Firmware::ui()->get();
         return $view;
     }
 
@@ -45,7 +46,8 @@ class VendingMachineController extends Controller
     {
         $view = view('backend.vending-machine.edit');
         $view->vending_machine = VendingMachine::findOrFail($id);
-        $view->firmwares = Firmware::all();
+        $view->list_firmware = Firmware::firmware()->get();
+        $view->list_ui = Firmware::ui()->get();
         return $view;
     }
 
