@@ -16,10 +16,16 @@ class ApiHelper
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $slot_alias = $request->input('slot_alias');
+        $type = $request->input('type') ? : 'mini'; // normal, mini
 
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
         if (!$customer) {
+            if ($type == 'mini') {
+                return "0:Identity number customer not found";
+            }
+
+            // normal
             return json_encode([
                 'status' => 0,
                 'data' => 'Identity number customer not found'
@@ -29,6 +35,10 @@ class ApiHelper
         /** Cek slot vending machine */
         $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
         if (!$vending_machine_slot) {
+            if ($type == 'mini') {
+                return "0:Vending Machine Slot not found";
+            }
+
             return json_encode([
                 'status' => 0,
                 'data' => 'Vending Machine Slot not found'
@@ -36,6 +46,10 @@ class ApiHelper
         }
 
         if ($vending_machine_slot->stock < 1) {
+            if ($type == 'mini') {
+                return '0:Stock '.$vending_machine_slot->food_name .' is empty';
+            }
+
             return json_encode([
                 'status' => 0,
                 'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
@@ -70,12 +84,21 @@ class ApiHelper
             self::updateStockTransaction($transaction);
             \DB::commit();
 
+            $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
+            if ($type == 'mini') {
+                return '1:'.$transaction->customer->name;
+            }
+
             return json_encode([
                 'status' => 1,
-                'data' => VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first()
+                'data' => $transaction
             ]);
 
         } catch (\Throwable $th) {
+            if ($type == 'mini') {
+                return '0:Transaction failed';
+            }
+
             return json_encode([
                 'status' => 0,
                 'data' => 'Transaction failed'
@@ -113,10 +136,15 @@ class ApiHelper
         $phone = $request->input('phone')  ? : null;
         $address = $request->input('address') ? : null;
         $vending_machine_alias = $request->input('vending_machine_alias');
-
+        
+        $type = $request->input('type') ? : 'mini';
         
         $vending_machine = VendingMachine::where('alias', $vending_machine_alias)->first();
         if (!$vending_machine) {
+            if ($type == 'mini') {
+                return '0:Vending machine not found';
+            }
+
             return json_encode([
                 'status' => 0,
                 'data' => 'Vending machine not found'
@@ -125,6 +153,11 @@ class ApiHelper
 
         $customer = Customer::where('identity_number', $identity_number)->first();
         if ($customer) {
+
+            if ($type == 'mini') {
+                return '1:'.$customer->name;
+            }
+
             return json_encode([
                 'status' => 1, // return true
                 'data' => $customer
@@ -141,6 +174,10 @@ class ApiHelper
         $customer->register_at_client_id = $vending_machine->client_id;
         $customer->register_at_vending_machine_id = $vending_machine->id;
         $customer->save();
+        
+        if ($type == 'mini') {
+            return '1:'.$customer->name;
+        }
         
         return json_encode([
             'status' => 1, // return true
