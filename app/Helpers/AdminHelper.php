@@ -51,6 +51,7 @@ class AdminHelper
         $firmware = $id ? Firmware::findOrFail($id) : new Firmware;
         $firmware->name = $request->input('name');
         $firmware->code_version = $request->input('code_version');
+        $firmware->type = $request->input('type');
         if (asset($file)) {
             $firmware->link = FileHelper::upload($file, 'uploads/firmware/');
         }

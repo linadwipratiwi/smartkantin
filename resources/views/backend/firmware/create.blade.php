@@ -35,6 +35,13 @@
                                     <input type="text" name="code_version" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Tipe', 'Type') !!} </label>
+                                    <select name="type" class="form-control" id="">
+                                        <option value="firmware">Firmware</option>
+                                        <option value="ui">UI</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('File', 'file') !!} </label>
                                     <input type="file" name="file" class="form-control" id="" value="">
                                 </div>

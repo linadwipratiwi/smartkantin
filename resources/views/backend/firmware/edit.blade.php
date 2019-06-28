@@ -36,6 +36,13 @@
                                     <input type="text" name="code_version" class="form-control" id="" value="{{$firmware->code_version}}">
                                 </div>
                                 <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Tipe', 'Type') !!} </label>
+                                    <select name="type" class="form-control" id="">
+                                        <option value="firmware" @if($firmware->type == 'firmware') selected @endif>Firmware</option>
+                                        <option value="ui" @if($firmware->type == 'ui') selected @endif>UI</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('File', 'file') !!} </label>
                                     <input type="file" name="file" class="form-control" id="" value="">
                                 </div>
