@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteRule ^(.*)$ http://epm-activity.com/public/$1 [L]
+RewriteRule ^(.*)$ https://epm-activity.com/$1 [L]
 </IfModule>
 
