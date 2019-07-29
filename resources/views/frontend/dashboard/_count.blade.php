@@ -9,7 +9,7 @@
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
                                     <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_transaction)}}</span></span>
-                                    <span class="weight-500 uppercase-font txt-light block font-13">Transaction</span>
+                                    <span class="weight-500 uppercase-font txt-light block font-13">Transaction Today</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
                                     <i class="zmdi zmdi-chart-donut txt-light data-right-rep-icon"></i>
@@ -80,10 +80,10 @@
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
                                     <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_profit)}}</span></span>
-                                    <span class="weight-500 uppercase-font txt-light block">Profit</span>
+                                    <span class="weight-500 uppercase-font txt-light block">Profit Today</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 pt-25  data-wrap-right">
-                                    <i class="fa fa-user txt-light data-right-rep-icon"></i>
+                                    <i class="fa fa-dollar txt-light data-right-rep-icon"></i>
                                 </div>
                             </div>	
                         </div>

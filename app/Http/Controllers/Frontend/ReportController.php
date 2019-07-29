@@ -13,7 +13,7 @@ class ReportController extends Controller
     {
         $view = view('frontend.report.index');
         $view->list_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->orderBy('created_at', 'desc')->paginate(50);
-        $view->total_profit =  VendingMachineTransaction::search()->where('client_id', client()->id)->sum('profit_platform');
+        $view->total_profit =  VendingMachineTransaction::search()->where('client_id', client()->id)->sum('profit_client');
         $view->total_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->count();
         return $view;
     }
