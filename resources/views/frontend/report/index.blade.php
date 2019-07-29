@@ -6,7 +6,7 @@
         'title' => 'Transaction',
         'breadcrumbs' => [
             0 => [
-                'link' => url('/'),
+                'link' => url('front'),
                 'label' => 'dashboard'
             ],
             1 => [
@@ -17,7 +17,7 @@
     ])
     
     <!-- /Title -->
-    @include('backend.transaction._filter')
+    @include('frontend.report._filter')
     <!-- Row -->
     <div class="row">
         <div class="col-sm-12">

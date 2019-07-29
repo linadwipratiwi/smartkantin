@@ -78,9 +78,9 @@
 				<li>
 					<a @if(\Request::segment(2) == 'vending-machine') class="active" @endif href="{{ url('front/vending-machine') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="clearfix"></div></a>
 				</li>
-				{{-- <li>
+				<li>
 					<a @if(\Request::segment(2) == 'report') class="active" @endif href="{{ url('front/report') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="clearfix"></div></a>
-				</li> --}}
+				</li>
 				
 				<li><hr class="light-grey-hr mb-10"/></li>
 				<li class="navigation-header">
