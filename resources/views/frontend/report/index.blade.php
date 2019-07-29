@@ -44,7 +44,7 @@
                                             <th>Client</th>
                                             <th>Customer</th>
                                             <th>Selling Price VM</th>
-                                            <th>Profit Platform</th>
+                                            <th>Profit Client</th>
                                             <th>Date</th>
                                         </tr>
                                     </thead>
@@ -57,7 +57,7 @@
                                             <td>{{$transaction->client->name}}</td>
                                             <td>{{$transaction->customer->name}}</td>
                                             <td>{{format_price($transaction->selling_price_vending_machine)}}</td>
-                                            <td>{{format_price($transaction->profit_platform)}}</td>
+                                            <td>{{format_price($transaction->profit_client)}}</td>
                                             <td>{{date_format_view($transaction->created_at)}}</td>
                                         </tr>
                                         @endforeach
