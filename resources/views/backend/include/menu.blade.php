@@ -30,9 +30,9 @@
 				<li>
 					<a @if(\Request::segment(1) == 'transaction') class="active" @endif href="{{ url('transaction') }}"><div class="pull-left"><i class="fa fa-list mr-20"></i><span class="right-nav-text">Transaction </span></div><div class="clearfix"></div></a>
 				</li>
-				<li>
+				{{-- <li>
 					<a @if(\Request::segment(1) == 'report') class="active" @endif href="{{ url('report') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="clearfix"></div></a>
-				</li>
+				</li> --}}
 				{{-- @endif --}}
 				<li><hr class="light-grey-hr mb-10"/></li>
 				<li class="navigation-header">
