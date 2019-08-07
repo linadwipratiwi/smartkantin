@@ -46,6 +46,10 @@
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-cubes"></i></button>
                                 </a>
+                                <a onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/video")}}')" data-toggle="modal"
+                                    data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
+                                    <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-play"></i></button>
+                                </a>
                             </div>
                         </article>
                     </div>

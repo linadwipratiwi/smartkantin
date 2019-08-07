@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend\VendingMachine;
 
 use Illuminate\Http\Request;
 use App\Helpers\AdminHelper;
+use App\Helpers\FileHelper;
 use App\Models\VendingMachine;
 use App\Http\Controllers\Controller;
 
@@ -66,4 +67,28 @@ class VendingMachineController extends Controller
         toaster_success('delete form success');
         return redirect('vending-machine');
     }
+
+    public function _formVideo($id)
+    {
+        $view = view('frontend.vending-machine._form-video');
+        $view->vending_machine = VendingMachine::findOrFail($id);
+
+        return $view;
+    }
+
+    public function storeVideo(Request $request, $id)
+    {
+        $validator = \Validator::make($request->all(), [
+            'file' => 'required'
+        ]);
+
+        $file = $request->file('file');
+        $vending_machine = VendingMachine::findOrFail($id);
+        $vending_machine->video = FileHelper::upload($file, 'uploads/video/');
+        $vending_machine->save();
+
+        toaster_success('upload success');
+        return 1;
+    }
+        
 }

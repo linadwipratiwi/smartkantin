@@ -63,6 +63,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     Route::resource('customer', 'CustomerController');
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
+        Route::post('{id}/video', 'VendingMachineController@storeVideo');
+        Route::get('{id}/video', 'VendingMachineController@_formVideo');
         Route::resource('{id}/slot', 'VendingMachineSlotController');
         Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
