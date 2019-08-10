@@ -62,10 +62,10 @@ class UserSeeder extends Seeder
         $user->attachRole(1);
 
         $user = new User;
-        $user->name = 'YDFS';
-        $user->username = 'ydfs';
+        $user->name = 'YDSF';
+        $user->username = 'ydsf';
         $user->email = null;
-        $user->password = bcrypt('ydfs');
+        $user->password = bcrypt('ydsf');
         $user->save();
         $user->attachRole(2);
 

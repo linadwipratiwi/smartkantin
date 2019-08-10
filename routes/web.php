@@ -59,8 +59,15 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
     Route::get('/', 'FrontendController@index');
 
-    Route::get('customer/download', 'CustomerController@download');
     Route::resource('customer', 'CustomerController');
+    Route::group(['prefix' => 'customer'], function () {
+        Route::get('download', 'CustomerController@download');
+        Route::post('topup/store', 'CustomerController@_topupStore');
+        Route::get('{id}/topup/edit', 'CustomerController@_topupEdit');
+        Route::get('{id}/topup/create', 'CustomerController@_topupCreate');
+        Route::get('{id}/topup', 'CustomerController@_topupIndex');
+    });
+
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
         Route::post('{id}/video', 'VendingMachineController@storeVideo');

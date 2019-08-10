@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\User;
 use App\Models\Customer;
+use App\Models\TransferSaldo;
 use App\Helpers\ExcelHelper;
 use App\Helpers\AdminHelper;
 use Illuminate\Http\Request;
@@ -80,4 +81,33 @@ class CustomerController extends Controller
         $header = 'REPORT CUSTOMER';
         ExcelHelper::excel($file_name, $content, $header);
     }
+
+     /** List Saldo */
+     public function _topupIndex($id) 
+     {
+         $view = view('frontend.customer.topup._index');
+         $view->customer = Customer::findOrFail($id);
+         $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $id)->orderBy('created_at', 'desc')->paginate(10);
+         return $view;
+     }
+ 
+     /** Create topup */
+     public function _topupCreate($id)
+     {
+         $view = view('frontend.customer.topup._create');
+         $view->customer = Customer::findOrFail($id);
+ 
+         return $view;
+     }
+ 
+     /** Store topup */
+     public function _topupStore(Request $request)
+     {
+         $topup = AdminHelper::createTopupCustomer($request);
+         $view = view('frontend.customer.topup._index');
+         $view->customer = Customer::findOrFail($topup->to_type_id);
+         $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $topup->to_type_id)->orderBy('created_at', 'desc')->paginate(10);
+ 
+         return $view;
+     }
 }

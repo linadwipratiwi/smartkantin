@@ -47,6 +47,12 @@ class ApiController extends Controller
         return ApiHelper::transaction($request);
     }
 
+    /** Transaction fail */
+    public function transactionFail(Request $request)
+    {
+        return ApiHelper::transactionFail($request);
+    }
+
     /** Store data customer */
     public function customer(Request $request)
     {

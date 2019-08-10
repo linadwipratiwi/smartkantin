@@ -62,11 +62,15 @@
                                             <td>{{$customer->email}}</td>
                                             <td>{{$customer->phone}}</td>
                                             <td>{{$customer->address}}</td>
-                                            <td>{{format_price($customer->saldo)}}</td>
+                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo)}}</td>
                                             <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->vendingMachine ? $customer->vendingMachine->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->created_at ? date_format_view($customer->created_at) : '-'}}</td>
                                             <td>
+                                                <a onclick="showDetail('{{url('front/customer/'.$customer->id.'/topup')}}')" data-toggle="modal" data-target=".detail-modal"  data-original-title="Topup">
+                                                    <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-dollar"></i></button>
+                                                </a>
+                                                
                                                 <a href="{{url('front/customer/'.$customer->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                                 </a>

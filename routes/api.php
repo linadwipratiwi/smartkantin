@@ -18,5 +18,6 @@ Route::post('slot', 'ApiController@findSlot');
 Route::get('customer/{id}', 'ApiController@findCustomer');
 Route::get('clients', 'ApiController@getClient');
 Route::get('firmware/{vending_machine_alias}', 'ApiController@getFirmware');
+Route::post('transaction/{id}/fail', 'ApiController@transactionFail');
 Route::post('transaction', 'ApiController@transaction');
 Route::post('customer', 'ApiController@customer');

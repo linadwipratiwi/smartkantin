@@ -107,6 +107,61 @@ class ApiHelper
 
     }
 
+    public static function transactionFail($request)
+    {
+        $transaction_id = $request->input('transaction_id');
+        $type = $request->input('type') ? : 'mini'; // normal, mini
+
+        DB::beginTransaction();
+        /**
+         * Ketika terjadi gagal 
+         * 1. Ubah status vending machine
+         * 2. kembalikan stok dengan proses stock opname
+         * 3. Update stok di vending mesin
+         */
+        $transaction = VendingMachineTransaction::find($transaction_id);
+        if (!$transaction) {
+            if ($type == 'mini') {
+                return "0:Vending Machine Not not found";
+            }
+
+            return json_encode([
+                'status' => 0,
+                'data' => 'Vending Machine Not not found'
+            ]);
+        }
+
+        $transaction->status_transaction = 0; // failed
+        $transaction->save();
+
+        /** Update record dengan stok opname */
+        $stock_mutation = new StockMutation;
+        $stock_mutation->vending_machine_id = $transaction->vending_machine_id;
+        $stock_mutation->vending_machine_slot_id = $transaction->vending_machine_slot_id;
+        $stock_mutation->stock = 1; // stok dikurang 1
+        $stock_mutation->type = 'transaction_fail';
+        $stock_mutation->food_name = $transaction->food_name;
+        $stock_mutation->hpp = $transaction->hpp;
+        $stock_mutation->selling_price_client = $transaction->selling_price_client;
+        $stock_mutation->created_by = 1; // system
+        $stock_mutation->save();
+
+        /** update stock di vending machine */
+        $vending_machine_slot = VendingMachineSlot::find($transaction->vending_machine_slot_id);
+        $vending_machine_slot->stock = $vending_machine_slot->stock + 1; // stok di vending machine ditambah 1
+        $vending_machine_slot->save();
+
+        DB::commit();
+        if ($type == 'mini') {
+            return '1:'.$transaction->customer->name;
+        }
+
+        return json_encode([
+            'status' => 1,
+            'data' => $transaction
+        ]);
+    }
+
     public static function updateStockTransaction($transaction)
     {
         // tambah record stock opname

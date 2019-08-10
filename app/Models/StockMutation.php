@@ -30,6 +30,11 @@ class StockMutation extends Model
             if ($type == 'excel') return 'Stock Opname';
             return '<span class="label label-info capitalize-font inline-block ml-10">Stock Opname</span>';
         }
+
+        if ($this->type == 'transaction_fail') {
+            if ($type == 'excel') return 'Transaction Fail';
+            return '<span class="label label-warning capitalize-font inline-block ml-10">Transaction Fail</span>';
+        }
         
         if ($type == 'excel') return 'Transaction';
         return '<span class="label label-success capitalize-font inline-block ml-10">Transaction</span>';
