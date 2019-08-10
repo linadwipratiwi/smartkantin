@@ -11,11 +11,6 @@ class TransferSaldo extends Model
     protected $table = 'transfer_saldo';   
     public $timestamps = true;
 
-    public function scopeFromYdsf($q)
-    {
-        $q->where('from_type', 'ydsf');
-    }
-
     public function scopeFromClient($q, $to_type_id="")
     {
         $q->where('from_type', get_class(new Client))
@@ -26,7 +21,7 @@ class TransferSaldo extends Model
             });
     }
 
-    public function scopeToCustomerClient($q, $to_type_id="")
+    public function scopeToCustomer($q, $to_type_id="")
     {
         $q->where('to_type', get_class(new Customer))
             ->where(function ($query) use ($to_type_id) {

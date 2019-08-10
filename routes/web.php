@@ -61,7 +61,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
 
     Route::resource('customer', 'CustomerController');
     Route::group(['prefix' => 'customer'], function () {
-        Route::get('download', 'CustomerController@download');
+        Route::get('{id}/export', 'CustomerController@export');
         Route::post('topup/store', 'CustomerController@_topupStore');
         Route::get('{id}/topup/edit', 'CustomerController@_topupEdit');
         Route::get('{id}/topup/create', 'CustomerController@_topupCreate');

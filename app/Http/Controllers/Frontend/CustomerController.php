@@ -109,5 +109,22 @@ class CustomerController extends Controller
          $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $topup->to_type_id)->orderBy('created_at', 'desc')->paginate(10);
  
          return $view;
-     }
+    }
+
+    /** Export Topup ke Customer */
+    public function export($id) 
+    {
+        $customer = Customer::findOrFail($id);
+        $list_topup = TransferSaldo::fromClient(client()->id)->toCustomer($id)->orderBy('created_at', 'desc')->get();
+        $content = array(array('NO', 'TANGGAL', 'JUMLAH TOPUP', 'PELANGGAN', 'JENIS IDENTITAS', 'NOMER IDENTITAS', 'TOPUP OLEH'));
+        foreach ($list_topup as $row => $topup) {
+            $customer = $topup->to_type::find($topup->to_type_id);
+            array_push($content, [++$row, date_format_view($topup->created_at), format_price($topup->saldo),
+                $customer->name, $customer->identity_type, $customer->identity_number, $topup->createdBy->name]);
+        }
+
+        $file_name = 'RIWAYAT TOPUP KE  ' .$customer->name;
+        $header = $customer->name;
+        ExcelHelper::excel($file_name, $content, $header);
+    }
 }
