@@ -16,7 +16,7 @@ class ApiHelper
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $slot_alias = $request->input('slot_alias');
-        $type = $request->input('type') ? : 'mini'; // normal, mini
+        $type = $request->input('type') ? : 'normal'; // normal, mini
 
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
@@ -86,7 +86,7 @@ class ApiHelper
 
             $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
             if ($type == 'mini') {
-                return '1:'.$transaction->customer->name;
+                return '1:'.$transaction->id.':'.$transaction->customer->name;
             }
 
             return json_encode([
@@ -110,14 +110,15 @@ class ApiHelper
     public static function transactionFail($request)
     {
         $transaction_id = $request->input('transaction_id');
-        $type = $request->input('type') ? : 'mini'; // normal, mini
+        $type = $request->input('type') ? : 'normal'; // normal, mini
 
-        DB::beginTransaction();
+        \DB::beginTransaction();
         /**
          * Ketika terjadi gagal 
          * 1. Ubah status vending machine
          * 2. kembalikan stok dengan proses stock opname
          * 3. Update stok di vending mesin
+         * 4. Kembalikan saldo pelanggan
          */
         $transaction = VendingMachineTransaction::find($transaction_id);
         if (!$transaction) {
@@ -151,7 +152,12 @@ class ApiHelper
         $vending_machine_slot->stock = $vending_machine_slot->stock + 1; // stok di vending machine ditambah 1
         $vending_machine_slot->save();
 
-        DB::commit();
+        $customer = $transaction->customer;
+        $customer->saldo += $transaction->selling_price_vending_machine;
+        $customer->save();
+        /** Kembalikan saldo pelanggan */
+
+        \DB::commit();
         if ($type == 'mini') {
             return '1:'.$transaction->customer->name;
         }

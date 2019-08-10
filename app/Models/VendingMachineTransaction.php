@@ -31,6 +31,11 @@ class VendingMachineTransaction extends Model
         return $this->belongsTo('App\Models\Customer', 'customer_id');
     }
 
+    public function scopeSuccess($q)
+    {
+        $q->where('status_transaction', 1);
+    }
+
     public function scopeSearch($q)
     {
         $type = \Input::get('type');
@@ -64,5 +69,18 @@ class VendingMachineTransaction extends Model
         }
 
         return $q;
+    }
+
+    public function status($type=null)
+    {
+        if ($this->status_transaction == 1) {
+            if ($type == 'excel') return 'Success';
+            return '<span class="label label-success capitalize-font inline-block ml-10">Success</span>';
+        }
+
+        if ($this->status_transaction == 0) {
+            if ($type == 'excel') return 'Failed';
+            return '<span class="label label-info capitalize-font inline-block ml-10">Failed</span>';
+        }
     }
 }

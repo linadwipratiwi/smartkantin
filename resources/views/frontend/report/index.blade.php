@@ -46,6 +46,7 @@
                                             <th>Selling Price VM</th>
                                             <th>Profit Client</th>
                                             <th>Date</th>
+                                            <th>Status Transaction</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,6 +60,7 @@
                                             <td>{{format_price($transaction->selling_price_vending_machine)}}</td>
                                             <td>{{format_price($transaction->profit_client)}}</td>
                                             <td>{{date_format_view($transaction->created_at)}}</td>
+                                            <td>{!! $transaction->status() !!}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
