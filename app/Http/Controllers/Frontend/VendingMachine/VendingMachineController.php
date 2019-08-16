@@ -82,9 +82,9 @@ class VendingMachineController extends Controller
             'file' => 'required'
         ]);
 
-        $file = $request->file('file');
+        $file = $request->input('file');
         $vending_machine = VendingMachine::findOrFail($id);
-        $vending_machine->video = FileHelper::upload($file, 'uploads/video/');
+        $vending_machine->video = $file;
         $vending_machine->save();
 
         toaster_success('upload success');

@@ -8,11 +8,20 @@
             <div class="col-lg-12" id="form-item">
                 {!! csrf_field() !!}
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">Video</label>
-                    <input type='file' name="file" id="file" class="form-control" />
+                    <label class="control-label mb-10">Masukkan Url Youtube disini</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-youtube"></i></div>
+                        <input type='text' name="file" id="file" placeholder="Contoh. https://www.youtube.com/watch?v=vljXoPISytg" class="form-control" />
+                    </div>
+                    
                 </div>
-                @if($vending_machine->video)
-                <a href="{{asset($vending_machine->video)}}"><i class="fa fa-link"></i> Unduh video</a>
+                @if ($vending_machine->video)
+                    <?php
+                    // https://www.youtube.com/watch?v=vljXoPISytg
+                    $url = explode('=', $vending_machine->video);
+                    ?>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{$url[1]}}" frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 @endif
             </div>
             <div class="modal-footer">
