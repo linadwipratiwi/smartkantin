@@ -21,3 +21,4 @@ Route::get('firmware/{vending_machine_alias}', 'ApiController@getFirmware');
 Route::post('transaction/fail', 'ApiController@transactionFail');
 Route::post('transaction', 'ApiController@transaction');
 Route::post('customer', 'ApiController@customer');
+Route::post('get-stock/{vending_alias}', 'ApiController@getStock');

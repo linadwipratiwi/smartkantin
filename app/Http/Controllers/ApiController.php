@@ -120,4 +120,13 @@ class ApiController extends Controller
             'data' => $vending_machine
         ]);
     }
+
+    public function getStock($vending_alias)
+    {
+        $vending = VendingMachine::where('alias', $vending_alias)->first();
+        return response()->json([
+            'status' => 1,
+            'data' => $vending ? $vending->slots : []
+        ]); 
+    }
 }
