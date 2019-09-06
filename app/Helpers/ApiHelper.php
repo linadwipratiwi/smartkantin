@@ -83,7 +83,7 @@ class ApiHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(40);;
+        $vending_machine->flaging_transaction = Str::random(10);;
         $vending_machine->save();
 
         try {
