@@ -9,6 +9,7 @@ use App\Models\StockMutation;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
+use Illuminate\Support\Str;
 
 class ApiHelper
 {
@@ -79,6 +80,12 @@ class ApiHelper
         $transaction->selling_price_vending_machine = $vending_machine_slot->selling_price_vending_machine;
         $transaction->quantity = 1;
         $transaction->status_transaction = 1;
+
+        /** Update flaging transaksi. Digunakan untuk Smansa */
+        $vending_machine = $transaction->vendingMachine;
+        $vending_machine->flaging_transaction = Str::random(40);;
+        $vending_machine->save();
+
         try {
             $transaction->save();
             self::updateStockTransaction($transaction);

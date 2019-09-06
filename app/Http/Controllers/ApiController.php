@@ -129,4 +129,13 @@ class ApiController extends Controller
             'data' => $vending ? $vending->slots : []
         ]); 
     }
+
+    public function getFlagTransaction($vending_alias)
+    {
+        $vending = VendingMachine::where('alias', $vending_alias)->first();
+        return response()->json([
+            'status' => 1,
+            'code' => $vending ? $vending->flaging_transaction : null
+        ]); 
+    }
 }
