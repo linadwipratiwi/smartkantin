@@ -84,6 +84,15 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
     });
+
+    Route::resource('stand', 'Stand\StandController');
+    Route::group(['prefix' => 'stand', 'namespace' => 'Stand'], function () {
+        Route::post('{id}/video', 'StandController@storeVideo');
+        Route::get('{id}/video', 'StandController@_formVideo');
+        Route::resource('{id}/slot', 'StandSlotController');
+        Route::get('{id}/stock/export', 'StockMutationController@export');
+        Route::resource('{id}/stock', 'StockMutationController');
+    });
     
     // Setting
     Route::get('report', 'ReportController@index');

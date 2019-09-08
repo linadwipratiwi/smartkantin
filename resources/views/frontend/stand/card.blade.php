@@ -32,7 +32,7 @@
                                     <a href="javascript:void(0);" class="font-18 txt-grey pull-left sa-warning"><i class="zmdi zmdi-close"></i></a> --}}
                                 </div>
                                 
-                                <a href="javascript:void(0);"> <img src="{{asset('dist/img/vending-logo.png')}}" class="img-responsive" alt="Product Image"> </a>
+                                <a href="javascript:void(0);"> <img src="{{asset('dist/img/warung.png')}}" class="img-responsive" alt="Product Image"> </a>
                             </div>
                             <div class="info">
                                 <h6>{{$vending_machine->name}}</h6>
