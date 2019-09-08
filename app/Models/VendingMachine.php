@@ -38,4 +38,14 @@ class VendingMachine extends Model
     {
         $q->where('client_id', $client_id);
     }
+
+    public function scopeVending($q)
+    {
+        $q->where('type', 1);
+    }
+
+    public function scopeStand($q)
+    {
+        $q->where('type', 2);
+    }
 }

@@ -128,6 +128,7 @@ class AdminHelper
     {
         DB::beginTransaction();
         $vending_machine = $id ? VendingMachine::findOrFail($id) : new VendingMachine;
+        $vending_machine->type = $request->input('type'); // 1. vending 2. stand
         $vending_machine->name = $request->input('name');
         $vending_machine->production_year = $request->input('production_year');
         $vending_machine->location = $request->input('location');

@@ -11,21 +11,16 @@
 				</li>
 				
 				<li>
-					<a @if(\Request::segment(1) == 'client') class="active" @endif href="{{url('client')}}"><div class="pull-left"><i class="zmdi zmdi-chart-donut mr-20"></i><span class="right-nav-text">Client</span></div><div class="clearfix"></div></a>
+					<a @if(\Request::segment(1) == 'client') class="active" @endif href="{{url('client')}}"><div class="pull-left"><i class="fa fa-university mr-20"></i><span class="right-nav-text">Client</span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
-					<a @if(\Request::segment(1) == 'customer') class="active" @endif href="{{ url('customer') }}"><div class="pull-left"><i class="fa fa-support mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
+					<a @if(\Request::segment(1) == 'customer') class="active" @endif href="{{ url('customer') }}"><div class="pull-left"><i class="fa fa-users mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
-					<a @if(\Request::segment(1) == 'vending-machine') class="active" @endif href="{{ url('vending-machine') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="clearfix"></div></a>
-					{{-- <ul id="menu-vending-machine" class="collapse @if(\Request::segment(1) == 'vending-machine') in @endif  collapse-level-1">
-						<li>
-							<a href="{{url('vending-machine')}}">Vending Machine</a>
-						</li>
-						<li>
-							<a href="{{url('inventory/history')}}">Stock Opname</a>
-						</li>
-					</ul> --}}
+					<a @if(\Request::segment(1) == 'vending-machine') class="active" @endif href="{{ url('vending-machine') }}"><div class="pull-left"><i class="fa fa-building mr-20"></i><span class="right-nav-text">Vending Machine</span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
+					<a @if(\Request::segment(1) == 'stand') class="active" @endif href="{{ url('stand') }}"><div class="pull-left"><i class="fa fa-shopping-bag mr-20"></i><span class="right-nav-text">Stand</span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
 					<a @if(\Request::segment(1) == 'transaction') class="active" @endif href="{{ url('transaction') }}"><div class="pull-left"><i class="fa fa-list mr-20"></i><span class="right-nav-text">Transaction </span></div><div class="clearfix"></div></a>

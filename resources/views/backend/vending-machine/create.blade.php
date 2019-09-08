@@ -26,6 +26,7 @@
                         <div class="form-wrap">
                             <form method="post" action="{{url('vending-machine')}}">
                                 {!! csrf_field() !!}
+                                <input type="hidden" class="form-control" value="1" name="type" required>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('nama', 'name') !!}</label>
                                     <input type="text" class="form-control" value="" name="name" required>

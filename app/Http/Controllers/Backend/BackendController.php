@@ -18,7 +18,7 @@ class BackendController extends Controller
         $view = view('backend.dashboard.index');
         $view->total_client = Client::count();
         $view->total_customer = Customer::count();
-        $view->total_vending_machine = VendingMachine::count();
+        $view->total_vending_machine = VendingMachine::vending()->count();
         $view->total_user = User::count();
         $view->total_profit =  VendingMachineTransaction::search()->success()->sum('profit_platform');
         $view->total_transaction =  VendingMachineTransaction::search()->count();

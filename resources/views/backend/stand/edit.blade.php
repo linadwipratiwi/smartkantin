@@ -3,7 +3,7 @@
 @section('content')
     <!-- Title -->
     @include('backend._bread-crumb', [
-        'title' => 'Vending Machine',
+        'title' => 'Stand',
         'breadcrumbs' => [
             0 => [
                 'link' => url('/'),
@@ -11,7 +11,7 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Vending Machine'
+                'label' => 'Stand'
             ],
         ]
     ])
@@ -24,10 +24,10 @@
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="form-wrap">
-                            <form method="post" action="{{url('vending-machine/'.$vending_machine->id)}}">
+                            <form method="post" action="{{url('stand/'.$vending_machine->id)}}">
                                 {!! csrf_field() !!}
-                                <input type="hidden" class="form-control" value="1" name="type" required>
                                 <input name="_method" type="hidden" value="PUT">
+                                <input type="hidden" class="form-control" value="2" name="type" required>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('nama', 'name') !!}</label>
                                     <input type="text" class="form-control" value="{{$vending_machine->name}}" name="name" required>

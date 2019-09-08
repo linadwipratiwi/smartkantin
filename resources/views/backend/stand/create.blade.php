@@ -3,7 +3,7 @@
 @section('content')
     <!-- Title -->
     @include('backend._bread-crumb', [
-        'title' => 'Vending Machine',
+        'title' => 'Stand',
         'breadcrumbs' => [
             0 => [
                 'link' => url('/'),
@@ -11,7 +11,7 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Vending Machine'
+                'label' => 'Stand'
             ],
         ]
     ])
@@ -24,41 +24,39 @@
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="form-wrap">
-                            <form method="post" action="{{url('vending-machine/'.$vending_machine->id)}}">
+                            <form method="post" action="{{url('stand')}}">
                                 {!! csrf_field() !!}
-                                <input type="hidden" class="form-control" value="1" name="type" required>
-                                <input name="_method" type="hidden" value="PUT">
+                                <input type="hidden" class="form-control" value="2" name="type" required>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('nama', 'name') !!}</label>
-                                    <input type="text" class="form-control" value="{{$vending_machine->name}}" name="name" required>
+                                    <input type="text" class="form-control" value="" name="name" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('alias', 'digunakan untuk request API') !!}</label>
-                                    <input type="text" class="form-control" value="{{$vending_machine->alias}}" name="alias" required>
+                                    <input type="text" class="form-control" value="" name="alias" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Client', 'Client') !!} </label>
                                     <select name="client_id" class="form-control" id="client-id">
-                                        <option value="{{$vending_machine->client_id}}" selected>{{$vending_machine->client->name}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Tahun Produksi', 'Production Year') !!} </label>
-                                    <input type="text" name="production_year" class="form-control" id="" value="{{$vending_machine->production_year}}">
+                                    <input type="text" name="production_year" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Lokasi', 'Location') !!} </label>
-                                    <input type="text" name="location" class="form-control" id="" value="{{$vending_machine->location}}">
+                                    <input type="text" name="location" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Alamat IP', 'IP Address') !!} </label>
-                                    <input type="text" name="ip" class="form-control" id="" value="{{$vending_machine->ip}}">
+                                    <input type="text" name="ip" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Versi Firmware', 'Firmware') !!} </label>
                                     <select name="version_firmware_id" id="" class="form-control">
                                         @foreach ($list_firmware as $firmware)
-                                            <option value="{{$firmware->id}}" @if($firmware->id == $vending_machine->version_firmware_id) @endif>{{$firmware->name}}</option>
+                                            <option value="{{$firmware->id}}">{{$firmware->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -66,7 +64,7 @@
                                     <label class="control-label mb-10 text-left">{!! label('Versi UI', 'UI') !!} </label>
                                     <select name="version_ui_id" id="" class="form-control">
                                         @foreach ($list_ui as $ui)
-                                            <option value="{{$ui->id}}" @if($ui->id == $vending_machine->version_ui_id) @endif>{{$ui->name}}</option>
+                                            <option value="{{$ui->id}}">{{$ui->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -84,7 +82,7 @@
 @stop
 
 @section('scripts')
-    <script>
+<script>
     initItemSelect2('#client-id', '{{url("api/clients")}}')
-    </script>
+</script>
 @endsection

@@ -37,6 +37,14 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
         Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
     });
+
+    // Stand
+    Route::resource('stand', 'Stand\StandController');
+    Route::group(['prefix' => 'stand', 'namespace' => 'Stand'], function () {
+        Route::resource('{id}/slot', 'StandSlotController');
+        Route::get('{id}/stock/export', 'StockMutationController@export');
+        Route::resource('{id}/stock', 'StockMutationController');
+    });
     
     // Setting
     Route::resource('setting', 'SettingController');

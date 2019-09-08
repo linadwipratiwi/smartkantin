@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Backend\VendingMachine;
+namespace App\Http\Controllers\Backend\Stand;
 
 use Illuminate\Http\Request;
 use App\Helpers\AdminHelper;
-use App\Models\VendingMachine;
+use App\Helpers\FileHelper;
 use App\Models\Firmware;
+use App\Models\VendingMachine;
 use App\Http\Controllers\Controller;
 
-class VendingMachineController extends Controller
+class StandController extends Controller
 {
     public function index(Request $request)
     {
-        $view = view('backend.vending-machine.index');
-        $view->vending_machines = VendingMachine::vending()->paginate(25);
+        $view = view('backend.stand.index');
+        $view->vending_machines = VendingMachine::stand()->paginate(25);
         return $view;
     }
 
     public function create()
     {
-        $view = view('backend.vending-machine.create');
+        $view = view('backend.stand.create');
         $view->list_firmware = Firmware::firmware()->get();
         $view->list_ui = Firmware::ui()->get();
         return $view;
@@ -33,18 +34,18 @@ class VendingMachineController extends Controller
 
         if ($validator->fails()) {
             toaster_error('create form failed');
-            return redirect('vending-machine/create')->withErrors($validator)
+            return redirect('stand/create')->withErrors($validator)
                 ->withInput();
         }
 
         AdminHelper::createVendingMachine($request);
         toaster_success('create form success');
-        return redirect('vending-machine');
+        return redirect('stand');
     }
 
     public function edit($id)
     {
-        $view = view('backend.vending-machine.edit');
+        $view = view('backend.stand.edit');
         $view->vending_machine = VendingMachine::findOrFail($id);
         $view->list_firmware = Firmware::firmware()->get();
         $view->list_ui = Firmware::ui()->get();
@@ -59,7 +60,7 @@ class VendingMachineController extends Controller
 
         AdminHelper::createVendingMachine($request, $id);
         toaster_success('create form success');
-        return redirect('vending-machine');
+        return redirect('stand');
     }
 
     public function destroy($id)
@@ -69,6 +70,6 @@ class VendingMachineController extends Controller
         $delete = AdminHelper::delete($vending_machine);
         
         toaster_success('delete form success');
-        return redirect('vending-machine');
+        return redirect('stand');
     }
 }
