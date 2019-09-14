@@ -20,6 +20,7 @@ use App\Models\StockMutation;
 
 class FrontHelper
 {
+    // Produk di Stand
     public static function createProduct($request, $id='')
     {
         $file = $request->file;
@@ -38,11 +39,15 @@ class FrontHelper
         $product->selling_price_vending_machine = format_db($request->selling_price_client);
         $product->profit_platform_type = null;
         $product->profit_platform_value = 'value'; // set static value
-        $product->photo = FileHelper::upload($file, 'uploads/product/');;
+        if ($file) {
+            $product->photo = FileHelper::upload($file, 'uploads/product/');;
+        }
 
         try {
             $product->save();
-            self::creteStockFromCreateProduct($product);
+            $stock_mutation = self::creteStockFromCreateProduct($product, $id);
+            $product->ref_stock_mutation_id = $stock_mutation->id;
+            $product->save();
         } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
@@ -53,10 +58,10 @@ class FrontHelper
 
     }
 
-    public static function creteStockFromCreateProduct($product)
+    public static function creteStockFromCreateProduct($product, $id='')
     {
         DB::beginTransaction();
-        $stock_mutation = new StockMutation;
+        $stock_mutation = $id ? StockMutation::find($product->ref_stock_mutation_id) : new StockMutation;
         $stock_mutation->vending_machine_id = $product->vendingMachine->id;
         $stock_mutation->vending_machine_slot_id = $product->id;
         $stock_mutation->stock = $product->stock;

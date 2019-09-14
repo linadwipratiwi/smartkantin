@@ -14,24 +14,28 @@
                         <table class="table color-table info-table">
                             <thead>
                             <tr>
-                                <th class="text-center" style="min-width: 50px">#</th>
-                                <th class="text-center">Foto</th>
-                                <th class="text-center">Makanan</th>
-                                <th class="text-center">Stok</th>
-                                <th class="text-center">Harga Jual</th>
+                                <th class="text-left" style="min-width: 50px">#</th>
+                                <th class="text-left">Foto</th>
+                                <th class="text-left">Makanan</th>
+                                <th class="text-right">Stok</th>
+                                <th class="text-right">Harga Jual</th>
                             </tr>
                             </thead>
                             @foreach($vending_machine->slots as $i => $slot)
                                 <tr id="tr-slot-{{$slot->id}}">
                                     <td>
+                                        <a onclick="secureDelete('{{url('front/stand/".$vending_machine->id."/product/'.$slot->id)}}', '#tr-slot-{{$slot->id}}')"
+                                            data-toggle="tooltip" data-original-title="Delete">
+                                            <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
+                                        </a>
                                         <a  onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                         </a>
                                     </td>
                                     <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td>
                                     <td>{{$slot->food_name}}</td>
-                                    <td>{{$slot->stock}}</td>
-                                    <td>{{format_price($slot->selling_price_vending_machine)}}</td>
+                                    <td class="text-right">{{$slot->stock}}</td>
+                                    <td class="text-right">{{format_price($slot->selling_price_vending_machine)}}</td>
                                 </tr>
                             @endforeach
                         </table>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Frontend\Stand;
 
-use Illuminate\Http\Request;
-use App\Helpers\FrontHelper;
 use App\Models\Category;
+use App\Helpers\AdminHelper;
+use App\Helpers\FrontHelper;
+use Illuminate\Http\Request;
+use App\Models\StockMutation;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Http\Controllers\Controller;
@@ -43,15 +45,17 @@ class StandSlotController extends Controller
         $view = view('frontend.stand.slot._edit');
         $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
         $view->vending_machine_slot = VendingMachineSlot::findOrFail($id);
+        $view->categories = Category::food()->get();
 
         return $view;
     }
 
     public function destroy($vending_machine_id, $id)
     {
-        $vending_machine = VendingMachineSlot::findOrFail($id);
-        // remove client
-        $delete = FrontHelper::delete($vending_machine);
+        $product = VendingMachineSlot::findOrFail($id);
+        $stock_mutation = StockMutation::find($product->ref_stock_mutation_id);
+        $stock_mutation ? $stock_mutation->delete() : '';
+        $delete = AdminHelper::delete($product);
         
         toaster_success('delete form success');
         return redirect('front/stand');
