@@ -67,7 +67,6 @@
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             data: { id: id, stock:stock, food_name: food_name, price: price },
             success: function(res) {
-                console.log(res);
                 notification('Berhasil', 'Perubahan berhasil disimpan')
             }
         })

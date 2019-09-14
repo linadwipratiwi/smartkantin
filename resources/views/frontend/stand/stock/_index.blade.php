@@ -2,9 +2,8 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
-            <p>List mutasi stok vending machine</p>
-            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" href="{{url("front/vending-machine/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-file-text"></i> </span><span class="btn-text">Download Laporan</span></a> 
-            <a class="btn btn-primary btn-sm btn-lable-wrap left-label pull-right mr-5" onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/stock/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Buat Baru</span></a> 
+            <p>List mutasi stok dan transaksi warung</p>
+            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" href="{{url("front/stand/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-file-text"></i> </span><span class="btn-text">Download Laporan</span></a> 
         </div>
         <div class="col-lg-12">
             <div class="modal-body">
@@ -17,9 +16,7 @@
                                 {{-- <th class="text-center" style="min-width: 150px">Aksi</th> --}}
                                 <th class="text-center">Nama Makanan</th>
                                 <th class="text-center">Quantity</th>
-                                <th class="text-center">Slot Vending Machine</th>
-                                <th class="text-center">HPP</th>
-                                <th class="text-center">Harga Jual Client</th>
+                                <th class="text-center">Harga Jual</th>
                                 <th class="text-center">Tanggal Transaksi</th>
                                 <th class="text-center">Jenis Transaksi</th>
                             </tr>
@@ -37,8 +34,6 @@
                                     </td> --}}
                                     <td>{{$stock->food_name}}</td>
                                     <td>{{$stock->stock}}</td>
-                                    <td>{{$stock->vendingMachineSlot->name}}</td>
-                                    <td>{{format_price($stock->hpp)}}</td>
                                     <td>{{format_price($stock->selling_price_client)}}</td>
                                     <td>{{$stock->created_at ? date_format_view($stock->created_at) : '-'}}</td>
                                     <td>{!! $stock->typeTransaction() !!}</td>

@@ -38,7 +38,7 @@
                                 <h6>{{$vending_machine->name}}</h6>
                                 <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> 230</span>
                                 <br>
-                                <a title="Grafik" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/slot")}}')" data-toggle="modal"
+                                <a title="Grafik" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/graph")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="zmdi zmdi-landscape"></i></button>
                                 </a>
@@ -46,7 +46,7 @@
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-cubes"></i></button>
                                 </a>
-                                <a title="Riwayat Transaksi" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/video")}}')" data-toggle="modal"
+                                <a title="Riwayat Transaksi" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/stock")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-list"></i></button>
                                 </a>

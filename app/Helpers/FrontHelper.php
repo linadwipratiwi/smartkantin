@@ -68,6 +68,7 @@ class FrontHelper
         $stock_mutation->type = 'stock_mutation';
         $stock_mutation->food_name = $product->food_name;
         $stock_mutation->hpp = $product->hpp;
+        $stock_mutation->selling_price_client = $product->selling_price_client;
         $stock_mutation->created_by = auth()->user()->id;
 
         try {
