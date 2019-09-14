@@ -38,17 +38,17 @@
                                 <h6>{{$vending_machine->name}}</h6>
                                 <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> 230</span>
                                 <br>
-                                <a onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/slot")}}')" data-toggle="modal"
+                                <a title="Grafik" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/slot")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
-                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="fa fa-eye"></i></button>
+                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="zmdi zmdi-landscape"></i></button>
                                 </a>
-                                <a onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/stock")}}')" data-toggle="modal"
+                                <a title="Produk dan Stock Opname" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-cubes"></i></button>
                                 </a>
-                                <a onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/video")}}')" data-toggle="modal"
+                                <a title="Riwayat Transaksi" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/video")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
-                                    <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-play"></i></button>
+                                    <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-list"></i></button>
                                 </a>
                             </div>
                         </article>

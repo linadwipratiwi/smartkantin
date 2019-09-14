@@ -9,9 +9,9 @@ class Category extends Model
     protected $table = 'categories';   
     public $timestamps = false;
 
-    public function scopeItem($q)
+    public function scopeFood($q)
     {
-        $q->whereType('item');
+        $q->whereType('food');
     }
 
     public function scopeSubmission($q)

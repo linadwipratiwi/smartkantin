@@ -25,7 +25,7 @@ class CategorySeeder extends Seeder
     {
         $this->output->writeln('<info>--- Category Seeder Started ---</info>');
         $array_data = array(
-            'version vending machine' => ['V.1.0']
+            'food' => ['Makanan', 'Minuman', 'Snack']
         );
 
         DB::beginTransaction();

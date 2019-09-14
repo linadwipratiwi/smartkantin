@@ -2,8 +2,10 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
-            <p>Pengaturan slot untuk setiap vending machine</p>
-            {{-- <button class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" onclick="showDetail('{{url("vending-machine/".$vending_machine->id."/slot/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Buat baru</span></button> --}}
+            <p>Pengaturan produk yang dijual untuk setiap warung</p>
+            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Tambah produk baru</span></a>
+            <a class="btn btn-success btn-sm btn-lable-wrap left-label pull-right mr-5" href="{{url("front/stand/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-cube"></i> </span><span class="btn-text">Stock Opname</span></a> 
+
         </div>
         <div class="col-lg-12">
             <div class="modal-body">
@@ -13,34 +15,23 @@
                             <thead>
                             <tr>
                                 <th class="text-center" style="min-width: 50px">#</th>
+                                <th class="text-center">Foto</th>
                                 <th class="text-center">Makanan</th>
                                 <th class="text-center">Stok</th>
-                                <th class="text-center">HPP</th>
-                                <th class="text-center">Harga Jual Client</th>
-                                <th class="text-center">Harga Jual (asli)</th>
-                                <th class="text-center">Profit Client</th>
-                                <th class="text-center">Profit Platform</th>
-                                <th class="text-center">Kapasitas</th>
-                                <th class="text-center">Tgl. Expired</th>
+                                <th class="text-center">Harga Jual</th>
                             </tr>
                             </thead>
                             @foreach($vending_machine->slots as $i => $slot)
                                 <tr id="tr-slot-{{$slot->id}}">
                                     <td>
-                                        <a  onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/slot/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
+                                        <a  onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                         </a>
                                     </td>
+                                    <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td>
                                     <td>{{$slot->food_name}}</td>
                                     <td>{{$slot->stock}}</td>
-                                    <td>{{format_price($slot->hpp)}}</td>
-                                    <td>{{format_price($slot->selling_price_client)}}</td>
                                     <td>{{format_price($slot->selling_price_vending_machine)}}</td>
-                                    <td>{{format_price($slot->profit_client)}}</td>
-                                    <td>{!! $slot->profitPlatform() !!}</td>
-                                    <td>{{$slot->capacity}}</td>
-                                    <td>{{$slot->expired_date}}</td>
-                                    
                                 </tr>
                             @endforeach
                         </table>

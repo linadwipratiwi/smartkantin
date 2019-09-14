@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Frontend\Stand;
 
 use Illuminate\Http\Request;
-use App\Helpers\AdminHelper;
+use App\Helpers\FrontHelper;
+use App\Models\Category;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Http\Controllers\Controller;
@@ -22,13 +23,14 @@ class StandSlotController extends Controller
     {
         $view = view('frontend.stand.slot._create');
         $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        $view->categories = Category::food()->get();
         return $view;
     }
 
     public function store(Request $request, $vending_machine_id)
     {
         // store
-        AdminHelper::createVendingMachineSlotByClient($request);
+        FrontHelper::createProduct($request);
 
         // show index
         $view = view('frontend.stand.slot._index');
@@ -49,7 +51,7 @@ class StandSlotController extends Controller
     {
         $vending_machine = VendingMachineSlot::findOrFail($id);
         // remove client
-        $delete = AdminHelper::delete($vending_machine);
+        $delete = FrontHelper::delete($vending_machine);
         
         toaster_success('delete form success');
         return redirect('front/stand');
