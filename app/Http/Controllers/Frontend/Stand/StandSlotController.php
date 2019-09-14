@@ -60,4 +60,22 @@ class StandSlotController extends Controller
         toaster_success('delete form success');
         return redirect('front/stand');
     }
+
+    public function stockOpnameForm($vending_machine_id)
+    {
+        $view = view('frontend.stand.slot.stock-opname-form');
+        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        return $view;
+    }
+
+    public function updateProduct(Request $request)
+    {
+        $product = VendingMachineSlot::findOrFail($request->id);
+        $product->stock = $request->stock;
+        $product->food_name = $request->food_name;
+        $product->selling_price_client = format_db($request->price);
+        $product->selling_price_vending_machine = format_db($request->price);
+        $product->save();
+        return 1;
+    }
 }

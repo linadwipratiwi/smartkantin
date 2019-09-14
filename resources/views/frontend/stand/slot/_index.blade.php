@@ -4,7 +4,7 @@
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
             <p>Pengaturan produk yang dijual untuk setiap warung</p>
             <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Tambah produk baru</span></a>
-            <a class="btn btn-success btn-sm btn-lable-wrap left-label pull-right mr-5" href="{{url("front/stand/".$vending_machine->id."/stock/export")}}"> <span class="btn-label"><i class="fa fa-cube"></i> </span><span class="btn-text">Stock Opname</span></a> 
+            <a class="btn btn-success btn-sm btn-lable-wrap left-label pull-right mr-5" href="{{url("front/stand/".$vending_machine->id."/product/stock-opname")}}"> <span class="btn-label"><i class="fa fa-cube"></i> </span><span class="btn-text">Stock Opname Semua produk</span></a> 
 
         </div>
         <div class="col-lg-12">

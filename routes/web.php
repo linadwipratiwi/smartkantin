@@ -90,6 +90,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::post('{id}/video', 'StandController@storeVideo');
         Route::get('{id}/video', 'StandController@_formVideo');
         Route::get('{id}/stock/export', 'StockMutationController@export');
+        Route::post('product/stock-opname/update', 'StandSlotController@updateProduct');
+        Route::get('{id}/product/stock-opname', 'StandSlotController@stockOpnameForm');
         Route::resource('{id}/product', 'StandSlotController');
         Route::resource('{id}/stock', 'StockMutationController');
     });
