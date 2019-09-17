@@ -294,4 +294,28 @@ class AdminHelper
         DB::commit();
         return $transfer_saldo;
     }
+
+    /**
+     * Create Stand
+     */
+    public static function createStand($request, $id='')
+    {
+        $client = Client::where('user_id', auth()->user()->id)->first();
+
+        DB::beginTransaction();
+        $stand = $id ? VendingMachine::findOrFail($id) : new VendingMachine;
+        $stand->type = 2; // 1. vending 2. stand
+        $stand->name = $request->input('name');
+        $stand->client_id = $client->id;
+        $stand->alias = str_random(20);
+
+        try {
+            $stand->save();
+        } catch (\Exception $e){
+            throw new AppException("Failed to save data", 503);
+        }
+
+        DB::commit();
+        return $stand;
+    }
 }

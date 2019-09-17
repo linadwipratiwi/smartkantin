@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\VendingMachineTransaction;
 
 class VendingMachine extends Model
 {
@@ -47,5 +48,10 @@ class VendingMachine extends Model
     public function scopeStand($q)
     {
         $q->where('type', 2);
+    }
+
+    public function totalTransactionToday()
+    {
+        return VendingMachineTransaction::whereDate('created_at', '=', date('Y-m-d'))->where('vending_machine_id', $this->id)->count();
     }
 }

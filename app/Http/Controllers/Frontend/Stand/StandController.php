@@ -34,9 +34,9 @@ class StandController extends Controller
                 ->withInput();
         }
 
-        AdminHelper::createVendingMachine($request);
+        AdminHelper::createStand($request);
         toaster_success('create form success');
-        return redirect('stand');
+        return redirect('front/stand');
     }
 
     public function edit($id)
@@ -53,7 +53,7 @@ class StandController extends Controller
             'name' => 'required'
         ]);
 
-        AdminHelper::createVendingMachine($request, $id);
+        AdminHelper::createStand($request, $id);
         toaster_success('create form success');
         return redirect('stand');
     }

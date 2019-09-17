@@ -3,7 +3,7 @@
 @section('content')
     <!-- Title -->
     @include('frontend._bread-crumb', [
-        'title' => 'Vending Machine',
+        'title' => 'Stand',
         'breadcrumbs' => [
             0 => [
                 'link' => url('/'),
@@ -11,7 +11,7 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Vending Machine'
+                'label' => 'Stand'
             ],
         ]
     ])
@@ -36,7 +36,7 @@
                             </div>
                             <div class="info">
                                 <h6>{{$vending_machine->name}}</h6>
-                                <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> 230</span>
+                                <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> {{format_price($vending_machine->totalTransactionToday(), 0)}}</span>
                                 <br>
                                 <a title="Grafik" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/graph")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
@@ -57,6 +57,29 @@
             </div>	
         </div>
         @endforeach
+        
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+            <div class="panel panel-default card-view pa-0">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body pa-0">
+                        <article class="col-item">
+                            <div class="photo">
+                                <div class="options">
+                                    {{-- <a href="add-products.html" class="font-18 txt-grey mr-10 pull-left"><i class="zmdi zmdi-edit"></i></a>
+                                    <a href="javascript:void(0);" class="font-18 txt-grey pull-left sa-warning"><i class="zmdi zmdi-close"></i></a> --}}
+                                </div>
+                                
+                                <a href="{{url('front/stand/create')}}"> <img src="{{asset('dist/img/warung-abu.png')}}" class="img-responsive" alt="Product Image"> </a>
+                            </div>
+                            <div class="info">
+                                <h6 style="font-weight:bold; padding-left:20px ">BUAT WARUNG BARU</h6>
+                                <br><br><br><br>
+                            </div>
+                        </article>
+                    </div>
+                </div>	
+            </div>	
+        </div>
     </div>
     <!-- /Row -->
 @stop
