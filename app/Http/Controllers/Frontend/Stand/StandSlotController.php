@@ -76,6 +76,11 @@ class StandSlotController extends Controller
         $product->selling_price_client = format_db($request->price);
         $product->selling_price_vending_machine = format_db($request->price);
         $product->save();
+
+        $vending_machine = $product->vendingMachine;
+        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->save();
+
         return 1;
     }
 }
