@@ -130,7 +130,7 @@ class AdminHelper
         $vending_machine = $id ? VendingMachine::findOrFail($id) : new VendingMachine;
         $vending_machine->type = $request->input('type'); // 1. vending 2. stand
         $vending_machine->name = $request->input('name');
-        $vending_machine->production_year = $request->input('production_year');
+        $vending_machine->production_year = $request->input('production_year') ? : date('Y');
         $vending_machine->location = $request->input('location');
         $vending_machine->ip = $request->input('ip');
         $vending_machine->client_id = $request->input('client_id');
