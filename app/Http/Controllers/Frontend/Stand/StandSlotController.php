@@ -71,7 +71,7 @@ class StandSlotController extends Controller
     public function updateProduct(Request $request)
     {
         $product = VendingMachineSlot::findOrFail($request->id);
-        $product->stock = $request->stock;
+        $product->stock = format_db($request->stock);
         $product->food_name = $request->food_name;
         $product->selling_price_client = format_db($request->price);
         $product->selling_price_vending_machine = format_db($request->price);
