@@ -142,9 +142,19 @@ class ApiController extends Controller
         ]); 
     }
 
+    /**
+     * STAND API
+     */
+
     /** Get All stock in client */
     public function getStockAllVending($username)
     {
         return ApiStandHelper::getStockAllVending($username);
+    }
+
+
+    public function standTransaction(Request $request)
+    {
+        return ApiStandHelper::transaction($request);
     }
 }
