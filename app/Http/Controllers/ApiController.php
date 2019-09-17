@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
-use App\Models\VendingMachineSlot;
-use App\Models\VendingMachine;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\VendingMachine;
+use App\Helpers\ApiStandHelper;
+use App\Models\VendingMachineSlot;
 
 class ApiController extends Controller
 {
@@ -121,6 +122,7 @@ class ApiController extends Controller
         ]);
     }
 
+    /** Get stock per vending */
     public function getStock($vending_alias)
     {
         $vending = VendingMachine::where('alias', $vending_alias)->first();
@@ -130,6 +132,7 @@ class ApiController extends Controller
         ]); 
     }
 
+    /** Get flag transaction */
     public function getFlagTransaction($vending_alias)
     {
         $vending = VendingMachine::where('alias', $vending_alias)->first();
@@ -137,5 +140,11 @@ class ApiController extends Controller
             'status' => 1,
             'code' => $vending ? $vending->flaging_transaction : null
         ]); 
+    }
+
+    /** Get All stock in client */
+    public function getStockAllVending($username)
+    {
+        return ApiStandHelper::getStockAllVending($username);
     }
 }

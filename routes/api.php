@@ -23,3 +23,7 @@ Route::post('transaction', 'ApiController@transaction');
 Route::post('customer', 'ApiController@customer');
 Route::get('get-stock/{vending_alias}', 'ApiController@getStock');
 Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransaction');
+
+/** API stand */
+Route::get('get-all-stock/{username}', 'ApiController@getStockAllVending');
+
