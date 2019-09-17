@@ -148,6 +148,28 @@ class AdminHelper
         return $vending_machine;
     }
 
+    public static function createVendingMachineAndSlot($request)
+    {
+        $vending_machine = self::createVendingMachine($request);
+        $row = $request->slot_rows;
+        $column = $request->slot_column;
+        if ($row && $column) {
+            // $total = $row * $column;
+            for ($i=0; $i<$row; $i++) {
+                for ($y=0; $y<$column; $y++) {
+                    $request['name'] = 'Makanan '. $i.$y;
+                    $request['alias'] = $vending_machine->alias.'_baris_'.$i.'_kolom_'.$y;
+                    $request['vending_machine_id'] = $vending_machine->id;
+                    $request['capacity'] = $column;
+                    self::createVendingMachineSlot($request);
+                }
+            }
+        }
+
+        return $vending_machine;
+
+    }
+
     public static function createVendingMachineSlot($request)
     {
         DB::beginTransaction();
@@ -157,8 +179,8 @@ class AdminHelper
         $vending_machine->vending_machine_id = $request->input('vending_machine_id');
         $vending_machine->alias = $request->input('alias');
         $vending_machine->food_name = $request->input('food_name');
-        $vending_machine->capacity = $request->input('capacity');
-        $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
+        $vending_machine->capacity = $request->input('capacity') ? : null;
+        $vending_machine->expired_date = $request->input('expired_date') ? Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date')) : null;
         $vending_machine->profit_platform_type = $request->input('profit_platform_type');
         if ($vending_machine->profit_platform_type == 'value') {
             $vending_machine->profit_platform_value = format_db($request->input('profit_platform_value'));

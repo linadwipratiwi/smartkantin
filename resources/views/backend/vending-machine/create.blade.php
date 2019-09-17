@@ -32,7 +32,7 @@
                                     <input type="text" class="form-control" value="" name="name" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('alias', 'digunakan untuk request API') !!}</label>
+                                    <label class="control-label mb-10 text-left">{!! label('alias / prefix', 'digunakan untuk request API dan sebagai prefix') !!}</label>
                                     <input type="text" class="form-control" value="" name="alias" required>
                                 </div>
                                 <div class="form-group">
@@ -40,17 +40,28 @@
                                     <select name="client_id" class="form-control" id="client-id">
                                     </select>
                                 </div>
+                                
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Tahun Produksi', 'Production Year') !!} </label>
-                                    <input type="text" name="production_year" class="form-control" id="" value="">
+                                    <label class="control-label mb-10 text-left">{!! label('baris', 'digunakan untuk generate baris slot') !!} </label>
+                                    <input type="number" min="1" name="slot_rows" placeholder="misl. 9" class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Lokasi', 'Location') !!} </label>
-                                    <input type="text" name="location" class="form-control" id="" value="">
+                                    <label class="control-label mb-10 text-left">{!! label('kolom', 'digunakan untuk generate kolom slot') !!} </label>
+                                    <input type="number" min="1" name="slot_column" placeholder="misl. 4" class="form-control" id="" value="">
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Alamat IP', 'IP Address') !!} </label>
-                                    <input type="text" name="ip" class="form-control" id="" value="">
+                                <div class="form-group ">
+                                    <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
+                                    <select name="profit_platform_type" id="" onchange="setType(this.value)" class="form-control">
+                                        <option value="value" selected>Value</option>
+                                        <option value="percent">Percent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="">
+                                    <label class="control-label mb-10">{!! label('Presentase profit / dengan set value', 'Jika Anda memilih type percent, maka isi dengan percent (max: 100). Jika dengan value, maka isi dengan harga (3000)') !!}</label>
+                                    <div class="input-group"> 
+                                        <span class="input-group-addon" id="lb-type">Rp.</span>
+                                        <input type="text" id="profit_platform_value" name="profit_platform_value" class="form-control format-price" placeholder="">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Versi Firmware', 'Firmware') !!} </label>
@@ -84,5 +95,14 @@
 @section('scripts')
 <script>
     initItemSelect2('#client-id', '{{url("api/clients")}}')
+    initFormatNumber();
+    function setType(value) {
+        type = 'Rp.'
+        if (value == 'percent') {
+            type = '%'    
+        }
+
+        $('#lb-type').html(type);
+    }    
 </script>
 @endsection

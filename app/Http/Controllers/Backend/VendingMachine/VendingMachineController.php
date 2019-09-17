@@ -28,7 +28,8 @@ class VendingMachineController extends Controller
     public function store(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-            'name' => 'required'
+            'name' => 'required',
+            'alias' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -37,7 +38,7 @@ class VendingMachineController extends Controller
                 ->withInput();
         }
 
-        AdminHelper::createVendingMachine($request);
+        AdminHelper::createVendingMachineAndSlot($request);
         toaster_success('create form success');
         return redirect('vending-machine');
     }
