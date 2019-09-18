@@ -80,6 +80,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {
         Route::post('{id}/video', 'VendingMachineController@storeVideo');
         Route::get('{id}/video', 'VendingMachineController@_formVideo');
+        Route::post('product/stock-opname/update', 'VendingMachineSlotController@updateProduct');
+        Route::get('{id}/product/stock-opname', 'VendingMachineSlotController@stockOpnameForm');
         Route::resource('{id}/slot', 'VendingMachineSlotController');
         Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
