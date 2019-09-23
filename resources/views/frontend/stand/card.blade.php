@@ -48,7 +48,7 @@
                                 </a>
                                 <a title="Riwayat Transaksi" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/stock")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
-                                    <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-list"></i></button>
+                                    <button class="btn btn-warning btn-icon-anim btn-square btn-sm"><i class="fa fa-list"></i></button>
                                 </a>
                                 <a href="{{url('front/stand/'.$vending_machine->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
