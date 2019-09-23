@@ -17,6 +17,7 @@
                                 <th class="text-left" style="min-width: 50px">#</th>
                                 <th class="text-left">Foto</th>
                                 <th class="text-left">Makanan</th>
+                                <th class="text-left">Jenis</th>
                                 <th class="text-right">Stok</th>
                                 <th class="text-right">Harga Jual</th>
                             </tr>
@@ -34,6 +35,7 @@
                                     </td>
                                     <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td>
                                     <td>{{$slot->food_name}}</td>
+                                    <td>{{$slot->category ? $slot->category->name : '-' }}</td>
                                     <td class="text-right">{{$slot->stock}}</td>
                                     <td class="text-right">{{format_price($slot->selling_price_vending_machine)}}</td>
                                 </tr>

@@ -33,6 +33,7 @@ class FrontHelper
         $product->alias = str_random(40);
         $product->food_name = $request->input('food_name');
         $product->capacity = 1000;
+        $product->category_id = $request->input('category_id');
         $product->stock = $request->input('stock');;
         $product->expired_date = null;
         $product->selling_price_client = format_db($request->selling_price_client);
