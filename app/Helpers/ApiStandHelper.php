@@ -47,6 +47,37 @@ class ApiStandHelper
         ]);
     }
 
+    /** 
+     * Digunakan untuk mengambil flag di semua vending yang ada di client
+     */
+    public static function getFlagClient($username)
+    {
+        /** check user */
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'User not found'
+            ]);
+        }
+
+        /** check client */
+        $client = Client::where('user_id', $user->id)->first();
+        if (!$user) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Client not found'
+            ]);
+        }
+
+        /** get all stand */
+        $list_all_stand = VendingMachine::select('flaging_transaction')->stand()->where('client_id', $client->id)->get();
+        return json_encode([
+            'status' => 1,
+            'data' => $list_all_stand
+        ]);
+    }
+
     public static function transaction($request)
     {
         $customer_identity_number = $request->input('customer_identity_number');

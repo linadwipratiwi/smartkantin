@@ -26,5 +26,6 @@ Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransac
 
 /** API stand */
 Route::get('get-all-stock/{username}', 'ApiController@getStockAllVending');
+Route::get('get-flag-client/{username}', 'ApiController@getFlagTransactionClient');
 Route::post('stand/transaction', 'ApiController@standTransaction');
 
