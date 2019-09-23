@@ -21,7 +21,7 @@
     <!-- Row -->
     <div class="row">
         @foreach($vending_machines as $row => $vending_machine)
-        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6" id="card-stand-{{$vending_machine->id}}">
             <div class="panel panel-default card-view pa-0">
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body pa-0">
@@ -49,6 +49,13 @@
                                 <a title="Riwayat Transaksi" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/stock")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
                                     <button class="btn btn-info btn-icon-anim btn-square btn-sm"><i class="fa fa-list"></i></button>
+                                </a>
+                                <a href="{{url('front/stand/'.$vending_machine->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
+                                    <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
+                                </a>
+                                <a onclick="secureDelete('{{url('front/stand/'.$vending_machine->id)}}', '#card-stand-{{$vending_machine->id}}')"
+                                    data-toggle="tooltip" data-original-title="Close">
+                                    <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
                                 </a>
                             </div>
                         </article>

@@ -55,7 +55,7 @@ class StandController extends Controller
 
         AdminHelper::createStand($request, $id);
         toaster_success('create form success');
-        return redirect('stand');
+        return redirect('front/stand');
     }
 
     public function destroy($id)
@@ -65,7 +65,7 @@ class StandController extends Controller
         $delete = AdminHelper::delete($vending_machine);
         
         toaster_success('delete form success');
-        return redirect('stand');
+        return redirect('front/stand');
     }
 
     public function _formVideo($id)
