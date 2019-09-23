@@ -55,6 +55,11 @@ class StandSlotController extends Controller
         $product = VendingMachineSlot::findOrFail($id);
         $stock_mutation = StockMutation::find($product->ref_stock_mutation_id);
         $stock_mutation ? $stock_mutation->delete() : '';
+
+        $vending_machine = $product->vendingMachine;
+        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->save();
+
         $delete = AdminHelper::delete($product);
         
         toaster_success('delete form success');
