@@ -54,4 +54,30 @@ class VendingMachineSlotController extends Controller
         toaster_success('delete form success');
         return redirect('front/vending-machine');
     }
+
+    public function stockOpnameForm($vending_machine_id)
+    {
+        $view = view('frontend.vending-machine.slot.stock-opname-form');
+        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        return $view;
+    }
+
+    public function updateProduct(Request $request)
+    {
+
+        $product = VendingMachineSlot::findOrFail($request->id);
+        $product->stock = $request->stock;
+        $product->food_name = $request->food_name;
+        $product->selling_price_client = $request->price;
+        $product->selling_price_vending_machine = $request->price_platform;
+        $product->selling_price_client = $request->price_client;
+        $product->hpp = $request->hpp;
+        $product->save();
+
+        $vending_machine = $product->vendingMachine;
+        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->save();
+
+        return 1;
+    }
 }

@@ -5,18 +5,19 @@ namespace App\Helpers;
 use App\User;
 use Carbon\Carbon;
 use App\Models\Item;
-use App\Models\Firmware;
 use App\Models\Client;
 use App\Models\Customer;
-use App\Models\TransferSaldo;
+use App\Models\Firmware;
 use App\Helpers\FileHelper;
+use Illuminate\Support\Str;
 use App\Helpers\AdminHelper;
 use Bican\Roles\Models\Role;
+use App\Models\StockMutation;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Exceptions\AppException;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
-use App\Models\StockMutation;
 
 class FrontHelper
 {
@@ -33,6 +34,7 @@ class FrontHelper
         $product->alias = str_random(40);
         $product->food_name = $request->input('food_name');
         $product->capacity = 1000;
+        $product->category_id = $request->input('category_id');
         $product->stock = $request->input('stock');;
         $product->expired_date = null;
         $product->selling_price_client = format_db($request->selling_price_client);
@@ -70,6 +72,10 @@ class FrontHelper
         $stock_mutation->hpp = $product->hpp;
         $stock_mutation->selling_price_client = $product->selling_price_client;
         $stock_mutation->created_by = auth()->user()->id;
+
+        $vending_machine = $product->vendingMachine;
+        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->save();
 
         try {
             $stock_mutation->save();

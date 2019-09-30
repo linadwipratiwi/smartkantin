@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">Username </label>
-                                    <input type="text" class="form-control" value="{{$user->username}}" name="username" required>
+                                    <input type="text" class="form-control" value="{{$user->username}}" @role('administrator') @else readonly @endrole name="username" required>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">New Password (optional)</label>

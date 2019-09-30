@@ -152,9 +152,16 @@ class ApiController extends Controller
         return ApiStandHelper::getStockAllVending($username);
     }
 
-
+    /** Stand transaction */
     public function standTransaction(Request $request)
     {
         return ApiStandHelper::transaction($request);
+    }
+
+    /** Get flag semua VM di client */
+    public function getFlagTransactionClient($username)
+    {
+
+        return ApiStandHelper::getFlagClient($username);
     }
 }
