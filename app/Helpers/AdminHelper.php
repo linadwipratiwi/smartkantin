@@ -237,6 +237,8 @@ class AdminHelper
      */
     public static function createVendingMachineSlotByClient($request)
     {
+        $file = $request->file;
+
         DB::beginTransaction();
         $id = $request->vending_machine_slot_id;
         $vending_machine = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
@@ -247,7 +249,9 @@ class AdminHelper
         $vending_machine->profit_client = $vending_machine->selling_price_client - $vending_machine->hpp;
         $vending_machine->selling_price_vending_machine = format_db($request->input('selling_price_vending_machine'));
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
-
+        if ($file) {
+            $vending_machine->photo = FileHelper::upload($file, 'uploads/product/');;
+        }
         try {
             $vending_machine->save();
         } catch (\Exception $e){

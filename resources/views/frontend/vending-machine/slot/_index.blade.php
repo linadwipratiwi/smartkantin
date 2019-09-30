@@ -13,6 +13,7 @@
                             <thead>
                             <tr>
                                 <th class="text-center" style="min-width: 50px">#</th>
+                                <th class="text-center">Photo</th>
                                 <th class="text-center">Makanan</th>
                                 <th class="text-center">Stok</th>
                                 <th class="text-center">HPP</th>
@@ -31,6 +32,7 @@
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                         </a>
                                     </td>
+                                    <td>{!!$slot->photo ? '<img src="'.url($slot->photo).'" width="50px" height="50px">' : '-'!!}</td>
                                     <td>{{$slot->food_name}}</td>
                                     <td>{{$slot->stock}}</td>
                                     <td>{{format_price($slot->hpp)}}</td>
