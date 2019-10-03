@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col-xs-6 text-center pl-0 pr-0 data-wrap-left">
                                     <span class="txt-light block counter"><span class="counter-anim">{{format_quantity($total_vending_machine)}}</span></span>
-                                    <span class="weight-500 uppercase-font txt-light block">Vending Machine</span>
+                                    <span class="weight-500 uppercase-font txt-light block">Outlet</span>
                                 </div>
                                 <div class="col-xs-6 text-center  pl-0 pr-0 data-wrap-right">
                                     <i class="fa fa-cubes txt-light data-right-rep-icon"></i>
