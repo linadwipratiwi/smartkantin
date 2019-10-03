@@ -3,8 +3,8 @@
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
         </div>
-        <div class="col-lg-12" id="form-item">
-            <form id="form-item-maintenance-activity">
+        <form id="form-file" enctype="multipart/form-data">
+            <div class="col-lg-12" id="form-item">
                 {!! csrf_field() !!}
                 <input type="hidden" id="vending_machine_slot_id" name="vending_machine_slot_id" value="{{$vending_machine_slot->id}}">
                 <input type="hidden" id="vending_machine_id" name="vending_machine_id" value="{{$vending_machine->id}}">
@@ -54,14 +54,19 @@
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <div class="button-list">
-                <button type="button" class="btn btn-success bt-store pull-right" onclick="store()">Simpan</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">{!! label('Gambar', 'Photo') !!}</label>
+                    <input type='file' name="file" class="form-control" /> <br>
+                    @if($vending_machine_slot->photo)<img src="{{url($vending_machine_slot->photo)}}" width="50px" height="50px" alt="">@endif
+                </div>
             </div>
-        </div>
+            <div class="modal-footer">
+                <div class="button-list">
+                    <button type="submit" class="btn btn-success bt-store pull-right">Simpan</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -70,13 +75,20 @@
     initFormatNumber();
     // init datepicker
     initDatetime('#datetimepicker1');
-    
+    $("#form-file").on('submit', (function(ev) {
+        ev.preventDefault();
+        store();
+    }));
+
     function store() {
-        var data = $( '#form-item-maintenance-activity' ).serialize();
+        var form = $('#form-file')[0];
+        var formData = new FormData(form);
         $.ajax({
             url: '{{url("front/vending-machine/".$vending_machine->id."/slot")}}',
             method: 'POST',
-            data: data,
+            processData: false,
+            contentType: false,
+            data: formData,
             success: function(res) {
                 $("#modal-detail").html(res);
                 notification('Success');
