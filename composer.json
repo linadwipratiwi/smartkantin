@@ -7,12 +7,13 @@
     "require": {
         "php": ">=5.6.4",
         "barryvdh/laravel-dompdf": "^0.8.4",
-        "bican/roles": "dev-master",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "~2.1.0",
-        "simplesoftwareio/simple-qrcode": "~2"
+        "nikolaynesov/laravel-roles": "~2.2.0",
+        "simplesoftwareio/simple-qrcode": "~2",
+        "tymon/jwt-auth": "^0.5.12"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -58,11 +59,5 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/nikolaynesov/roles.git"
-        }
-    ]
+    }
 }
