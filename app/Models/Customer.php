@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -14,6 +15,11 @@ class Customer extends Model
         return $this->belongsTo('App\Models\Client', 'register_at_client_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
     public function vendingMachine()
     {
         return $this->belongsTo('App\Models\VendingMachine', 'register_at_vending_machine_id');
@@ -22,5 +28,30 @@ class Customer extends Model
     public function scopeClientId($q, $client_id)
     {
         $q->where('register_at_client_id', $client_id);
+    }
+
+    public function createRandomUser()
+    {
+        if ($this->user) return;
+        $this->default_password = $this->id.str_random(10);
+        $this->save();
+
+        $user = new User;
+        $user->name = $this->name;
+        $user->email = $this->email;
+        $user->username = $this->default_password;
+        $user->password = $this->default_password;
+        $user->save();
+
+        $this->user_id = $user->id;
+        $this->save();
+
+        $user->attachRole(3);
+    }
+
+    public function showDefaultAccount()
+    {
+        $html = '<br>Username: '.$this->default_password.'<br>Password: '.$this->default_password;
+        return $html;
     }
 }

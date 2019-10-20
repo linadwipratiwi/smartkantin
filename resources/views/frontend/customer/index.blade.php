@@ -40,6 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
+                                            <th>Default Account</th>
                                             <th>Identity Type</th>
                                             <th>Identity Number</th>
                                             <th>Email</th>
@@ -57,6 +58,7 @@
                                         <tr id="tr-{{$customer->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{$customer->name}}</td>
+                                            <td>{!! $customer->user ? $customer->showDefaultAccount() : 'belum diset ' . $customer->createRandomUser() !!}</td>
                                             <td>{{$customer->identity_type}}</td>
                                             <td>{{$customer->identity_number}}</td>
                                             <td>{{$customer->email}}</td>

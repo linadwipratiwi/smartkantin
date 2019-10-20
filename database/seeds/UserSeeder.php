@@ -86,6 +86,11 @@ class UserSeeder extends Seeder
             'slug' => 'client'
         ]);
 
+        $admin_role = Role::create([
+            'name' => 'Customer',
+            'slug' => 'customer'
+        ]);
+
         $this->output->writeln('<info>--- Role Seeder Finished ---</info>');
     }
 

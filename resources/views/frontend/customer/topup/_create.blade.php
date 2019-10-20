@@ -51,7 +51,7 @@
 
     function swalConfirmation() {
         swal({
-            title: "Anda yakin ingin mengurangi saldo dari pelanggan ini?",
+            title: "Anda yakin ingin menambah saldo dari pelanggan ini?",
             text: "Saldo pelanggan akan berubah dan tidak bisa diedit.",
             type: "warning",
             showCancelButton: true,
