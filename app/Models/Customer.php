@@ -38,7 +38,7 @@ class Customer extends Model
 
         $user = new User;
         $user->name = $this->name;
-        $user->email = $this->email;
+        $user->email = $this->email ? : null;
         $user->username = $this->default_password;
         $user->password = $this->default_password;
         $user->save();

@@ -67,14 +67,19 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
     Route::get('/', 'FrontendController@index');
 
-    Route::resource('customer', 'CustomerController');
     Route::group(['prefix' => 'customer'], function () {
         Route::get('{id}/export', 'CustomerController@export');
         Route::post('topup/store', 'CustomerController@_topupStore');
         Route::get('{id}/topup/edit', 'CustomerController@_topupEdit');
         Route::get('{id}/topup/create', 'CustomerController@_topupCreate');
         Route::get('{id}/topup', 'CustomerController@_topupIndex');
+        Route::get('import/store', 'CustomerController@storeImportDatabase');
+        Route::post('import', 'CustomerController@storeImportTemp');
+        Route::get('import/download-template', 'CustomerController@downloadTemplate');
+        Route::get('import', 'CustomerController@import');
     });
+
+    Route::resource('customer', 'CustomerController');
 
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {

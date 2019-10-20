@@ -23,10 +23,9 @@
         <div class="col-sm-12">
             <div class="panel panel-default card-view">
                 <div class="panel-heading">
-                    <div class="pull-left">
-                        <div class="dt-buttons">
-                            <a class="dt-button buttons-copy buttons-html5 btn btn-sm" tabindex="0" aria-controls="example" href="{{url('front/customer/download')}}"><i class="fa fa-download"></i> <span>Download Excel</span></a>
-                        </div>
+                    <div class="pull-right">
+                        <a class="btn btn-sm btn-primary btn-icon" href="{{url('front/customer/download')}}"><span>Download Excel</span></a>
+                        <a class="btn btn-sm btn-default " href="{{url('front/customer/import')}}">Import Data</a>
                         <h6 class="panel-title txt-dark"></h6>
                     </div>
                     <div class="clearfix"></div>

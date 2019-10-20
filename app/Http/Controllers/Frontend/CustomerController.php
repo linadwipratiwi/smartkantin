@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\User;
+use App\Models\Temp;
 use App\Models\Customer;
-use App\Models\TransferSaldo;
-use App\Helpers\ExcelHelper;
+use App\Helpers\FileHelper;
 use App\Helpers\AdminHelper;
+use App\Helpers\ExcelHelper;
 use Illuminate\Http\Request;
+use App\Models\TransferSaldo;
+use App\Helpers\TempDataHelper;
 use App\Http\Controllers\Controller;
 
 class CustomerController extends Controller
@@ -126,5 +129,82 @@ class CustomerController extends Controller
         $file_name = 'RIWAYAT TOPUP KE  ' .$customer->name;
         $header = $customer->name;
         ExcelHelper::excel($file_name, $content, $header);
+    }
+
+    /** Import data customer */
+    public function import()
+    {
+        $view = view('frontend.customer.import');
+        $view->list_data_import = TempDataHelper::get('customer.import', auth()->user()->id);
+        return $view;   
+    }
+
+    /** Download template import excel */
+    public function downloadTemplate()
+    {
+        $content = array(array('Nama', 'Jenis Identitas (KTP/SIM)', 'Nomer Identitas','HP'));
+
+        $file_name = 'template-import-customer';
+        $sheet_name = 'Data Import';
+        ExcelHelper::templateImport($file_name, $content, $sheet_name);
+    }
+
+    public function storeImportTemp(Request $request)
+    {
+        FileHelper::xlsValidate();
+        try {
+            $filePath = 'data-import/';
+            $fileName = date('Y-m-d His') . '.xls';
+            $fileLink = $filePath . $fileName;
+            if (app('request')->hasFile('file')) {
+                \Storage::put($fileLink, file_get_contents($request->file('file')));
+            }
+            $request = $request->input();
+            \DB::beginTransaction();
+            \Excel::selectSheets('Data Import')->load('storage/app/' . $fileLink, function ($reader) use ($request) {
+                $results = $reader->get()->toArray();
+                TempDataHelper::clear('customer.import', auth()->user()->id);
+                foreach ($results as $data) {
+                    $temp_key = 'customer.import';
+                    $temp = new Temp;
+                    $temp->user_id = auth()->user()->id;
+                    $temp->name = $temp_key;
+                    $temp->keys = serialize($data);
+                    $temp->save();
+                }
+            });
+
+            \DB::commit();
+        } catch (\Exception $e) {
+            \Log::info($e->getMessage());
+            return redirect()->back();
+        }
+
+        toaster_success('data berhasil diunggah');
+        return redirect()->back();
+    }
+
+    public function storeImportDatabase()
+    {   
+        $list_data_import = TempDataHelper::get('customer.import', auth()->user()->id);
+        foreach ($list_data_import as $key => $import) {
+            $customer = Customer::where('identity_type', strtoupper($import['jenis_identitas_ktpsim']))->where('identity_number', $import['nomer_identitas'])->first();
+            $customer = $customer ? : new Customer;
+            $customer->name = $import['nama'];
+            $customer->phone = $import['hp'];
+            $customer->identity_type = strtoupper($import['jenis_identitas_ktpsim']);
+            $customer->identity_number = $import['nomer_identitas'];
+            $customer->register_at_client_id = client()->id;
+            $customer->save();
+
+            /** generate default account */
+            $customer->createRandomUser();
+        }
+
+        TempDataHelper::clear('customer.import', auth()->user()->id);
+
+        toaster_success('unggahan Anda telah berhasil disimpan didatabase');
+        return redirect()->back();
+
     }
 }
