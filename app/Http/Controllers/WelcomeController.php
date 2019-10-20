@@ -12,6 +12,10 @@ class WelcomeController extends Controller
             return redirect('/');
         }
 
+        if (auth()->user()->isRole('customer')) {
+            return redirect('c');
+        }
+
         return redirect('front');
     }
 }

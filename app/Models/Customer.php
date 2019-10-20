@@ -40,7 +40,7 @@ class Customer extends Model
         $user->name = $this->name;
         $user->email = $this->email ? : null;
         $user->username = $this->default_password;
-        $user->password = $this->default_password;
+        $user->password = bcrypt($this->default_password);
         $user->save();
 
         $this->user_id = $user->id;

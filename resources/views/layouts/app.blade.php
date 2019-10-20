@@ -157,6 +157,59 @@
 			$wrapper.removeClass('open-right-sidebar open-setting-panel').toggleClass('slide-nav-toggle');
 			return false;
 		});
+
+		$(document).on('click', '#open_right_sidebar', function (e) {
+			$wrapper.toggleClass('open-right-sidebar').removeClass('open-setting-panel');
+			return false;
+		
+		});
+		
+		$(document).on('click','.product-carousel .owl-nav',function(e){
+			return false;
+		});
+		
+		$(document).on('click', 'body', function (e) {
+			if($(e.target).closest('.fixed-sidebar-right,.setting-panel').length > 0) {
+				return;
+			}
+			$('body > .wrapper').removeClass('open-right-sidebar open-setting-panel');
+			return;
+		});
+		
+		$(document).on('show.bs.dropdown', '.nav.navbar-right.top-nav .dropdown', function (e) {
+			$wrapper.removeClass('open-right-sidebar open-setting-panel');
+			return;
+		});
+		
+		$(document).on('click', '#setting_panel_btn', function (e) {
+			$wrapper.toggleClass('open-setting-panel').removeClass('open-right-sidebar');
+			return false;
+		});
+		$(document).on('click', '#toggle_mobile_nav', function (e) {
+			$wrapper.toggleClass('mobile-nav-open').removeClass('open-right-sidebar');
+			return;
+		});
+		
+
+		$(document).on("mouseenter mouseleave",".wrapper > .fixed-sidebar-left", function(e) {
+			if (e.type == "mouseenter") {
+				$wrapper.addClass("sidebar-hover"); 
+			}
+			else { 
+				$wrapper.removeClass("sidebar-hover");  
+			}
+			return false;
+		});
+		
+		$(document).on("mouseenter mouseleave",".wrapper > .setting-panel", function(e) {
+			if (e.type == "mouseenter") {
+				$wrapper.addClass("no-transition"); 
+			}
+			else { 
+				$wrapper.removeClass("no-transition");  
+			}
+			return false;
+		});
 	</script>
 	<script>
 		@for($i=0;$i<=10;$i++)

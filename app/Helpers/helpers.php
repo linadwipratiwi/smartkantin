@@ -2,11 +2,12 @@
 
 use App\Models\Client;
 use App\Models\Setting;
+use App\Models\Customer;
+use App\Helpers\DateHelper;
 use App\Helpers\AccessHelper;
+use App\Helpers\NumberHelper;
 use App\Helpers\ToasterHelper;
 use App\Helpers\ApprovalHelper;
-use App\Helpers\DateHelper;
-use App\Helpers\NumberHelper;
 
 
 /**
@@ -255,6 +256,17 @@ if (! function_exists('client')) {
     function client()
     {
         return Client::where('user_id', auth()->user()->id)->first();
+    }
+}
+
+
+if (! function_exists('customer')) {
+    /**
+     * @return object
+     */
+    function customer()
+    {
+        return Customer::where('user_id', auth()->user()->id)->first();
     }
 }
 

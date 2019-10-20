@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('profile', 'Backend\UserController@profile');
 });
 
-// Full Administrator
+/** Administrator */
 Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administrator']], function () {
     Route::get('/', 'BackendController@index');
 
@@ -63,7 +63,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     
 });
 
-// Client
+/** Client */
 Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
     Route::get('/', 'FrontendController@index');
 
@@ -107,5 +107,10 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     Route::get('report', 'ReportController@index');
 });
 
+/** Customer */
+Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth', 'role:customer']], function () {
+    Route::get('/', 'PosController@index');
+
+});
 Auth::routes();
     
