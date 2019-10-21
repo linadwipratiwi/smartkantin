@@ -2410,8 +2410,8 @@ a#toggle_mobile_nav {
 
 .setting-panel {
   z-index: 1030;
-  margin-right: -220px;
-  width: 220px;
+  margin-right: -290px;
+  width: 290px;
   top: 0; }
   .setting-panel .setting-panel-title {
     font-size: 16px;

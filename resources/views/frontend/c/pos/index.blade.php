@@ -20,11 +20,11 @@
             <li class="layout-switcher-wrap">
                 <ul>
                     <li>
-                        <span class="layout-title">Scrollable sidebar</span>
-                        <span class="layout-switcher">
+                        <span class="layout-title">PESANAN (20)</span>
+                        {{-- <span class="layout-switcher">
                             <input type="checkbox" id="switch_3" class="js-switch"  data-color="#ea6c41" data-secondary-color="#878787" data-size="small"/>
-                        </span>	
-                        <h6 class="mt-30 mb-15">Theme colors</h6>
+                        </span>	 --}}
+                        {{-- <h6 class="mt-30 mb-15">Theme colors</h6>
                         <ul class="theme-option-wrap">
                             <li id="theme-1" class="active-theme"><i class="zmdi zmdi-check"></i></li>
                             <li id="theme-2"><i class="zmdi zmdi-check"></i></li>
@@ -32,41 +32,54 @@
                             <li id="theme-4"><i class="zmdi zmdi-check"></i></li>
                             <li id="theme-5"><i class="zmdi zmdi-check"></i></li>
                             <li id="theme-6"><i class="zmdi zmdi-check"></i></li>
-                        </ul>
-                        <h6 class="mt-30 mb-15">Primary colors</h6>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-red" checked value="pimary-color-red">
-                            <label for="pimary-color-red"> Red </label>
+                        </ul> --}}
+                        <div class="chatapp-nicescroll-bar" style="overflow: hidden; width: auto; height: 543px;">
+                            <ul class="chat-list-wrap">
+                                <li class="chat-list">
+                                    <div class="chat-body">
+                                        <a href="javascript:void(0)">
+                                            <div class="chat-data">
+                                                <img class="user-img img-circle" src="http://127.0.0.1:8000/uploads/product/20191021033107-nasi%20ayam%20bakar.jpeg" alt="user">
+                                                <div class="user-data">
+                                                    <span class="name block capitalize-font">Clay Masse</span>
+                                                    <span class="time block truncate txt-grey">3,000</span>
+                                                    <span class="">
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">-</label>
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-default">2</label>
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">+</label>
+                                                    </span>
+                                                </div>
+                                                <div class="status away"></div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                        <a href="javascript:void(0)">
+                                            <div class="chat-data">
+                                                <img class="user-img img-circle" src="http://127.0.0.1:8000/uploads/product/20191021033107-nasi%20ayam%20bakar.jpeg" alt="user">
+                                                <div class="user-data">
+                                                    <span class="name block capitalize-font">Evie Ono</span>
+                                                    <span class="time block truncate txt-grey">10,000</span>
+                                                    <span class="">
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">-</label>
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-default">2</label>
+                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">+</label>
+                                                    </span>
+                                                </div>
+                                                <div class="status offline"></div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-blue" value="pimary-color-blue">
-                            <label for="pimary-color-blue"> Blue </label>
+                        <div style="font-weight:bold" class="row">
+                            <div class="pull-left col-lg-6 col-md-6 col-sm-6 col-xs-6">Total bayar</div>
+                            <div class="pull-right col-lg-6 col-md-6 col-sm-6 col-xs-6"> Rp. 34,000</div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button id="reset_setting" class="btn btn-info btn-block btn-sm btn-primary mb-10">bayar sekarang</button>
+                            </div>
                         </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-green" value="pimary-color-green">
-                            <label for="pimary-color-green"> Green </label>
-                        </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-yellow" value="pimary-color-yellow">
-                            <label for="pimary-color-yellow"> Yellow </label>
-                        </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-pink" value="pimary-color-pink">
-                            <label for="pimary-color-pink"> Pink </label>
-                        </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-orange" value="pimary-color-orange">
-                            <label for="pimary-color-orange"> Orange </label>
-                        </div>
-                        <div class="radio mb-5">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-gold" value="pimary-color-gold">
-                            <label for="pimary-color-gold"> Gold </label>
-                        </div>
-                        <div class="radio mb-35">
-                            <input type="radio" name="radio-primary-color" id="pimary-color-silver" value="pimary-color-silver">
-                            <label for="pimary-color-silver"> Silver </label>
-                        </div>
-                        <button id="reset_setting" class="btn  btn-info btn-xs btn-outline btn-rounded mb-10">reset</button>
                     </li>
                 </ul>
             </li>
