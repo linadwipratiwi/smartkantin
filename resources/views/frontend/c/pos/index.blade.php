@@ -39,7 +39,7 @@
                                     <div class="chat-body">
                                         <a href="javascript:void(0)">
                                             <div class="chat-data">
-                                                <img class="user-img img-circle" src="http://127.0.0.1:8000/uploads/product/20191021033107-nasi%20ayam%20bakar.jpeg" alt="user">
+                                                <img class="user-img img-circle" src="https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIq7fXnazlAhWu7XMBHfEjCl4QjRx6BAgBEAQ&url=https%3A%2F%2Fdoyanresep.com%2Fcara-membuat-nasi-goreng-telur%2F&psig=AOvVaw0VLe3RhUTNQbgfWUJqVV_i&ust=1571708795790088" alt="user">
                                                 <div class="user-data">
                                                     <span class="name block capitalize-font">Clay Masse</span>
                                                     <span class="time block truncate txt-grey">3,000</span>
@@ -55,7 +55,7 @@
                                         </a>
                                         <a href="javascript:void(0)">
                                             <div class="chat-data">
-                                                <img class="user-img img-circle" src="http://127.0.0.1:8000/uploads/product/20191021033107-nasi%20ayam%20bakar.jpeg" alt="user">
+                                                <img class="user-img img-circle" src="https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjIq7fXnazlAhWu7XMBHfEjCl4QjRx6BAgBEAQ&url=https%3A%2F%2Fdoyanresep.com%2Fcara-membuat-nasi-goreng-telur%2F&psig=AOvVaw0VLe3RhUTNQbgfWUJqVV_i&ust=1571708795790088" alt="user">
                                                 <div class="user-data">
                                                     <span class="name block capitalize-font">Evie Ono</span>
                                                     <span class="time block truncate txt-grey">10,000</span>
