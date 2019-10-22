@@ -33,10 +33,12 @@
                             <li id="theme-5"><i class="zmdi zmdi-check"></i></li>
                             <li id="theme-6"><i class="zmdi zmdi-check"></i></li>
                         </ul> --}}
-                        <div class="chatapp-nicescroll-bar" style="overflow: hidden; width: auto; height: 543px;">
+                        <div class="chatapp-nicescroll-bar" style="overflow-y: scroll; width: auto; height: 443px;">
                             <ul class="chat-list-wrap">
                                 <li class="chat-list">
                                     <div class="chat-body">
+                                        @for ($i = 0; $i < 100; $i++)
+                                            
                                         <a href="javascript:void(0)">
                                             <div class="chat-data">
                                                 <img class="user-img img-circle" src="https://doyanresep.com/wp-content/uploads/2018/12/cara-membuat-nasi-goreng-telur.jpg" alt="user">
@@ -53,22 +55,8 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                         </a>
-                                        <a href="javascript:void(0)">
-                                            <div class="chat-data">
-                                                <img class="user-img img-circle" src="https://doyanresep.com/wp-content/uploads/2018/12/cara-membuat-nasi-goreng-telur.jpg" alt="user">
-                                                <div class="user-data">
-                                                    <span class="name block capitalize-font">Evie Ono</span>
-                                                    <span class="time block truncate txt-grey">10,000</span>
-                                                    <span class="">
-                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">-</label>
-                                                        <label style="font-weight:bold" class="btn btn-xs btn-default">2</label>
-                                                        <label style="font-weight:bold" class="btn btn-xs btn-warning">+</label>
-                                                    </span>
-                                                </div>
-                                                <div class="status offline"></div>
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </a>
+                                        @endfor
+
                                     </div>
                                 </li>
                             </ul>
@@ -102,16 +90,15 @@
                     <div class="panel-body pa-0">
                         <article class="col-item">
                             <div class="photo">
-                                <a href="javascript:void(0);"> <img src="{{asset($item->photo)}}" class="img-responsive" alt="Product Image" /> </a>
+                                <a href="javascript:void(0);"> <img src="{{asset($item->photo)}}" id="food-photo-{{$item->id}}" class="img-responsive" alt="Product Image" /> </a>
                             </div>
                             <div class="info">
                                 <div class="product-rating inline-block">
                                     {{$item->vendingMachine->name}}
                                 </div>
-                                <h6>{{$item->food_name}}</h6>
-                                <span class="head-font block text-warning font-16">{{format_quantity($item->selling_price_vending_machine)}}</span>
-                                <button class="btn btn-warning btn-sm">Tambah</button>
-                                    
+                                <h6 id="food-name-{{$item->id}}">{{$item->food_name}}</h6>
+                                <span class="head-font block text-warning font-16" id="food-price-{{$item->id}}">{{format_quantity($item->selling_price_vending_machine)}}</span>
+                                <button class="btn btn-warning btn-sm" onclick="addToCart({{$item->id}})">Tambah</button>
                             </div>
                         </article>
                     </div>
@@ -127,5 +114,14 @@
 @section('scripts')
 <script>
     initDatatable('#datatable');
+
+    function addToCart(id) {
+        $.ajax({
+            url: '{{url("c/add-to-cart/")}}/'+id,
+            success: function (res) {
+                notification('Item telah ditambahkan ke keranjang Anda');
+            }
+        })
+    }
 </script>
 @stop
