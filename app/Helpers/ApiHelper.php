@@ -18,6 +18,7 @@ class ApiHelper
         $customer_identity_number = $request->input('customer_identity_number');
         $slot_alias = $request->input('slot_alias');
         $type = $request->input('type') ? : 'normal'; // normal, mini
+        $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
 
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
@@ -33,6 +34,8 @@ class ApiHelper
             ]);
         }
 
+        
+
         /** Cek slot vending machine */
         $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
         if (!$vending_machine_slot) {
@@ -44,6 +47,16 @@ class ApiHelper
                 'status' => 0,
                 'data' => 'Vending Machine Slot not found'
             ]);
+        }
+
+        /** Cek saldo */
+        if ($payment_type == 'saldo') {
+            if ($customer->saldo < $vending_machine_slot->selling_price_vending_machine) {
+                return json_encode([
+                    'status' => 0,
+                    'data' => 'Saldo Anda tidak mencukupi'
+                ]);
+            }
         }
 
         if ($vending_machine_slot->stock < 1) {
@@ -86,8 +99,14 @@ class ApiHelper
         $vending_machine->flaging_transaction = Str::random(10);;
         $vending_machine->save();
 
+        
         try {
             $transaction->save();
+            /** Kurangi saldo customer */
+            $customer = $transaction->customer;
+            $customer->saldo -= $transaction->selling_price_vending_machine;
+            $customer->save();
+
             self::updateStockTransaction($transaction);
             \DB::commit();
 
