@@ -60,8 +60,8 @@
                                             <td>{{$vending_machine->production_year}}</td>
                                             <td>{{$vending_machine->location}}</td>
                                             <td>{{$vending_machine->ip}}</td>
-                                            <td>{{$vending_machine->firmware->name}}</td>
-                                            <td>{{$vending_machine->ui->name}}</td>
+                                            <td>{{$vending_machine->firmware ? $vending_machine->firmware->name : '-'}}</td>
+                                            <td>{{$vending_machine->ui ? $vending_machine->ui->name : '-'}}</td>
                                             <td>
                                                 <a href="{{url('vending-machine/'.$vending_machine->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
