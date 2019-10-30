@@ -239,19 +239,19 @@ class ApiHelper
         }
 
         $customer = Customer::where('identity_number', $identity_number)->first();
-        if ($customer) {
+        // if ($customer) {
 
-            if ($type == 'mini') {
-                return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
-            }
+        //     if ($type == 'mini') {
+        //         return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
+        //     }
 
-            return json_encode([
-                'status' => 1, // return true
-                'data' => $customer
-            ]);
-        }
+        //     return json_encode([
+        //         'status' => 1, // return true
+        //         'data' => $customer
+        //     ]);
+        // }
 
-        $customer = new Customer;
+        $customer = $customer ? : new Customer;
         $customer->name = $name;
         $customer->identity_type = $identity_type;
         $customer->identity_number = $identity_number;
