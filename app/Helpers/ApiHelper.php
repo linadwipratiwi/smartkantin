@@ -221,6 +221,7 @@ class ApiHelper
         $identity_number = $request->input('identity_number');
         $email = $request->input('email') ? : null;
         $phone = $request->input('phone')  ? : null;
+        $saldo = $request->input('saldo')  ? : null;
         $address = $request->input('address') ? : null;
         $vending_machine_alias = $request->input('vending_machine_alias');
         
@@ -258,6 +259,9 @@ class ApiHelper
         $customer->email = $email;
         $customer->address = $address;
         $customer->phone = $phone;
+        if ($saldo) {
+            $customer->saldo = $saldo;
+        }
         $customer->register_at_client_id = $vending_machine->client_id;
         $customer->register_at_vending_machine_id = $vending_machine->id;
         $customer->save();
