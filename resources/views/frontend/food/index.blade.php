@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Title -->
-    @include('backend._bread-crumb', [
-        'title' => 'Customer',
+    @include('frontend._bread-crumb', [
+        'title' => 'Food',
         'breadcrumbs' => [
             0 => [
                 'link' => url('/'),
@@ -11,7 +11,7 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Customer'
+                'label' => 'Food'
             ],
         ]
     ])
@@ -25,7 +25,7 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <div class="dt-buttons">
-                            {{-- <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('customer/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a> --}}
+                            <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="example" href="{{url('front/food/create')}}"><i class="fa fa-plus"></i> <span>Buat baru</span></a>
                         </div>
                         <h6 class="panel-title txt-dark"></h6>
                     </div>
@@ -40,35 +40,23 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
-                                            <th>Identity Type</th>
-                                            <th>Identity Number</th>
-                                            <th>Email</th>
-                                            <th>Saldo</th>
-                                            <th>Phone</th>
-                                            <th>Address</th>
-                                            <th>Register di Client</th>
-                                            <th>Register di Vending Machine</th>
+                                            <th>Jenis</th>
+                                            <th>Gambar</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($customers as $row => $customer)
-                                        <tr id="tr-{{$customer->id}}">
+                                        @foreach($foods as $row => $food)
+                                        <tr id="tr-{{$food->id}}">
                                             <td>{{$row + 1}}</td>
-                                            <td>{{$customer->name}}</td>
-                                            <td>{{$customer->identity_type}}</td>
-                                            <td>{{$customer->identity_number}}</td>
-                                            <td>{{$customer->email}}</td>
-                                            <td>{{format_price($customer->saldo)}}</td>
-                                            <td>{{$customer->phone}}</td>
-                                            <td>{{$customer->address}}</td>
-                                            <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>
-                                            <td>{{$customer->vendingMachine ? $customer->vendingMachine->name : 'SYSTEM'}}</td>
+                                            <td>{{$food->name}}</td>
+                                            <td>{{$food->category->name}}</td>
+                                            <td>{!! $food->photo ? '<img src="'.asset($food->photo).'" widht="50px" height="50px" />' : '-' !!}</td>
                                             <td>
-                                                <a href="{{url('customer/'.$customer->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
+                                                <a href="{{url('front/food/'.$food->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                                 </a>
-                                                <a onclick="secureDelete('{{url('customer/'.$customer->id)}}', '#tr-{{$customer->id}}')" data-toggle="tooltip" data-original-title="Close">
+                                                <a onclick="secureDelete('{{url('front/food/'.$food->id)}}', '#tr-{{$food->id}}')" data-toggle="tooltip" data-original-title="Close">
                                                     <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
                                                 </a>
                                             </td>
@@ -76,7 +64,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {!! $customers->links() !!}
                             </div>
                         </div>
                     </div>
@@ -89,6 +76,6 @@
 
 @section('scripts')
 <script>
-    // initDatatable('#datatable');
+    initDatatable('#datatable');
 </script>
 @stop

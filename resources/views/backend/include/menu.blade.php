@@ -66,6 +66,9 @@
 					<a @if(\Request::segment(2) == 'stand') class="active" @endif href="{{ url('front/stand') }}"><div class="pull-left"><i class="fa fa-shopping-bag mr-20"></i><span class="right-nav-text">Stand</span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
+					<a @if(\Request::segment(2) == 'food') class="active" @endif href="{{ url('front/food') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Food</span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
 					<a @if(\Request::segment(2) == 'report') class="active" @endif href="{{ url('front/report') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="clearfix"></div></a>
 				</li>
 			@endrole

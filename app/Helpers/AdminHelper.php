@@ -4,19 +4,20 @@ namespace App\Helpers;
 
 use App\User;
 use Carbon\Carbon;
+use App\Models\Food;
 use App\Models\Item;
-use App\Models\Firmware;
 use App\Models\Client;
 use App\Models\Customer;
-use App\Models\TransferSaldo;
+use App\Models\Firmware;
 use App\Helpers\FileHelper;
 use App\Helpers\AdminHelper;
 use Bican\Roles\Models\Role;
+use App\Models\StockMutation;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Exceptions\AppException;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
-use App\Models\StockMutation;
 
 class AdminHelper
 {
@@ -343,5 +344,28 @@ class AdminHelper
 
         DB::commit();
         return $stand;
+    }
+
+    /** Create master food */
+    public static function createFood($request, $id='')
+    {
+        $file = $request->file;
+
+        DB::beginTransaction();
+        $food = $id ? Food::findOrFail($id) : new Food;
+        $food->name = $request->name;
+        $food->category_id = $request->category_id;
+        $food->client_id = client()->id;
+        if ($file) {
+            $food->photo = FileHelper::upload($file, 'uploads/food/');;
+        }
+        try {
+            $food->save();
+        } catch (\Exception $e){
+            throw new AppException("Failed to save data", 503);
+        }
+
+        DB::commit();
+        return $food;
     }
 }

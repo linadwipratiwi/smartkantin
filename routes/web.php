@@ -79,6 +79,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::get('import', 'CustomerController@import');
     });
 
+    Route::resource('food', 'FoodController');
     Route::resource('customer', 'CustomerController');
 
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
