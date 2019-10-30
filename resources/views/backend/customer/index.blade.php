@@ -74,6 +74,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                {!! $customers->links() !!}
                             </div>
                         </div>
                     </div>
@@ -86,6 +87,6 @@
 
 @section('scripts')
 <script>
-    initDatatable('#datatable');
+    // initDatatable('#datatable');
 </script>
 @stop
