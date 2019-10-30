@@ -356,6 +356,11 @@ class AdminHelper
         $food->name = $request->name;
         $food->category_id = $request->category_id;
         $food->client_id = client()->id;
+        $food->hpp = format_db($request->input('hpp'));
+        $food->selling_price_client = format_db($request->input('selling_price_client'));
+        $food->profit_client = $food->selling_price_client - $food->hpp;
+        $food->selling_price_vending_machine = format_db($request->input('selling_price_vending_machine'));
+        
         if ($file) {
             $food->photo = FileHelper::upload($file, 'uploads/food/');;
         }

@@ -37,7 +37,7 @@ class Customer extends Model
         $this->save();
 
         $user = new User;
-        $user->name = $this->name;
+        $user->name = $this->name ? : str_random(10);
         $user->email = $this->email ? : null;
         $user->username = $this->default_password;
         $user->password = bcrypt($this->default_password);
