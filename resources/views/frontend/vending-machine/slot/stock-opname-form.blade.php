@@ -43,15 +43,7 @@
                                         <input type="hidden" readonly id="profit-platform-value-{{$slot->id}}" class="form-control" value="{{$slot->profit_platform_value}}" name="profit_platform_value[{{$slot->id}}]">
                                         <input type="hidden" readonly id="profit-platform-percent-{{$slot->id}}" class="form-control" value="{{$slot->profit_platform_percent}}" name="profit_platform_percent[{{$slot->id}}]">
                                         {{-- <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td> --}}
-                                        <?php
-                                            $ascii = 0;
-                                            if ($slot->name ) {
-                                                $kode = substr($slot->name, -2);
-                                                $slipt = str_split($kode, 1);
-                                                $ascii = chr($slipt[0]+65) . chr($slipt[1]+49);
-                                            }
-                                        ?>
-                                        <td>{{$ascii}}</td>
+                                        <td>{{$slot->convertToAsci()}}</td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="food-name-{{$slot->id}}" class="form-control" value="{{$slot->food_name}}" name="food_name[{{$slot->id}}]"></td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="stock-{{$slot->id}}" class="form-control format-price" value="{{$slot->stock}}" name="stock[{{$slot->id}}]"></td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="hpp-{{$slot->id}}" class="form-control format-price" value="{{$slot->hpp}}" name="hpp[{{$slot->id}}]"></td>
