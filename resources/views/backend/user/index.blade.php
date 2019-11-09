@@ -40,7 +40,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Name</th>
-                                            <th>Email</th>
+                                            <th>Username</th>
                                             <th>Role</th>
                                             <th>Action</th>
                                         </tr>
@@ -51,7 +51,7 @@
                                         <tr id="tr-{{$user->id}}">
                                             <td>{{$row++}}</td>
                                             <td><a href="{{url('user/'.$user->id.'/'.$user->roleUser->role_id)}}">{{$user->name}}</a></td>
-                                            <td>{{$user->email}}</td>
+                                            <td>{{$user->username}}</td>
                                             <td>{{$user->roleUser->role->name}}</td>
                                             <td>
                                                 <a href="{{url('user/'.$user->id.'/'.$user->roleUser->role_id)}}" data-toggle="tooltip" data-original-title="Edit">

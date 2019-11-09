@@ -39,9 +39,10 @@
                                     </thead>
                                     @foreach($vending_machine->slots as $i => $slot)
                                     <tr id="tr-slot-{{$slot->id}}">
-                                        <input type="hidden" readonly id="profit-platform-type-{{$slot->id}}" class="form-control" value="{{$slot->profit_platform_type}}" name="profit_platform_type[{{$slot->id}}]">
-                                        <input type="hidden" readonly id="profit-platform-value-{{$slot->id}}" class="form-control" value="{{$slot->profit_platform_value}}" name="profit_platform_value[{{$slot->id}}]">
-                                        <input type="hidden" readonly id="profit-platform-percent-{{$slot->id}}" class="form-control" value="{{$slot->profit_platform_percent}}" name="profit_platform_percent[{{$slot->id}}]">
+                                        <?php $client = $slot->vendingMachine->client;?>
+                                        <input type="hidden" readonly id="profit-platform-type-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_type}}" name="profit_platform_type[{{$slot->id}}]">
+                                        <input type="hidden" readonly id="profit-platform-value-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_value}}" name="profit_platform_value[{{$slot->id}}]">
+                                        <input type="hidden" readonly id="profit-platform-percent-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_percent}}" name="profit_platform_percent[{{$slot->id}}]">
                                         {{-- <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td> --}}
                                         <td>{{$slot->convertToAsci()}}</td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="food-name-{{$slot->id}}" class="form-control" value="{{$slot->food_name}}" name="food_name[{{$slot->id}}]"></td>

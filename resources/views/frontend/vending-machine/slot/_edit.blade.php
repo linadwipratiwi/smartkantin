@@ -29,15 +29,16 @@
                     <label class="control-label mb-10">{!! label('Harga Jual dari Anda', 'Laba penjualan Anda didapat dari <b style="font-weight:bold">harga jual - hpp</b>') !!}</label>
                     <input type='text' name="selling_price_client" id="selling_price_client" onchange="updateSellingPriceVM()" required class="form-control format-price" value="{{$vending_machine_slot->selling_price_client}}" />
                 </div>
+                <?php $client = $vending_machine_slot->vendingMachine->client;?>
                 <div class="form-group mt-20 ">
-                    <input type="hidden" id="profit-platform-type" value="{{$vending_machine_slot->profit_platform_type}}">
+                    <input type="hidden" id="profit-platform-type" value="{{$client->profit_platform_type}}">
                     <label class="control-label mb-10">{!! label('Profit Platform', 'keuntungan untuk platform / pengembang alat') !!}</label>
                     <div class="input-group"> 
-                        <span class="input-group-addon" id="lb-type">@if($vending_machine_slot->profit_platform_type == 'value') Rp. @else % @endif</span>
+                        <span class="input-group-addon" id="lb-type">@if($client->profit_platform_type == 'value') Rp. @else % @endif</span>
                         <?php
-                            $value_profit = $vending_machine_slot->profit_platform_value;
-                            if ($vending_machine_slot->profit_platform_type == 'percent') {
-                                $value_profit = $vending_machine_slot->profit_platform_percent;
+                            $value_profit = $client->profit_platform_value;
+                            if ($client->profit_platform_type == 'percent') {
+                                $value_profit = $client->profit_platform_percent;
                             }
                         ?>
                         <input type="text" id="profit_platform_value" readonly name="profit_platform_value" class="form-control format-price" value="{{$value_profit}}" placeholder="">

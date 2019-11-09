@@ -77,6 +77,8 @@ class ApiHelper
         }
 
         \DB::beginTransaction();
+        $client = $vending_machine_slot->vendingMachine->client;
+
         $transaction = new VendingMachineTransaction;
         $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
         $transaction->vending_machine_slot_id = $vending_machine_slot->id;
@@ -86,12 +88,12 @@ class ApiHelper
         $transaction->food_name = $vending_machine_slot->food_name;
         $transaction->selling_price_client = $vending_machine_slot->selling_price_client;
         $transaction->profit_client = $vending_machine_slot->profit_client;
-        $transaction->profit_platform_type = $vending_machine_slot->profit_platform_type;
-        $transaction->profit_platform_percent = $vending_machine_slot->profit_platform_percent;
-        $transaction->profit_platform_value = $vending_machine_slot->profit_platform_value;
+        $transaction->profit_platform_type = $client->profit_platform_type;
+        $transaction->profit_platform_percent = $client->profit_platform_percent;
+        $transaction->profit_platform_value = $client->profit_platform_value;
         
         // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
-        $transaction->profit_platform = $vending_machine_slot->profit_platform_value;
+        $transaction->profit_platform = $client->profit_platform_value;
         if ($transaction->profit_platform_type == 'percent') {
             $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
         }

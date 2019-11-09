@@ -15,9 +15,9 @@
                             <tr>
                                 <th class="text-center">No</th>
                                 {{-- <th class="text-center" style="min-width: 150px">Aksi</th> --}}
+                                <th class="text-center">Slot</th>
                                 <th class="text-center">Nama Makanan</th>
                                 <th class="text-center">Quantity</th>
-                                <th class="text-center">Slot Vending Machine</th>
                                 <th class="text-center">HPP</th>
                                 <th class="text-center">Harga Jual Client</th>
                                 <th class="text-center">Tanggal Transaksi</th>
@@ -35,9 +35,9 @@
                                             <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
                                         </a>
                                     </td> --}}
+                                    <td>{{$stock->vendingMachineSlot->convertToAsci()}}</td>
                                     <td>{{$stock->food_name}}</td>
                                     <td>{{$stock->stock}}</td>
-                                    <td>{{$stock->vendingMachineSlot->name}}</td>
                                     <td>{{format_price($stock->hpp)}}</td>
                                     <td>{{format_price($stock->selling_price_client)}}</td>
                                     <td>{{$stock->created_at ? date_format_view($stock->created_at) : '-'}}</td>

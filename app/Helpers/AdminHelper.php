@@ -12,6 +12,7 @@ use App\Models\Firmware;
 use App\Helpers\FileHelper;
 use App\Helpers\AdminHelper;
 use Bican\Roles\Models\Role;
+use App\Helpers\NumberHelper;
 use App\Models\StockMutation;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
@@ -55,6 +56,8 @@ class AdminHelper
 
     public static function createClient($request, $id='')
     {
+        DB::beginTransaction();
+
         if (!$id) {
             $user = User::where('username', $request->username)->first();
             if ($user) {
@@ -64,13 +67,23 @@ class AdminHelper
             $user = self::createUserFromClient($request);
         }
 
-        DB::beginTransaction();
         $client = $id ? Client::findOrFail($id) : new Client;
         $client->name = $request->input('name');
         $client->address = $request->input('address');
         $client->company = $request->input('company');
         $client->phone = $request->input('phone');
-        $client->user_id = $user->id;
+        $client->profit_platform_type = $request->input('profit_platform_type');
+        if ($client->profit_platform_type == 'value') {
+            $client->profit_platform_value = format_db($request->input('profit_platform_value'));
+        }
+
+        if ($client->profit_platform_type == 'percent') {
+            $client->profit_platform_percent = format_db($request->input('profit_platform_value'));
+        }
+        if (!$id) {
+            $client->user_id = $user->id;
+        }
+
         try{
             $client->save();
         } catch (\Exception $e) {
@@ -182,15 +195,7 @@ class AdminHelper
         $vending_machine->food_name = $request->input('food_name');
         $vending_machine->capacity = $request->input('capacity') ? : null;
         $vending_machine->expired_date = $request->input('expired_date') ? Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date')) : null;
-        $vending_machine->profit_platform_type = $request->input('profit_platform_type');
-        if ($vending_machine->profit_platform_type == 'value') {
-            $vending_machine->profit_platform_value = format_db($request->input('profit_platform_value'));
-        }
-
-        if ($vending_machine->profit_platform_type == 'percent') {
-            $vending_machine->profit_platform_percent = format_db($request->input('profit_platform_value'));
-        }
-
+        
         try {
             $vending_machine->save();
         } catch (\Exception $e){

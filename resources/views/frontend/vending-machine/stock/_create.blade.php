@@ -21,7 +21,7 @@
                     <select name="slot_id" class="form-control" id="slot-id" onchange="getStock(this.value)">
                         <option value="">Pilih slot</option>
                         @foreach ($vending_machine->slots as $slot)
-                            <option value="{{$slot->id}}">{{$slot->name}} - {{$slot->food_name}}</option>
+                            <option value="{{$slot->id}}">{{$slot->convertToAsci()}} - {{$slot->food_name}}</option>
                         @endforeach
                     </select>
                     <p id="info-stock"></p>

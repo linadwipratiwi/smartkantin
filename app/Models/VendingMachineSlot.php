@@ -26,12 +26,14 @@ class VendingMachineSlot extends Model
 
     public function profitPlatform()
     {
-        $type = $this->profit_platform_type;
+        $client = $this->vendingMachine->client;
+
+        $type = $client->profit_platform_type;
         if ($type == 'value') {
-            return '<span class="label label-info capitalize-font inline-block ml-10">'.format_price($this->profit_platform_value).'</span>';
+            return '<span class="label label-info capitalize-font inline-block ml-10">'.format_price($client->profit_platform_value).'</span>';
         }
 
-        return '<span class="label label-info capitalize-font inline-block ml-10">'.format_quantity($this->profit_platform_percent).' %</span>';
+        return '<span class="label label-info capitalize-font inline-block ml-10">'.format_quantity($client->profit_platform_percent).' %</span>';
 
     }
 

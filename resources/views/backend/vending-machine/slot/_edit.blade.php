@@ -24,26 +24,7 @@
                     <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
                     <input type='number' min="1" name="capacity" id="capacity" required class="form-control" value="{{$vending_machine_slot->capacity}}"/>
                 </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
-                    <select name="profit_platform_type" id="profit_platform_type" onchange="setType(this.value)" class="form-control">
-                        <option value="value" @if($vending_machine_slot->profit_platform_type == 'value') selected @endif>Value</option>
-                        <option value="percent" @if($vending_machine_slot->profit_platform_type == 'percent') selected @endif>Percent</option>
-                    </select>
-                </div>
-                <div class="form-group mt-20" id="">
-                    <label class="control-label mb-10">{!! label('Presentase profit / dengan set value', 'Jika Anda memilih type percent, maka isi dengan percent (max: 100). Jika dengan value, maka isi dengan harga (3000)') !!}</label>
-                    <div class="input-group"> 
-                        <span class="input-group-addon" id="lb-type">@if($vending_machine_slot->profit_platform_type == 'value') Rp. @else % @endif</span>
-                        <?php
-                            $value_profit = $vending_machine_slot->profit_platform_value;
-                            if ($vending_machine_slot->profit_platform_type == 'percent') {
-                                $value_profit = $vending_machine_slot->profit_platform_percent;
-                            }
-                        ?>
-                        <input type="text" id="profit_platform_value" name="profit_platform_value" class="form-control format-price" value="{{$value_profit}}" placeholder="">
-                    </div>
-                </div>
+                
                 <div class="form-group mt-20 ">
                     <div class="form-group">
                         <label class="control-label mb-10">{!! label('tanggal exp', 'expired date') !!}</label>

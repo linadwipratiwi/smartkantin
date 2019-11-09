@@ -43,7 +43,10 @@
                                             <th>Perusahaan</th>
                                             <th>Telepon</th>
                                             <th>Alamat</th>
+                                            <th>Tipe Share</th>
+                                            <th>Value</th>
                                             <th>Jumlah Vending Machine</th>
+                                            <th>Jumlah Stan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -55,7 +58,10 @@
                                             <td>{{$client->company}}</td>
                                             <td>{{$client->phone}}</td>
                                             <td>{{$client->address}}</td>
+                                            <td>{{$client->profit_platform_type}}</td>
+                                            <td>{{$client->profit_platform_type == 'value' ? format_quantity($client->profit_platform_value): $client->profit_platform_percent}}</td>
                                             <td>{{$client->vendingMachines->count()}} unit</td>
+                                            <td>{{$client->stands->count()}} stand</td>
                                             <td>
                                                 <a href="{{url('client/'.$client->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>

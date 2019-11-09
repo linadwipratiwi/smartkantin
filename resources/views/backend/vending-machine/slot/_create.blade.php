@@ -25,20 +25,6 @@
                     <input type='number' min="1" name="capacity" id="capacity" required class="form-control" />
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>
-                    <select name="profit_platform_type" id="" onchange="setType(this.value)" class="form-control">
-                        <option value="value" selected>Value</option>
-                        <option value="percent">Percent</option>
-                    </select>
-                </div>
-                <div class="form-group mt-20" id="">
-                    <label class="control-label mb-10">{!! label('Presentase profit / dengan set value', 'Jika Anda memilih type percent, maka isi dengan percent (max: 100). Jika dengan value, maka isi dengan harga (3000)') !!}</label>
-                    <div class="input-group"> 
-                        <span class="input-group-addon" id="lb-type">Rp.</span>
-                        <input type="text" id="profit_platform_value" name="profit_platform_value" class="form-control format-price" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group mt-20 ">
                     <div class="form-group">
                         <label class="control-label mb-10">{!! label('tanggal exp', 'expired date') !!}</label>
                         <div class='input-group date' id='datetimepicker1'>
@@ -66,32 +52,8 @@
     // init datepicker
     initDatetime('#datetimepicker1');
     
-    function setType(value) {
-        type = 'Rp.'
-        if (value == 'percent') {
-            type = '%'    
-        }
-
-        $('#lb-type').html(type);
-    }
 
     function store() {
-        var type = $('#profit_platform_type :selected').val();
-        var profit = $('#profit_platform_value').val();
-
-        if (profit == '') {
-            notification('Profit wajib diisi');
-            return false;
-        }
-        
-        profit = parseInt(dbNum(profit));
-        if (type == 'percent') {
-            if (profit > 100) {
-                notification('Maksimal profit adalah 100%');
-                return false;
-            }
-        }
-
         var data = $( '#form-item-maintenance-activity' ).serialize();
         $.ajax({
             url: '{{url("vending-machine/".$vending_machine->id."/slot")}}',

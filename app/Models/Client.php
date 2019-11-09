@@ -17,7 +17,12 @@ class Client extends Model
 
     public function vendingMachines()
     {
-        return $this->hasMany('App\Models\VendingMachine', 'client_id');
+        return $this->hasMany('App\Models\VendingMachine', 'client_id')->where('type', 1);
+    }
+
+    public function stands()
+    {
+        return $this->hasMany('App\Models\VendingMachine', 'client_id')->where('type', 2);
     }
 
     public function createdBy()

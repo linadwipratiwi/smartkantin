@@ -32,11 +32,11 @@
                                     <a href="javascript:void(0);" class="font-18 txt-grey pull-left sa-warning"><i class="zmdi zmdi-close"></i></a> --}}
                                 </div>
                                 
-                                <a href="javascript:void(0);"> <img src="{{asset('dist/img/vending-logo.png')}}" class="img-responsive" alt="Product Image"> </a>
+                                <a href="javascript:void(0);"> <img src="{{asset('dist/img/vending-logo-1.png')}}" class="img-responsive" alt="Product Image"> </a>
                             </div>
                             <div class="info">
                                 <h6>{{$vending_machine->name}}</h6>
-                                <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> 230</span>
+                                {{-- <span class="head-font block text-warning font-16"><i class="fa fa-bar-chart-o"></i> 230</span> --}}
                                 <br>
                                 <a onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/slot")}}')" data-toggle="modal"
                                     data-target=".detail-modal" data-toggle="tooltip" data-toggle="tooltip" data-original-title="Detail">
