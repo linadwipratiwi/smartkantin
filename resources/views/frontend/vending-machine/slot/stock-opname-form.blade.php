@@ -32,24 +32,23 @@
                                             <th>Slot</th>
                                             <th>Makanan</th>
                                             <th>Stok</th>
-                                            <th>HPP</th>
-                                            <th>Harga Jual Penjual</th>
-                                            <th>Harga Jual Platform</th>
                                         </tr>
                                     </thead>
                                     @foreach($vending_machine->slots as $i => $slot)
                                     <tr id="tr-slot-{{$slot->id}}">
                                         <?php $client = $slot->vendingMachine->client;?>
-                                        <input type="hidden" readonly id="profit-platform-type-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_type}}" name="profit_platform_type[{{$slot->id}}]">
-                                        <input type="hidden" readonly id="profit-platform-value-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_value}}" name="profit_platform_value[{{$slot->id}}]">
-                                        <input type="hidden" readonly id="profit-platform-percent-{{$slot->id}}" class="form-control" value="{{$client->profit_platform_percent}}" name="profit_platform_percent[{{$slot->id}}]">
+                                        
                                         {{-- <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td> --}}
                                         <td>{{$slot->convertToAsci()}}</td>
-                                        <td><input type="text" onchange="save({{$slot->id}})" id="food-name-{{$slot->id}}" class="form-control" value="{{$slot->food_name}}" name="food_name[{{$slot->id}}]"></td>
+                                        <td>
+                                            <select name="food_id" id="food-id-{{$slot->id}}" onchange="save({{$slot->id}})" class="form-control">
+                                                <option value="">Pilih Makanan</option>
+                                                @foreach ($list_food as $item)
+                                                    <option value="{{$item->id}}" @if($item->id == $slot->food_id) selected @endif>{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="stock-{{$slot->id}}" class="form-control format-price" value="{{$slot->stock}}" name="stock[{{$slot->id}}]"></td>
-                                        <td><input type="text" onchange="save({{$slot->id}})" id="hpp-{{$slot->id}}" class="form-control format-price" value="{{$slot->hpp}}" name="hpp[{{$slot->id}}]"></td>
-                                        <td><input type="text" onkeyup="calculate({{$slot->id}})" onchange="save({{$slot->id}})" id="selling-price-client-{{$slot->id}}" class="form-control format-price" value="{{$slot->selling_price_client}}" name="selling_price_client[{{$slot->id}}]"></td>
-                                        <td><input type="text" readonly onchange="save({{$slot->id}})" id="selling-price-vending-machine-{{$slot->id}}" class="form-control format-price" value="{{$slot->selling_price_vending_machine}}" name="selling_price_vending_machine[{{$slot->id}}]"></td>
                                     </tr>
                                     @endforeach
                                 </table>
@@ -67,42 +66,16 @@
 <script>
     initFormatNumber();
     function calculate(id) {
-        var food_name = $('#food-name-'+id).val();
-        var price_platform = dbNum($('#selling-price-vending-machine-'+id).val());
-        var price_client = dbNum($('#selling-price-client-'+id).val());
+        var food_id = $('#food-id-'+id+ ' :selected').val();
         var stock = dbNum($('#stock-'+id).val());
-        var hpp = dbNum($('#hpp-'+id).val());
-        
-        var profit_type = $('#profit-platform-type-'+id).val();
-        var profit_value = dbNum($('#profit-platform-value-'+id).val());
-        var profit_percent = dbNum($('#profit-platform-percent-'+id).val());
-        
-        price_platform = profit_value + price_client;
-        if (profit_type == 'percent') {
-            price_platform = (price_client * profit_percent / 100) + price_client;
-        }
-        $('#selling-price-vending-machine-'+id).val(appNum(price_platform))
     }
     
     function save(id) {
-        var food_name = $('#food-name-'+id).val();
-        var price_platform = dbNum($('#selling-price-vending-machine-'+id).val());
-        var price_client = dbNum($('#selling-price-client-'+id).val());
+        var food_id = $('#food-id-'+id+ ' :selected').val();
         var stock = dbNum($('#stock-'+id).val());
-        var hpp = dbNum($('#hpp-'+id).val());
-
-        var profit_type = $('#profit-platform-type-'+id).val();
-        var profit_value = dbNum($('#profit-platform-value-'+id).val());
-        var profit_percent = dbNum($('#profit-platform-percent-'+id).val());
-
-        price_platform = profit_value + price_client;
-        if (profit_type == 'percent') {
-            price_platform = (price_client * profit_percent / 100) + price_client;
-        }
-        $('#selling-price-vending-machine-'+id).val(appNum(price_platform))
 
         var data = {
-            id: id, stock: stock, food_name: food_name, price_client: price_client, hpp: hpp, price_platform: price_platform
+            id: id, stock: stock, food_id: food_id
         };
         $.ajax({
             url: '{{url("front/vending-machine/product/stock-opname/update")}}',

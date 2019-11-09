@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Frontend\VendingMachine;
 
-use Illuminate\Http\Request;
+use App\Models\Food;
 use App\Helpers\AdminHelper;
+use Illuminate\Http\Request;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 class VendingMachineSlotController extends Controller
 {
     
+    /** index slot */
     public function index($vending_machine_id)
     {
         $view = view('frontend.vending-machine.slot._index');
@@ -18,17 +20,13 @@ class VendingMachineSlotController extends Controller
         return $view;
     }
 
-    public function create($vending_machine_id)
-    {
-        $view = view('frontend.vending-machine.slot._create');
-        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
-        return $view;
-    }
-
+    /** update slot set food */
     public function store(Request $request, $vending_machine_id)
     {
         // store
-        AdminHelper::createVendingMachineSlotByClient($request);
+        $slot = VendingMachineSlot::find($request->vending_machine_slot_id);
+        $slot->food_id = $request->food_id;
+        $slot->save();
 
         // show index
         $view = view('frontend.vending-machine.slot._index');
@@ -36,42 +34,30 @@ class VendingMachineSlotController extends Controller
         return $view;
     }
 
+    /** form edit */
     public function edit($vending_machine_id, $id)
     {
         $view = view('frontend.vending-machine.slot._edit');
         $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
         $view->vending_machine_slot = VendingMachineSlot::findOrFail($id);
-
+        $view->list_food = Food::where('client_id', client()->id)->get();
         return $view;
     }
 
-    public function destroy($vending_machine_id, $id)
-    {
-        $vending_machine = VendingMachineSlot::findOrFail($id);
-        // remove client
-        $delete = AdminHelper::delete($vending_machine);
-        
-        toaster_success('delete form success');
-        return redirect('front/vending-machine');
-    }
-
+    /** form stock opname all */
     public function stockOpnameForm($vending_machine_id)
     {
         $view = view('frontend.vending-machine.slot.stock-opname-form');
         $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
+        $view->list_food = Food::where('client_id', client()->id)->get();
         return $view;
     }
 
     public function updateProduct(Request $request)
     {
-
         $product = VendingMachineSlot::findOrFail($request->id);
         $product->stock = $request->stock;
-        $product->food_name = $request->food_name;
-        $product->selling_price_client = $request->price;
-        $product->selling_price_vending_machine = $request->price_platform;
-        $product->selling_price_client = $request->price_client;
-        $product->hpp = $request->hpp;
+        $product->food_id = $request->food_id;
         $product->save();
 
         $vending_machine = $product->vendingMachine;

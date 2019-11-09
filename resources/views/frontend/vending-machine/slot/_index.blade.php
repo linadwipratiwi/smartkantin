@@ -20,30 +20,40 @@
                                 <th class="text-center">Stok</th>
                                 <th class="text-center">HPP</th>
                                 <th class="text-center">Harga Jual Client</th>
-                                <th class="text-center">Harga Jual (asli)</th>
-                                <th class="text-center">Profit Client</th>
-                                <th class="text-center">Profit Platform</th>
-                                <th class="text-center">Kapasitas</th>
+                                <th class="text-center">Harga Jual Di Vending</th>
                                 <th class="text-center">Tgl. Expired</th>
                             </tr>
                             </thead>
                             @foreach($vending_machine->slots as $i => $slot)
+                                <?php 
+                                $client = $slot->vendingMachine->client;
+                                $profit = $type = $client->profit_platform_type;
+                                $profit_vm = 0;
+                                if ($type == 'value') {
+                                    if ($slot->food) {
+                                        $profit_vm = $client->profit_platform_value + $slot->food->selling_price_client;
+                                    }
+                                } elseif ($type == 'percent') {
+                                    if ($slot->food) {
+                                        $profit_vm = ($client->profit_platform_percent * $slot->food->selling_price_client) + $slot->food->selling_price_client;
+                                    }
+                                }
+
+
+                                ?>
                                 <tr id="tr-slot-{{$slot->id}}">
                                     <td>
                                         <a  onclick="showDetail('{{url("front/vending-machine/".$vending_machine->id."/slot/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                         </a>
                                     </td>
-                                    <td>{!!$slot->photo ? '<img src="'.url($slot->photo).'" width="50px" height="50px">' : '-'!!}</td>
+                                    <td>{!!$slot->food ? $slot->food->photo ? '<img src="'.url($slot->food->photo).'" width="50px" height="50px">' : '-' : '-'!!}</td>
                                     <td>{{$slot->convertToAsci()}}</td>
-                                    <td>{{$slot->food_name}}</td>
+                                    <td>{{$slot->food ? $slot->food->name : '-'}}</td>
                                     <td>{{$slot->stock}}</td>
-                                    <td>{{format_price($slot->hpp)}}</td>
-                                    <td>{{format_price($slot->selling_price_client)}}</td>
-                                    <td>{{format_price($slot->selling_price_vending_machine)}}</td>
-                                    <td>{{format_price($slot->profit_client)}}</td>
-                                    <td>{!! $slot->profitPlatform() !!}</td>
-                                    <td>{{$slot->capacity}}</td>
+                                    <td>{{$slot->food ? format_price($slot->food->hpp) : '-'}}</td>
+                                    <td>{{$slot->food ? format_price($slot->food->selling_price_client) : '-'}}</td>
+                                    <td>{{format_price($profit_vm)}}</td>
                                     <td>{{$slot->expired_date}}</td>
                                     
                                 </tr>

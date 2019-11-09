@@ -14,55 +14,12 @@
                     <input type='text' readonly required class="form-control" value="{{$vending_machine_slot->convertToAsci()}}"/>
                 </div>
                 <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('makanan', 'food name') !!}</label>
-                    <input type='text' name="food_name" id="food_name" required class="form-control" value="{{$vending_machine_slot->food_name}}"/>
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('Kapasitas Maksimal', 'Max Capacity') !!}</label>
-                    <input type='number' min="1" name="capacity" id="capacity" required class="form-control" value="{{$vending_machine_slot->capacity}}"/>
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('HPP', 'Harga Pokok Penjualan') !!}</label>
-                    <input type='text' name="hpp" id="hpp" required class="form-control format-price" value="{{$vending_machine_slot->hpp}}" />
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('Harga Jual dari Anda', 'Laba penjualan Anda didapat dari <b style="font-weight:bold">harga jual - hpp</b>') !!}</label>
-                    <input type='text' name="selling_price_client" id="selling_price_client" onchange="updateSellingPriceVM()" required class="form-control format-price" value="{{$vending_machine_slot->selling_price_client}}" />
-                </div>
-                <?php $client = $vending_machine_slot->vendingMachine->client;?>
-                <div class="form-group mt-20 ">
-                    <input type="hidden" id="profit-platform-type" value="{{$client->profit_platform_type}}">
-                    <label class="control-label mb-10">{!! label('Profit Platform', 'keuntungan untuk platform / pengembang alat') !!}</label>
-                    <div class="input-group"> 
-                        <span class="input-group-addon" id="lb-type">@if($client->profit_platform_type == 'value') Rp. @else % @endif</span>
-                        <?php
-                            $value_profit = $client->profit_platform_value;
-                            if ($client->profit_platform_type == 'percent') {
-                                $value_profit = $client->profit_platform_percent;
-                            }
-                        ?>
-                        <input type="text" id="profit_platform_value" readonly name="profit_platform_value" class="form-control format-price" value="{{$value_profit}}" placeholder="">
-                    </div>
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('Harga Jual dari Vending Machine', 'Adalah harga yang akan dikenakan customer ketika membeli item ini') !!}</label>
-                    <input type='text' name="selling_price_vending_machine" id="selling_price_vending_machine" readonly required class="form-control format-price" value="{{$vending_machine_slot->selling_price_vending_machine}}" />
-                </div>
-                <div class="form-group mt-20 ">
-                    <div class="form-group">
-                        <label class="control-label mb-10">{!! label('tanggal exp', 'expired date') !!}</label>
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' name="expired_date" value="{{date('m-d-Y a', strtotime($vending_machine_slot->expired_date))}}" class="form-control" />
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group mt-20 ">
-                    <label class="control-label mb-10">{!! label('Gambar', 'Photo') !!}</label>
-                    <input type='file' name="file" class="form-control" /> <br>
-                    @if($vending_machine_slot->photo)<img src="{{url($vending_machine_slot->photo)}}" width="50px" height="50px" alt="">@endif
+                    <label class="control-label mb-10">{!! label('makanan', 'food') !!}</label>
+                    <select name="food_id" class="form-control" id="">
+                        @foreach ($list_food as $item)
+                        <option value="{{$item->id}}" @if($item->id == $vending_machine_slot->food_id) selected @endif>{{$item->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
