@@ -44,6 +44,7 @@
                                             <th>Identity Number</th>
                                             <th>Email</th>
                                             <th>Saldo</th>
+                                            <th>Saldo Pens</th>
                                             <th>Phone</th>
                                             <th>Address</th>
                                             <th>Register di Client</th>
@@ -60,6 +61,7 @@
                                             <td>{{$customer->identity_number}}</td>
                                             <td>{{$customer->email}}</td>
                                             <td>{{format_price($customer->saldo)}}</td>
+                                            <td>{{format_price($customer->saldo_pens)}}</td>
                                             <td>{{$customer->phone}}</td>
                                             <td>{{$customer->address}}</td>
                                             <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>

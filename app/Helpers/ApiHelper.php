@@ -50,8 +50,14 @@ class ApiHelper
         }
 
         /** Cek saldo */
+        $saldo = $customer->saldo;
+        $saldo_pens = $customer->saldo_pens;
+        $saldo_total = $saldo + $saldo_pens;
+
+        $selling_price_vending_machine = $vending_machine_slot->selling_price_vending_machine;
         if ($payment_type == 'saldo') {
-            if ($customer->saldo < $vending_machine_slot->selling_price_vending_machine) {
+            /** jika saldo total kurang dari harga jual */
+            if ($saldo_total < $selling_price_vending_machine) {
                 return json_encode([
                     'status' => 0,
                     'data' => 'Saldo Anda tidak mencukupi'
@@ -104,7 +110,18 @@ class ApiHelper
             $transaction->save();
             /** Kurangi saldo customer */
             $customer = $transaction->customer;
-            $customer->saldo -= $transaction->selling_price_vending_machine;
+            $saldo_pens_akhir = $saldo_pens - $selling_price_vending_machine;
+            if ($saldo_pens_akhir < 0) {
+                /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
+                $customer->saldo_pens = 0;
+
+                $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
+                $customer->saldo = $saldo - $biaya_kekurangan;
+            } else {
+                /** saldo pens masih sisa */
+                $customer->saldo_pens = $saldo_pens_akhir;
+            }
+
             $customer->save();
 
             self::updateStockTransaction($transaction);
@@ -181,7 +198,7 @@ class ApiHelper
         $customer = $transaction->customer;
         $customer->saldo += $transaction->selling_price_vending_machine;
         $customer->save();
-        /** Kembalikan saldo pelanggan */
+        /** Kembalikan saldo pelanggan, saldo pens dikembalikan ke saldo */
 
         \DB::commit();
         if ($type == 'mini') {
