@@ -41,7 +41,7 @@
 			<header class="sp-header">
 				<div class="sp-logo-wrap pull-left">
 					<a href="index.html">
-						<img class="brand-img mr-10" style="height:50px; width: auto" src="{{asset('dist/img/vending-navbar.png')}}" alt="brand"/>
+						<img class="brand-img mr-10" style="height:50px; width: auto" src="{{asset('dist/img/login-1.png')}}" alt="brand"/>
 						<span class="brand-text"></span>
 					</a>
 				</div>
@@ -51,15 +51,16 @@
 			
 			<!-- Main Content -->
 			<div class="page-wrapper pa-0 ma-0 auth-page">
-				<div class="container-fluid">
+				<div class="container-fluid" style="background: #f4ac00">
 					<!-- Row -->
 					<div class="table-struct full-width full-height">
 						<div class="table-cell vertical-align-middle auth-form-wrap">
 							<div class="auth-form  ml-auto mr-auto no-float">
 								<div class="row">
 									<div class="col-sm-12 col-xs-12">
-										<div class="mb-30">
-											<h3 class="text-center txt-dark mb-10">Sign in to <br> <strong>SMART CANTEEN</strong></h3>
+										<div class="mb-30 text-center">
+											<img class="brand-img mr-10" style="height:80px; width: auto" src="{{asset('dist/img/login-2.png')}}" alt="brand"/>
+											<h3 class="text-left txt-dark mb-10">Sign in <br></h3>
 										</div>	
 										<div class="form-wrap">
                                             <form role="form" method="POST" action="{{ url('/login') }}">
