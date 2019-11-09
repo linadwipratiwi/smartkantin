@@ -41,6 +41,8 @@
                                             <th>No</th>
                                             <th>Nama</th>
                                             <th>Jenis</th>
+                                            <th>HPP</th>
+                                            <th>Harga Jual</th>
                                             <th>Gambar</th>
                                             <th>Action</th>
                                         </tr>
@@ -51,6 +53,8 @@
                                             <td>{{$row + 1}}</td>
                                             <td>{{$food->name}}</td>
                                             <td>{{$food->category->name}}</td>
+                                            <td>{{format_quantity($food->hpp)}}</td>
+                                            <td>{{format_quantity($food->selling_price_client)}}</td>
                                             <td>{!! $food->photo ? '<img src="'.asset($food->photo).'" widht="50px" height="50px" />' : '-' !!}</td>
                                             <td>
                                                 <a href="{{url('front/food/'.$food->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">

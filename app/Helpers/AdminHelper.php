@@ -365,7 +365,6 @@ class AdminHelper
         $food->selling_price_client = format_db($request->input('selling_price_client'));
         $food->profit_client = $food->selling_price_client - $food->hpp;
 
-        /** Todo: update profit platform di slot */
         if ($file) {
             $food->photo = FileHelper::upload($file, 'uploads/food/');;
         }

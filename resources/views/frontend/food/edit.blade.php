@@ -42,6 +42,14 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('HPP', 'harga pokok penjualan') !!} </label>
+                                    <input type="text" name="hpp" class="form-control format-price" required id="" value="{{$food->hpp}}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">Harga Jual </label>
+                                    <input type="text" name="selling_price_client" required class="form-control format-price" id="" value="{{$food->selling_price_client}}">
+                                </div>
+                                <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Gambar', 'Photo') !!} </label>
                                     <input type="file" name="file" class="form-control" id="" value="">
                                     {!! $food->photo ? '<img src="'.asset($food->photo).'" widht="50px" height="50px" />' : '-' !!}
@@ -58,3 +66,10 @@
     </div>
     <!-- /Row -->
 @stop
+
+
+@section('scripts')
+    <script>
+    initFormatNumber();
+    </script>
+@endsection
