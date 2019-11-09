@@ -10,6 +10,10 @@
                 <input type="hidden" id="vending_machine_id" name="vending_machine_id" value="{{$vending_machine->id}}">
                 
                 <div class="form-group mt-20 ">
+                    <label class="control-label mb-10">Slot</label>
+                    <input type='text' readonly required class="form-control" value="{{$vending_machine_slot->convertToAsci()}}"/>
+                </div>
+                <div class="form-group mt-20 ">
                     <label class="control-label mb-10">{!! label('makanan', 'food name') !!}</label>
                     <input type='text' name="food_name" id="food_name" required class="form-control" value="{{$vending_machine_slot->food_name}}"/>
                 </div>

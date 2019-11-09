@@ -34,4 +34,16 @@ class VendingMachineSlot extends Model
         return '<span class="label label-info capitalize-font inline-block ml-10">'.format_quantity($this->profit_platform_percent).' %</span>';
 
     }
+
+    public function convertToAsci()
+    {
+        $ascii = 0;
+        if ($this->name) {
+            $kode = substr($this->name, -2);
+            $slipt = str_split($kode, 1);
+            $ascii = chr($slipt[0]+65) . chr($slipt[1]+49);
+        }
+
+        return $ascii;
+    }
 }
