@@ -245,7 +245,7 @@ class ApiHelper
         $address = $request->input('address') ? : null;
         $vending_machine_alias = $request->input('vending_machine_alias');
         
-        $type = $request->input('type') ? : 'mini';
+        $type = $request->input('type') == 'mini' ? 'mini' : 'normal';
         
         $vending_machine = VendingMachine::where('alias', $vending_machine_alias)->first();
         if (!$vending_machine) {
