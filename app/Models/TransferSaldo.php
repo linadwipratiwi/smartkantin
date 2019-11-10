@@ -16,7 +16,7 @@ class TransferSaldo extends Model
         $q->where('from_type', get_class(new Client))
             ->where(function ($query) use ($to_type_id) {
                 if ($to_type_id) {
-                    $query->where('to_type_id', $to_type_id);
+                    $query->where('from_type_id', $to_type_id);
                 }
             });
     }

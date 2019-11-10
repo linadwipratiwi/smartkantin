@@ -123,7 +123,7 @@ class CustomerController extends Controller
         foreach ($list_topup as $row => $topup) {
             $customer = $topup->to_type::find($topup->to_type_id);
             array_push($content, [++$row, date_format_view($topup->created_at), format_price($topup->saldo),
-                $customer->name, $customer->identity_type, $customer->identity_number, $topup->createdBy->name]);
+                $customer->name, $customer->identity_type, $customer->card_number, $topup->createdBy->name]);
         }
 
         $file_name = 'RIWAYAT TOPUP KE  ' .$customer->name;
