@@ -241,6 +241,7 @@ class ApiHelper
         $email = $request->input('email') ? : null;
         $phone = $request->input('phone')  ? : null;
         $saldo = $request->input('saldo')  ? : null;
+        $card_number = $request->input('card_number')  ? : null;
         $saldo_pens = $request->input('saldo_pens')  ? : null;
         $address = $request->input('address') ? : null;
         $vending_machine_alias = $request->input('vending_machine_alias');
@@ -279,6 +280,9 @@ class ApiHelper
         $customer->email = $email;
         $customer->address = $address;
         $customer->phone = $phone;
+        if ($card_number) {
+            $customer->card_number = $card_number;
+        }
         if ($saldo) {
             $customer->saldo = $saldo;
         }

@@ -55,6 +55,10 @@
 				<li>
 					<a @if((\Request::segment(2) == '') && (\Request::segment(1) != 'profile')) class="active" @endif  href="{{url('front/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="clearfix"></div></a>
 				</li>
+
+				<li>
+					<a @if(\Request::segment(2) == 'topup') class="active" @endif href="{{ url('front/topup') }}"><div class="pull-left"><i class="fa fa-dollar mr-20"></i><span class="right-nav-text">Topup </span></div><div class="clearfix"></div></a>
+				</li>
 				<li>
 					<a @if(\Request::segment(2) == 'customer') class="active" @endif href="{{ url('front/customer') }}"><div class="pull-left"><i class="fa fa-group mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
 				</li>
