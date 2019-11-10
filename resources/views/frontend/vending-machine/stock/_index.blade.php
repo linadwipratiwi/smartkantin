@@ -36,7 +36,7 @@
                                         </a>
                                     </td> --}}
                                     <td>{{$stock->vendingMachineSlot->convertToAsci()}}</td>
-                                    <td>{{$stock->food_name}}</td>
+                                    <td>{{$stock->food ? $stock->food->name : '-'}}</td>
                                     <td>{{$stock->stock}}</td>
                                     <td>{{format_price($stock->hpp)}}</td>
                                     <td>{{format_price($stock->selling_price_client)}}</td>
