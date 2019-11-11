@@ -47,6 +47,7 @@
                                             <th>Value</th>
                                             <th>Jumlah Vending Machine</th>
                                             <th>Jumlah Stan</th>
+                                            <th>Jumlah Customer</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -62,6 +63,7 @@
                                             <td>{{$client->profit_platform_type == 'value' ? format_quantity($client->profit_platform_value): $client->profit_platform_percent}}</td>
                                             <td>{{$client->vendingMachines->count()}} unit</td>
                                             <td>{{$client->stands->count()}} stand</td>
+                                            <td>{{$client->customers->count()}} orang</td>
                                             <td>
                                                 <a href="{{url('client/'.$client->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>

@@ -65,7 +65,7 @@
                                             <td>{{$customer->email}}</td>
                                             <td>{{$customer->phone}}</td>
                                             <td>{{$customer->address}}</td>
-                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo)}}</td>
+                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo + $customer->saldo_pens)}}</td>
                                             <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->vendingMachine ? $customer->vendingMachine->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->created_at ? date_format_view($customer->created_at) : '-'}}</td>

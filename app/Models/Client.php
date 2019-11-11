@@ -20,6 +20,11 @@ class Client extends Model
         return $this->hasMany('App\Models\VendingMachine', 'client_id')->where('type', 1);
     }
 
+    public function customers()
+    {
+        return $this->hasMany('App\Models\Customer', 'register_at_client_id');
+    }
+
     public function stands()
     {
         return $this->hasMany('App\Models\VendingMachine', 'client_id')->where('type', 2);
