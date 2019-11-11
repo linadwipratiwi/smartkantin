@@ -36,7 +36,7 @@
                                     </td> --}}
                                     <td>{{$stock->food_name}}</td>
                                     <td>{{$stock->stock}}</td>
-                                    <td>{{$stock->vendingMachineSlot->name}}</td>
+                                    <td>{{$stock->vendingMachineSlot->convertToAsci()}}</td>
                                     <td>{{format_price($stock->hpp)}}</td>
                                     <td>{{format_price($stock->selling_price_client)}}</td>
                                     <td>{{$stock->created_at ? date_format_view($stock->created_at) : '-'}}</td>
