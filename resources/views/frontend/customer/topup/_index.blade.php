@@ -5,7 +5,7 @@
             <p>Saldo pelanggan sekarang</p>
             <div class="row">
                 <div class="col-md-6">
-                    <font style="font-weight:bold; font-size:24px" class="text-info">Rp. {{format_price($customer->saldo)}}</font>
+                    <font style="font-weight:bold; font-size:24px" class="text-info">Rp. {{format_price($customer->saldo + $customer->saldo_pens)}}</font>
                 </div>
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-sm btn-lable-wrap left-label pull-right ml-5" onclick="showDetail('{{url("front/customer/".$customer->id."/topup/create")}}')">
@@ -16,7 +16,7 @@
                     </a>
                 </div>
             </div>
-            <input type="hidden" id="saldo-customer" value="{{format_price($customer->saldo)}}">
+            <input type="hidden" id="saldo-customer" value="{{format_price($customer->saldo + $customer->saldo_pens)}}">
         </div>
         <div class="col-lg-12 pt-5">
             <h4>Riwayat Topup</h4>

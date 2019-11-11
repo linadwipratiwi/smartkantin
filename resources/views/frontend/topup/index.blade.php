@@ -74,7 +74,7 @@
                                             <td>{{$customer->identity_type}}</td>
                                             <td>{{$customer->email}}</td>
                                             <td>{{$customer->phone}}</td>
-                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo)}}</td>
+                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo + $customer->saldo_pens)}}</td>
                                             <td>
                                                 <a onclick="showDetail('{{url('front/customer/'.$customer->id.'/topup')}}')" data-toggle="modal" data-target=".detail-modal"  data-original-title="Topup">
                                                     <button class="btn btn-success btn-icon-anim btn-sm"><i class="fa fa-dollar"></i> Topup</button>
