@@ -38,7 +38,7 @@
                                             <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
                                         </a>
                                     </td>
-                                    <td>{{$slot->name}}</td>
+                                    <td>{{$slot->convertToAsci()}}</td>
                                     <td>{{$slot->stock}}</td>
                                     <td>{{$slot->alias}}</td>
                                     <td>{{$slot->food_name}}</td>
