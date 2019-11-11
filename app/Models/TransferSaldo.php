@@ -41,7 +41,7 @@ class TransferSaldo extends Model
     public function toType()
     {
         $model = $this->to_type::find($this->to_type_id);
-        if (!$model) return "-";
+        if (!$model) return null;
 
         return $model;
     }
