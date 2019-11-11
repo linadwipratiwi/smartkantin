@@ -50,7 +50,7 @@
                                         <tr id="tr-{{$topup->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{date_format_view($topup->created_at)}}</td>
-                                            <td>{{$topup->toType()->name}}</td>
+                                            <td>{{$topup->toType() ? $topup->toType()->name : '-'}}</td>
                                             <td>{{format_price($topup->saldo)}}</td>
                                             <td>{{$topup->createdBy->name}}</td>
                                         </tr>
