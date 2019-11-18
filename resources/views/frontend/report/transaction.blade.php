@@ -39,6 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Slot</th>
                                             <th>Food Nama</th>
                                             <th>Vending Machine</th>
                                             <th>Client</th>
@@ -53,6 +54,7 @@
                                         @foreach($list_transaction as $row => $transaction)
                                         <tr id="tr-{{$transaction->id}}">
                                             <td>{{$row + 1}}</td>
+                                            <td>{{$transaction->vendingMachineSlot->convertToAsci()}}</td>
                                             <td>{{$transaction->food_name}}</td>
                                             <td>{{$transaction->vendingMachine->name}}</td>
                                             <td>{{$transaction->client->name}}</td>
