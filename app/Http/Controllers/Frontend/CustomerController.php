@@ -18,7 +18,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $view = view('frontend.customer.index');
-        $view->customers = Customer::clientId(client()->id)->orderBy('created_at', 'desc')->paginate(25);
+        $view->customers = Customer::search()->clientId(client()->id)->orderBy('created_at', 'desc')->paginate(25);
         return $view;
     }
 
