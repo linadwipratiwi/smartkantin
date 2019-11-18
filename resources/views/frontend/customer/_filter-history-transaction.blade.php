@@ -11,7 +11,7 @@
                         <div class="clearfix"></div>
                         <br>
                         <div class="form-wrap">
-                            <form class="form-inline" method="get" action="{{url('front/customer/history-transaction')}}">
+                            <form class="form-inline" method="get" action="{{url('front/customer/'.$customer->id.'/history-transaction')}}">
                                 <div class="form-group mr-15">
                                     <label class="control-label mr-10" for="date">Date</label>
                                     <select name="type" class="form-control" id="type" onchange="selectDate(this.value)">
