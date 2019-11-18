@@ -74,6 +74,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::get('{id}/topup/edit', 'CustomerController@_topupEdit');
         Route::get('{id}/topup/create', 'CustomerController@_topupCreate');
         Route::get('{id}/topup', 'CustomerController@_topupIndex');
+        Route::get('{id}/history-transaction', 'CustomerController@_historyTransaction');
         Route::get('import/store', 'CustomerController@storeImportDatabase');
         Route::post('import', 'CustomerController@storeImportTemp');
         Route::get('import/download-template', 'CustomerController@downloadTemplate');

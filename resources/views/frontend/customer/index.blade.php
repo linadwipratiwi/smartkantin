@@ -96,6 +96,10 @@
                                                 <a onclick="showDetail('{{url('front/customer/'.$customer->id.'/topup')}}')" data-toggle="modal" data-target=".detail-modal"  data-original-title="Topup">
                                                     <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-dollar"></i></button>
                                                 </a>
+
+                                                <a href="{{url('front/customer/'.$customer->id.'/history-transaction')}}" data-original-title="Transaction">
+                                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="fa fa-file"></i></button>
+                                                </a>
                                                 
                                                 <a href="{{url('front/customer/'.$customer->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>

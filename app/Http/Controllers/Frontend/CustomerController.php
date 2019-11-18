@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Helpers\TempDataHelper;
 use App\Http\Controllers\Controller;
+use App\Models\VendingMachineTransaction;
 
 class CustomerController extends Controller
 {
@@ -206,5 +207,15 @@ class CustomerController extends Controller
         toaster_success('unggahan Anda telah berhasil disimpan didatabase');
         return redirect()->back();
 
+    }
+
+    public function _historyTransaction($id) 
+    {
+        $view = view('frontend.customer.history-transaction');
+        $view->customer = Customer::findOrFail($id);
+        $view->list_transaction = VendingMachineTransaction::search()->where('customer_id', $id)->orderBy('created_at', 'desc')->paginate(100);
+        $view->total_transaction =  VendingMachineTransaction::search()->where('customer_id', $id)->count();
+
+        return $view;
     }
 }
