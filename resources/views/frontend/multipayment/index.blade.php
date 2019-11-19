@@ -48,12 +48,12 @@
                                     </thead>
                                     <tbody>
                                         @foreach($multipayments as $row => $multipayment)
-                                        <tr id="tr-{{$customer->id}}">
+                                        <tr id="tr-{{$multipayment->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{$multipayment->customer->name}}</td>
                                             <td>{{$multipayment->payment_type}}</td>
                                             <td>{{format_price($multipayment->amount)}}</td>
-                                            <td>{{date_format_view($multipayment->creatd_at)}}</td>
+                                            <td>{{date_format_view($multipayment->created_at)}}</td>
                                             {{-- <td>
                                                 <a href="{{url('multipayment/'.$multipayment->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
