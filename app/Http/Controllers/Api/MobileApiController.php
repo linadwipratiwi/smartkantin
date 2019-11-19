@@ -153,7 +153,7 @@ class MobileApiController extends Controller
             ApiHelper::updateStockTransaction($transaction);
             \DB::commit();
 
-            $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
+            $transaction = VendingMachineTransaction::where('id', $transaction->id)->first();
             $transaction->status = 1;
             $transaction->msg = 'success';
             return json_encode(
@@ -221,7 +221,7 @@ class MobileApiController extends Controller
 
         $customer->save();
 
-        $multipayment = Multipayment::where('id', $multipayment->id)->with('customer')->first();
+        $multipayment = Multipayment::where('id', $multipayment->id)->first();
         $multipayment->status = 1;
         $multipayment->msg = 'success';
         return json_encode(
