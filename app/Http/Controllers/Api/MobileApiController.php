@@ -185,11 +185,41 @@ class MobileApiController extends Controller
             ]);
         }
 
+        /** Cek saldo */
+        $saldo = $customer->saldo;
+        $saldo_pens = $customer->saldo_pens;
+        $saldo_total = $saldo + $saldo_pens;
+
+        /** jika saldo total kurang dari harga jual */
+        if ($saldo_total < $amount) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Saldo Anda tidak mencukupi'
+            ]);
+        }
+
+
         $multipayment = new Multipayment;
         $multipayment->customer_id = $customer->id;
         $multipayment->amount = $amount;
         $multipayment->payment_type = $payment_type;
         $multipayment->save();
+
+
+        /** pengurangan saldo */
+        $saldo_pens_akhir = $saldo_pens - $amount;
+        if ($saldo_pens_akhir < 0) {
+            /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
+            $customer->saldo_pens = 0;
+
+            $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
+            $customer->saldo = $saldo - $biaya_kekurangan;
+        } else {
+            /** saldo pens masih sisa */
+            $customer->saldo_pens = $saldo_pens_akhir;
+        }
+
+        $customer->save();
 
         $multipayment = Multipayment::where('id', $multipayment->id)->with('customer')->first();
         $multipayment->status = 1;
