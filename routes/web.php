@@ -81,6 +81,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::get('import', 'CustomerController@import');
     });
 
+    Route::resource('multipayment', 'MultipaymentController');
     Route::resource('food', 'FoodController');
     Route::resource('customer', 'CustomerController');
 

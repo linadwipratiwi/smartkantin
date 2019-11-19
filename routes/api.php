@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 */
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['prefix' => 'mobile', 'namespace' => 'Api'], function () {
+    Route::post('multipayment', 'MobileApiController@multipayment');
+
     Route::post('transaction', 'MobileApiController@transaction');
     Route::get('customer/{id}', 'MobileApiController@findCustomer');
   });

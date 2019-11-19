@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
+use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
@@ -165,6 +166,37 @@ class MobileApiController extends Controller
                 'msg' => 'Transaction failed'
             ]);
         }
+
+    }
+
+    /** Transaction multipayment */
+    public static function multipayment(Request $request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $amount = $request->input('amount');
+        $payment_type = $request->input('payment_type'); // in : out
+        $notes = $request->input('notes');
+
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Identity number customer not found'
+            ]);
+        }
+
+        $multipayment = new Multipayment;
+        $multipayment->customer_id = $customer->id;
+        $multipayment->amount = $amount;
+        $multipayment->payment_type = $payment_type;
+        $multipayment->save();
+
+        $multipayment = Multipayment::where('id', $multipayment->id)->with('customer')->first();
+        $multipayment->status = 1;
+        $multipayment->msg = 'success';
+        return json_encode(
+            $multipayment
+        );
 
     }
 }
