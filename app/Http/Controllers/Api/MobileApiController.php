@@ -9,9 +9,12 @@ use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
+use App\Exceptions\AppException;
 use App\Models\VendingMachineSlot;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\VendingMachineTransaction;
 
@@ -166,5 +169,45 @@ class MobileApiController extends Controller
             ]);
         }
 
+    }
+
+    /** Topup */
+    public static function topup(Request $request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $saldo = $request->input('saldo');
+
+        /** Cek customer ada apa tidak */
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Identity number customer not found'
+            ]);
+        }
+
+        DB::beginTransaction();
+        $transfer_saldo = new TransferSaldo;
+        $transfer_saldo->from_type = get_class(new Client);
+        $transfer_saldo->from_type_id = $customer->client->id;
+        $transfer_saldo->saldo = $saldo;
+        $transfer_saldo->to_type = get_class(new Customer);
+        $transfer_saldo->to_type_id = $customer->id;
+        $transfer_saldo->created_by = $customer->client->user->id;
+        try {
+            $transfer_saldo->save();
+        } catch (\Exception $e){
+            throw new AppException("Failed to save data", 503);
+        }
+
+        // update saldo customer
+        $customer = Customer::findOrFail($customer->id);
+        $customer->saldo += $saldo;
+        $customer->save();
+        DB::commit();
+
+        return json_encode(
+            $customer
+        ); 
     }
 }
