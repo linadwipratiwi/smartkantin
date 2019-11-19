@@ -153,7 +153,8 @@ class MobileApiController extends Controller
             \DB::commit();
 
             $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
-
+            $transaction->status = 1;
+            $transaction->msg = 'success';
             return json_encode(
                 $transaction
             );
