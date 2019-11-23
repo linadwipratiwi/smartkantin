@@ -16,6 +16,8 @@ class ReportController extends Controller
         $view->list_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->orderBy('created_at', 'desc')->paginate(50);
         $view->total_profit =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->sum('profit_client');
         $view->total_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->count();
+        $view->total_transaction_failed =  VendingMachineTransaction::search()->failed()->where('client_id', client()->id)->count();
+        $view->total_transaction_success =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->count();
         return $view;
     }
 
@@ -25,7 +27,7 @@ class ReportController extends Controller
 
         $view->list_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->get();
         $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');;
-        return $view;
+        return $view; 
     }
 
     public function download(Request $request) 

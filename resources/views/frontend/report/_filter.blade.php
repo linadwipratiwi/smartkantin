@@ -69,6 +69,9 @@
                         <span style="font-size:24px" class="text-info">
                             <i class="fa fa-repeat"></i>
                             {{format_quantity($total_transaction)}}
+                        </span> <br>
+                        <span style="font-size:14px" class="text-success">
+                            Success : {{format_quantity($total_transaction_success)}} / Failed : {{format_quantity($total_transaction_failed)}}
                         </span>
                     </div>
                 </div>
