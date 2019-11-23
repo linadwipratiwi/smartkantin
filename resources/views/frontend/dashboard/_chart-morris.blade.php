@@ -6,11 +6,24 @@
                   <h6 class="panel-title txt-dark">Daftar Transaksi</h6>
               </div>
               <div class="pull-right">
-                  <select name="" id="" class="form-control">
-                      @for ($i = date('Y'); $i >= 2015; $i--)
-                          <option value="">{{$i}}</option>
-                      @endfor
-                  </select>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <select name="month" id="month" onchange="filterGrafikTransaction()" class="form-control">
+                            <option value="0">All</option>
+                            @foreach (App\Helpers\DateHelper::getAllMonths() as $index => $month)
+                                <option value="{{$index}}" @if(\Input::get('month') == $index) selected @endif>{{$month}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-6">
+                        <select name="year" id="year" onchange="filterGrafikTransaction()" class="form-control">
+                            @for ($i = date('Y'); $i >= 2015; $i--)
+                                <option value="{{$i}}" @if($i == $year) selected @endif>{{$i}}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+                
               </div>
               <div class="clearfix"></div>
           </div>
@@ -20,17 +33,17 @@
                   </div>
                   <ul class="flex-stat mt-40">
                       <li>
-                          <span style="color:#dc0030" class="block">Transaksi Sukses</span>
-                          <span style="color:#dc0030" class="block weight-500 font-18"><span class="counter-anim">{{format_quantity($graph_transaction['total_transaction_success'])}}</span></span>
+                          <span style="color:#dc0030" class="block">Total Transaksi</span>
+                          <span style="color:#dc0030" class="block weight-500 font-18"><span class="counter-anim">{{format_quantity($graph_transaction['total_transaction'])}}</span></span>
                       </li>
                       <li>
                           <span style="color:#f2b701" class="block">Transaksi Gagal</span>
                           <span style="color:#f2b701" class="block weight-500 font-18"><span class="counter-anim">{{format_quantity($graph_transaction['total_transaction_failed'])}}</span></span>
                       </li>
                       <li>
-                          <span style="color:#09a275" class="block">Transaksi Total</span>
+                          <span style="color:#09a275" class="block">Transaksi Sukses</span>
                           <span style="color:#09a275" class="block weight-500 font-18">
-                              <span class="counter-anim">{{format_quantity($graph_transaction['total_transaction'])}}</span>
+                              <span class="counter-anim">{{format_quantity($graph_transaction['total_transaction_success'])}}</span>
                           </span>
                       </li>
                   </ul>
@@ -39,8 +52,7 @@
       </div>
   </div>
 </div>
-@push('scripts')
-    {{-- {{dd($graph_transaction['grafik'])}} --}}
+<script src="{{ asset('js/all.js') }}"></script>
 <script>
     /**
     var data = [
@@ -151,6 +163,17 @@
         gridTextFamily:"Roboto",
         parseTime: false
     });
-</script>
 
-@endpush
+    function filterGrafikTransaction() {
+        var year = $('#year option:selected').val();
+        var month = $('#month option:selected').val();
+
+        $.ajax({
+            url: '{{$url_ajax_call}}',
+            data: {year: year, month: month},
+            success: function(res) {
+                $('#body-grafik-transaction').html(res);
+            }
+        });
+    }
+</script>

@@ -12,45 +12,81 @@ class GrafikHelper
     /**
      * Grafik total transaction
      */
-    public static function grafikTransaction($year, $from="")
+    public static function grafikTransaction($year, $month)
     {
+        
+
         $array = [];
         $total_transaction = 0;
         $total_transaction_failed = 0;
         $total_transaction_success = 0;
-        for ($i=1; $i<=12; $i++) {
-            $transaction = VendingMachineTransaction::where('client_id', client()->id)
-                ->whereMonth('created_at', $i)
-                ->whereYear('created_at', $year)
-                ->count();
-            
-            $transaction_failed = VendingMachineTransaction::where('client_id', client()->id)
-                ->whereMonth('created_at', $i)
-                ->whereYear('created_at', $year)
-                ->failed()
-                ->count();
-            
-            $transaction_success = VendingMachineTransaction::where('client_id', client()->id)
-                ->whereMonth('created_at', $i)
-                ->whereYear('created_at', $year)
-                ->success()
-                ->count();
-            
-            $total_transaction += $transaction;
-            $total_transaction_failed += $transaction_failed;
-            $total_transaction_success += $transaction_success;
-
-            $date = $year.'-'.$i.'-01';
-            $date = new Carbon($date);
-
-            $period = $date->localeMonth;
-            array_push($array, [
-                'transaction' => $transaction,
-                'transaction_failed' => $transaction_failed,
-                'transaction_success' => $transaction_success,
-                'period' => $period,
-            ]);
+        if (!$month) {
+            for ($i=1; $i<=12; $i++) {
+                $transaction = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereMonth('created_at', $i)
+                    ->whereYear('created_at', $year)
+                    ->count();
+                
+                $transaction_failed = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereMonth('created_at', $i)
+                    ->whereYear('created_at', $year)
+                    ->failed()
+                    ->count();
+                
+                $transaction_success = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereMonth('created_at', $i)
+                    ->whereYear('created_at', $year)
+                    ->success()
+                    ->count();
+                
+                $total_transaction += $transaction;
+                $total_transaction_failed += $transaction_failed;
+                $total_transaction_success += $transaction_success;
+    
+                $date = $year.'-'.$i.'-01';
+                $date = new Carbon($date);
+    
+                $period = $date->localeMonth;
+                array_push($array, [
+                    'transaction' => $transaction,
+                    'transaction_failed' => $transaction_failed,
+                    'transaction_success' => $transaction_success,
+                    'period' => $period,
+                ]);
+            }
+        } else {
+            $list_days = DateHelper::getAllDaysByMonth($month, $year);
+            for ($i=0; $i<count($list_days); $i++) {
+                $transaction = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereDate('created_at', $list_days[$i]['date'])
+                    ->count();
+                
+                $transaction_failed = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereDate('created_at', $list_days[$i]['date'])
+                    ->failed()
+                    ->count();
+                
+                $transaction_success = VendingMachineTransaction::where('client_id', client()->id)
+                    ->whereDate('created_at', $list_days[$i]['date'])
+                    ->success()
+                    ->count();
+                
+                $total_transaction += $transaction;
+                $total_transaction_failed += $transaction_failed;
+                $total_transaction_success += $transaction_success;
+    
+                $date = new Carbon($list_days[$i]['date']);
+    
+                $period = $date->format('d');
+                array_push($array, [
+                    'transaction' => $transaction,
+                    'transaction_failed' => $transaction_failed,
+                    'transaction_success' => $transaction_success,
+                    'period' => $period,
+                ]);
+            }
         }
+        
 
         return [
             'grafik' => json_encode($array),

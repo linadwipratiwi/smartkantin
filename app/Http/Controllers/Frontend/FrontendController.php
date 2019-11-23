@@ -19,9 +19,26 @@ class FrontendController extends Controller
         $view = view('frontend.dashboard.index');
         $view->total_transaction = VendingMachineTransaction::search()->where('client_id', client()->id)->count();;
         $view->total_customer = Customer::count();
-        $view->graph_transaction = GrafikHelper::grafikTransaction(date('Y'));
+        $view->year = date('Y');
+        $view->month = date('m');
+        $view->graph_transaction = GrafikHelper::grafikTransaction(date('Y'), date('m'));
         $view->total_vending_machine = VendingMachine::where('client_id', client()->id)->count();
-        $view->total_profit = VendingMachineTransaction::search()->where('client_id', client()->id)->sum('profit_client');;
+        $view->total_profit = VendingMachineTransaction::search()->where('client_id', client()->id)->sum('profit_client');
+        $view->url_ajax_call = url('front/load-grafik-transaction');
+
+        return $view;
+    }
+
+    public function loadGrafikTransaction(Request $request)
+    {
+        $year = \Input::get('year');
+        $month = \Input::get('month');
+        $view = view('frontend.dashboard._chart-morris');
+        $view->graph_transaction = GrafikHelper::grafikTransaction($year, $month);
+        $view->year = $year;
+        $view->month = $month;
+        $view->url_ajax_call = url('front/load-grafik-transaction');
+
         return $view;
     }
 }
