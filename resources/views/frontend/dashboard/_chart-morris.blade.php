@@ -21,16 +21,16 @@
                   <ul class="flex-stat mt-40">
                       <li>
                           <span style="color:#dc0030" class="block">Transaksi Sukses</span>
-                          <span style="color:#dc0030" class="block weight-500 font-18"><span class="counter-anim">200</span></span>
+                          <span style="color:#dc0030" class="block weight-500 font-18"><span class="counter-anim">{{format_quantity($graph_transaction['total_transaction_success'])}}</span></span>
                       </li>
                       <li>
                           <span style="color:#f2b701" class="block">Transaksi Gagal</span>
-                          <span style="color:#f2b701" class="block weight-500 font-18"><span class="counter-anim">500</span></span>
+                          <span style="color:#f2b701" class="block weight-500 font-18"><span class="counter-anim">{{format_quantity($graph_transaction['total_transaction_failed'])}}</span></span>
                       </li>
                       <li>
                           <span style="color:#09a275" class="block">Transaksi Total</span>
                           <span style="color:#09a275" class="block weight-500 font-18">
-                              <span class="counter-anim">700</span>
+                              <span class="counter-anim">{{format_quantity($graph_transaction['total_transaction'])}}</span>
                           </span>
                       </li>
                   </ul>
@@ -42,7 +42,7 @@
 @push('scripts')
     
 <script>
-
+    /**
     var data = [
         {
             period: 'Jan',
@@ -117,13 +117,23 @@
             bebekSinjai: 10
         }
     ];
+    **/
+    var data = <?php echo $graph_transaction['grafik']; ?>;
+    data = JSON.stringify(data);
+    data = JSON.parse(data)
+
+    var key = JSON.stringify({!! $graph_transaction['keys'] !!});
+    key = JSON.parse(key)
+
+    var label = JSON.stringify({!! $graph_transaction['label'] !!});
+    label = JSON.parse(label)
 
     var lineChart = Morris.Line({
         element: 'morris_extra_line_chart',
         data: data ,
         xkey: 'period',
-        ykeys: ['nasiGoreng', 'sate', 'bebekSinjai'],
-        labels: ['Nasi Goreng', 'Sate', 'Bebek Sinjai'],
+        ykeys: key,
+        labels: label,
         pointSize: 2,
         fillOpacity: 0,
         lineWidth:2,
