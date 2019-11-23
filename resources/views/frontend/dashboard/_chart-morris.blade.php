@@ -40,7 +40,7 @@
   </div>
 </div>
 @push('scripts')
-    
+    {{-- {{dd($graph_transaction['grafik'])}} --}}
 <script>
     /**
     var data = [
@@ -120,13 +120,16 @@
     **/
     var data = <?php echo $graph_transaction['grafik']; ?>;
     data = JSON.stringify(data);
-    data = JSON.parse(data)
+    data = JSON.parse(data);
+    console.log(data);
+
 
     var key = JSON.stringify({!! $graph_transaction['keys'] !!});
-    key = JSON.parse(key)
+    key = JSON.parse(key);
 
     var label = JSON.stringify({!! $graph_transaction['label'] !!});
-    label = JSON.parse(label)
+    label = JSON.parse(label);
+
 
     var lineChart = Morris.Line({
         element: 'morris_extra_line_chart',

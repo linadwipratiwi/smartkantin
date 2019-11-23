@@ -55,7 +55,7 @@ class GrafikHelper
         return [
             'grafik' => json_encode($array),
             'label' => json_encode(['Total Transaksi', 'Gagal', 'Berhasil']),
-            'keys' => json_encode(['total_transaction', 'total_transaction_failed', 'total_transaction_success']),
+            'keys' => json_encode(['transaction', 'transaction_failed', 'transaction_success']),
             'total_transaction' => $total_transaction,
             'total_transaction_failed' => $total_transaction_failed,
             'total_transaction_success' => $total_transaction_success,
