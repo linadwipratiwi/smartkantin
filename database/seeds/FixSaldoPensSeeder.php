@@ -38,6 +38,7 @@ class FixSaldoPensSeeder extends Seeder
         /** Total Transaksi */
         $total_transaksi = VendingMachineTransaction::where('vending_machine_id', 16)
             ->where('status_transaction', 1)
+            ->whereDate('created_at', '>', '2019-11-11')
             ->sum('selling_price_vending_machine');
         
         /** saldo pens */
