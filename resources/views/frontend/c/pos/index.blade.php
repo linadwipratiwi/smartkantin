@@ -33,12 +33,12 @@
                             <li id="theme-5"><i class="zmdi zmdi-check"></i></li>
                             <li id="theme-6"><i class="zmdi zmdi-check"></i></li>
                         </ul> --}}
-                        <div class="chatapp-nicescroll-bar" style="overflow-y: scroll; width: auto; height: 443px;">
+                        <!-- menu cekout -->
+                        <!-- <div class="chatapp-nicescroll-bar" style="overflow-y: scroll; width: auto; height: 443px;">
                             <ul class="chat-list-wrap">
                                 <li class="chat-list">
                                     <div class="chat-body">
                                         @for ($i = 0; $i < 100; $i++)
-                                            
                                         <a href="javascript:void(0)">
                                             <div class="chat-data">
                                                 <img class="user-img img-circle" src="https://doyanresep.com/wp-content/uploads/2018/12/cara-membuat-nasi-goreng-telur.jpg" alt="user">
@@ -60,7 +60,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                         <div style="font-weight:bold" class="row">
                             <div class="pull-left col-lg-6 col-md-6 col-sm-6 col-xs-6">Total bayar</div>
                             <div class="pull-right col-lg-6 col-md-6 col-sm-6 col-xs-6"> Rp. 34,000</div>
@@ -90,7 +90,7 @@
                     <div class="panel-body pa-0">
                         <article class="col-item">
                             <div class="photo">
-                                <a href="javascript:void(0);"> <img src="{{asset($item->photo)}}" id="food-photo-{{$item->id}}" class="img-responsive" alt="Product Image" /> </a>
+                                <a href="javascript:void(0);"> <img src="{{asset($item->photo)}}" id="food-photo-{{$item->id}}" width="304" height="130" alt="Product Image"/> </a>
                             </div>
                             <div class="info">
                                 <div class="product-rating inline-block">

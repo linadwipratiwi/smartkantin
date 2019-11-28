@@ -17,6 +17,7 @@ use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\VendingMachineTransaction;
+use App\User;
 
 class MobileApiController extends Controller
 {
@@ -24,6 +25,7 @@ class MobileApiController extends Controller
     public function findCustomer($identity_number)
     {
         $customer = Customer::where('identity_number', $identity_number)->first();
+       
         if (!$customer) {
             return response()->json([
                 'status' => 0,
@@ -209,5 +211,124 @@ class MobileApiController extends Controller
         return json_encode(
             $customer
         ); 
+    }
+
+    /**Login */
+    public static function login(Request $request){
+        $username= $request->input('username');
+        $password=$request->input('password');
+        
+        $user=User::where('username',$username)->first();
+        if(!$user){
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            // Success
+            return response()->json([
+                'status' => 1,
+                'msg' => 'access granted'
+            ]);
+        }
+        else{
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }      
+    }
+
+    /**Bill check */
+    public static function billcheck(Request $request){
+        $vending_machine_alias=$request->input('vending_machine_alias');
+        // $vending_machine_alias="vm_paens";
+        $customer_identity_number= $request->input('customer_identity_number');
+        // $customer_identity_number=$request;
+        $customer= Customer::where('identity_number',$customer_identity_number)->first();
+        if(!$customer){
+            return response()->json([
+                'status' => 0,
+                'msg' => 'customer identity not found'
+            ]);
+        }
+        $customer_id=$customer->id;
+        /*cek vending machine*/
+        $vending_machine=VendingMachine::Where('alias',$vending_machine_alias)->first();
+        if(!$vending_machine){
+            return response()->json([
+                'status' => 0,
+                'msg' => 'vending machine not found'
+            ]);
+        }
+        $vending_machine_id=$vending_machine->id;
+
+        $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
+                                    'vending_machine_id'=>$vending_machine_id,
+                                    'status_transaction'=>'2'])->get();
+
+        $hasil="";
+        foreach ($transactions as $data){
+            $hasil[]=$data;
+        }
+        if(!$hasil){
+            return response()->json([
+                'status' => 0,
+                'msg' => 'no bill found'
+            ]);  
+        }
+        return response()->json(
+            $hasil      
+        );  
+    }
+
+    /**History */
+    public static function history($request){
+     
+        $stand_alias=$request;
+        /* cek alias */
+        $stand = VendingMachine::where('alias', $stand_alias)->first();
+        if(!$stand){
+            return json_encode([
+                'status' => 0,
+                'msg' => 'stand not found'
+            ]);
+        }
+        /*id stand*/
+        $stand_id= $stand->id;
+        /** Cek customer ada apa tidak */
+        $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->with('customer')->get();
+        
+        $hasil="";
+        if($transaction){
+            echo "masuk";
+            foreach($transaction as $data){
+                $text= json_decode($data,true);
+                $text['type_transaction']="buy";
+                $hasil[]=($text);
+            }
+        }
+        $topup_transaction= TransferSaldo::where('from_type_id',$stand_id)->get();
+        if($topup_transaction){
+            foreach($topup_transaction as $data){
+                $text= json_decode($data,true);
+                $text['type_transaction']="topup";
+                $hasil[]=($text);
+            }
+        }
+
+        if(!$hasil){
+            return response()->json([
+                'status'=> 0,
+                'msg' => 'no transaction'
+            ]);
+        }
+        return response()->json(
+            $hasil
+        );
+
+        
     }
 }
