@@ -73,6 +73,9 @@
 					<a @if(\Request::segment(2) == 'food') class="active" @endif href="{{ url('front/food') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Food</span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
+					<a @if(\Request::segment(2) == 'multipayment') class="active" @endif href="{{ url('front/multipayment') }}"><div class="pull-left"><i class="fa fa-money mr-20"></i><span class="right-nav-text">Multipayment</span></div><div class="clearfix"></div></a>
+				</li>
+				<li>
 					<a @if(\Request::segment(2) == 'report') class="active" @endif href="javascript:void(0);" data-toggle="collapse" data-target="#app_report"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
 					<ul id="app_report" class="collapse @if(\Request::segment(2) == 'report') in @endif  collapse-level-1">
 						<li>

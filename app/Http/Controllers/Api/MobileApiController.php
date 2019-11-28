@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
+use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
@@ -157,7 +158,7 @@ class MobileApiController extends Controller
             ApiHelper::updateStockTransaction($transaction);
             \DB::commit();
 
-            $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
+            $transaction = VendingMachineTransaction::where('id', $transaction->id)->first();
             $transaction->status = 1;
             $transaction->msg = 'success';
             return json_encode(
@@ -171,6 +172,66 @@ class MobileApiController extends Controller
             ]);
         }
 
+    }
+
+    /** Transaction multipayment */
+    public static function multipayment(Request $request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $amount = $request->input('amount');
+        $payment_type = $request->input('payment_type'); // in : out
+        $notes = $request->input('notes');
+
+        /** Cek customer ada apa tidak */
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Identity number customer not found'
+            ]);
+        }
+
+        /** Cek saldo */
+        $saldo = $customer->saldo;
+        $saldo_pens = $customer->saldo_pens;
+        $saldo_total = $saldo + $saldo_pens;
+
+        /** jika saldo total kurang dari harga jual */
+        if ($saldo_total < $amount) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Saldo Anda tidak mencukupi'
+            ]);
+        }
+
+
+        $multipayment = new Multipayment;
+        $multipayment->customer_id = $customer->id;
+        $multipayment->amount = $amount;
+        $multipayment->payment_type = $payment_type;
+        $multipayment->save();
+
+        /** pengurangan saldo */
+        $saldo_pens_akhir = $saldo_pens - $amount;
+        if ($saldo_pens_akhir < 0) {
+            /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
+            $customer->saldo_pens = 0;
+
+            $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
+            $customer->saldo = $saldo - $biaya_kekurangan;
+        } else {
+            /** saldo pens masih sisa */
+            $customer->saldo_pens = $saldo_pens_akhir;
+        }
+
+        $customer->save();
+
+        $multipayment = Multipayment::where('id', $multipayment->id)->first();
+        $multipayment->status = 1;
+        $multipayment->msg = 'success';
+        return json_encode(
+            $multipayment
+        );
     }
 
     /** Topup */
@@ -187,7 +248,7 @@ class MobileApiController extends Controller
                 'msg' => 'Identity number customer not found'
             ]);
         }
-
+        
         DB::beginTransaction();
         $transfer_saldo = new TransferSaldo;
         $transfer_saldo->from_type = get_class(new Client);
