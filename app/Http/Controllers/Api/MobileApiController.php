@@ -303,11 +303,11 @@ class MobileApiController extends Controller
     }
 
     /**Bill check */
-    public static function billcheck(Request $request){
-        $vending_machine_alias=$request->input('vending_machine_alias');
-        // $vending_machine_alias="vm_paens";
-        $customer_identity_number= $request->input('customer_identity_number');
-        // $customer_identity_number=$request;
+    public static function billcheck( $request){
+        // $vending_machine_alias=$request->input('vending_machine_alias');
+        $vending_machine_alias="vm_pens";
+        // $customer_identity_number= $request->input('customer_identity_number');
+        $customer_identity_number=$request;
         $customer= Customer::where('identity_number',$customer_identity_number)->first();
         if(!$customer){
             return response()->json([
@@ -330,7 +330,7 @@ class MobileApiController extends Controller
                                     'vending_machine_id'=>$vending_machine_id,
                                     'status_transaction'=>'2'])->get();
 
-        $hasil="";
+        $hasil[]="";
         foreach ($transactions as $data){
             $hasil[]=$data;
         }
@@ -341,7 +341,7 @@ class MobileApiController extends Controller
             ]);  
         }
         return response()->json(
-            $hasil      
+            $transactions   
         );  
     }
 
@@ -362,7 +362,7 @@ class MobileApiController extends Controller
         /** Cek customer ada apa tidak */
         $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->with('customer')->get();
         
-        $hasil="";
+        $hasil[]="";
         if($transaction){
             echo "masuk";
             foreach($transaction as $data){
