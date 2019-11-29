@@ -88,9 +88,9 @@ class ApiHelper
         $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
         $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
         $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
-        $transaction->profit_platform_type = $client->profit_platform_type;
-        $transaction->profit_platform_percent = $client->profit_platform_percent;
-        $transaction->profit_platform_value = $client->profit_platform_value;
+        $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
+        $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
+        $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
         
         // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
         $transaction->profit_platform = $client->profit_platform_value;
@@ -98,7 +98,7 @@ class ApiHelper
             $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
         }
 
-        $transaction->selling_price_vending_machine = $vending_machine_slot->selling_price_vending_machine;
+        $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
         $transaction->quantity = 1;
         $transaction->status_transaction = 1;
 

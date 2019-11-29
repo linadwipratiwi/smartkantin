@@ -43,6 +43,9 @@
                                             <th>Jenis</th>
                                             <th>HPP</th>
                                             <th>Harga Jual</th>
+                                            <th>Jenis Keuntungan Platform</th>
+                                            <th>Keuntungan Platform / transaksi</th>
+                                            <th>Harga Jual VM</th>
                                             <th>Gambar</th>
                                             <th>Action</th>
                                         </tr>
@@ -55,6 +58,9 @@
                                             <td>{{$food->category->name}}</td>
                                             <td>{{format_quantity($food->hpp)}}</td>
                                             <td>{{format_quantity($food->selling_price_client)}}</td>
+                                            <td>{{$food->profit_platform_type}}</td>
+                                            <td>{{$food->profit_platform_type == 'value' ? format_quantity($food->profit_platform_value): $food->profit_platform_percent}}</td>
+                                            <td>{{format_quantity($food->selling_price_vending_machine)}}</td>
                                             <td>{!! $food->photo ? '<img src="'.asset($food->photo).'" widht="50px" height="50px" />' : '-' !!}</td>
                                             <td>
                                                 <a href="{{url('front/food/'.$food->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">

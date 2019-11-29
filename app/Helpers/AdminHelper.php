@@ -355,6 +355,14 @@ class AdminHelper
     /** Create master food */
     public static function createFood($request, $id='')
     {
+        $type = client()->profit_platform_type;
+        $profit_vm = 0;
+        if ($type == 'value') {
+            $profit_vm = client()->profit_platform_value + client()->selling_price_client;
+        } elseif ($type == 'percent') {
+            $profit_vm = (client()->profit_platform_percent * client()->selling_price_client) + client()->selling_price_client;
+        }
+        
         $file = $request->file;
 
         DB::beginTransaction();
@@ -365,6 +373,10 @@ class AdminHelper
         $food->hpp = format_db($request->input('hpp'));
         $food->selling_price_client = format_db($request->input('selling_price_client'));
         $food->profit_client = $food->selling_price_client - $food->hpp;
+        $food->profit_platform_type = client()->profit_platform_type;
+        $food->profit_platform_percent = client()->profit_platform_percent;
+        $food->profit_platform_value = client()->profit_platform_value;
+        $food->selling_price_vending_machine = $food->selling_price_client + $profit_vm;
 
         if ($file) {
             $food->photo = FileHelper::upload($file, 'uploads/food/');;
@@ -372,6 +384,7 @@ class AdminHelper
         try {
             $food->save();
         } catch (\Exception $e){
+            dd($e);
             throw new AppException("Failed to save data", 503);
         }
 
