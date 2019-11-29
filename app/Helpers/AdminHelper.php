@@ -384,7 +384,6 @@ class AdminHelper
         try {
             $food->save();
         } catch (\Exception $e){
-            dd($e);
             throw new AppException("Failed to save data", 503);
         }
 
