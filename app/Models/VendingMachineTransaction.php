@@ -36,6 +36,11 @@ class VendingMachineTransaction extends Model
         $q->where('status_transaction', 1);
     }
 
+    public function scopeFailed($q)
+    {
+        $q->where('status_transaction', 0);
+    }
+
     public function scopeSearch($q)
     {
         $type = \Input::get('type');

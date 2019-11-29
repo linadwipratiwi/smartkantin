@@ -55,6 +55,10 @@
 				<li>
 					<a @if((\Request::segment(2) == '') && (\Request::segment(1) != 'profile')) class="active" @endif  href="{{url('front/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="clearfix"></div></a>
 				</li>
+
+				<li>
+					<a @if(\Request::segment(2) == 'topup') class="active" @endif href="{{ url('front/topup') }}"><div class="pull-left"><i class="fa fa-dollar mr-20"></i><span class="right-nav-text">Topup </span></div><div class="clearfix"></div></a>
+				</li>
 				<li>
 					<a @if(\Request::segment(2) == 'customer') class="active" @endif href="{{ url('front/customer') }}"><div class="pull-left"><i class="fa fa-group mr-20"></i><span class="right-nav-text">Customer </span></div><div class="clearfix"></div></a>
 				</li>
@@ -69,7 +73,15 @@
 					<a @if(\Request::segment(2) == 'food') class="active" @endif href="{{ url('front/food') }}"><div class="pull-left"><i class="fa fa-cubes mr-20"></i><span class="right-nav-text">Food</span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
-					<a @if(\Request::segment(2) == 'report') class="active" @endif href="{{ url('front/report') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="clearfix"></div></a>
+					<a @if(\Request::segment(2) == 'report') class="active" @endif href="javascript:void(0);" data-toggle="collapse" data-target="#app_report"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
+					<ul id="app_report" class="collapse @if(\Request::segment(2) == 'report') in @endif  collapse-level-1">
+						<li>
+							<a href="{{url('front/report/transaction')}}">Transaction</a>
+						</li>
+						<li>
+							<a href="{{url('front/report/topup')}}">Topup</a>
+						</li>
+					</ul>
 				</li>
 			@endrole
 			

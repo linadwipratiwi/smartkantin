@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" >{{$customer->name}}</h4>
-            <p>Saldo saat ini : <b style="font-weight:bold" class="text-info">Rp. {{format_price($customer->saldo)}}</b></p>
+            <p>Saldo saat ini : <b style="font-weight:bold" class="text-info">Rp. {{format_price($customer->saldo + $customer->saldo_pens)}}</b></p>
         </div>
         <div class="col-lg-12" id="form-item">
             <form id="form-topup">

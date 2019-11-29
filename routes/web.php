@@ -65,7 +65,9 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 
 /** Client */
 Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
+    Route::get('load-grafik-transaction', 'FrontendController@loadGrafikTransaction');
     Route::get('/', 'FrontendController@index');
+    Route::get('topup', 'TopupController@index');
 
     Route::group(['prefix' => 'customer'], function () {
         Route::get('{id}/export', 'CustomerController@export');
@@ -73,6 +75,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::get('{id}/topup/edit', 'CustomerController@_topupEdit');
         Route::get('{id}/topup/create', 'CustomerController@_topupCreate');
         Route::get('{id}/topup', 'CustomerController@_topupIndex');
+        Route::get('{id}/history-transaction', 'CustomerController@_historyTransaction');
         Route::get('import/store', 'CustomerController@storeImportDatabase');
         Route::post('import', 'CustomerController@storeImportTemp');
         Route::get('import/download-template', 'CustomerController@downloadTemplate');
@@ -105,7 +108,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     });
     
     // Setting
-    Route::get('report', 'ReportController@index');
+    Route::get('report/transaction', 'ReportController@transaction');
+    Route::get('report/topup', 'ReportController@topup');
 });
 
 /** Customer */

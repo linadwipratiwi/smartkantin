@@ -36,13 +36,13 @@
                                     <input type="text" name="identity_type" value="{{$customer->identity_type}}"  class="form-control" id="" value="">
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('Nomer Identitas', 'Identity Number') !!} </label>
-                                    <input type="text" name="identity_number" value="{{$customer->identity_number}}"  class="form-control" id="" value="">
+                                    <label class="control-label mb-10 text-left">{!! label('Nomer Kartu', 'Card Number') !!} </label>
+                                    <input type="text" name="card_number" value="{{$customer->card_number}}"  class="form-control" id="" value="">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Saldo', 'Saldo') !!} </label>
                                     <input type="text" name="saldo" value="{{$customer->saldo}}"  class="form-control format-price" id="" value="">
-                                </div>
+                                </div> --}}
                                 <div class="form-group mb-0">
                                     <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">submit</span></button>
                                 </div>

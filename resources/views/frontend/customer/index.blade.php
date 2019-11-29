@@ -16,7 +16,30 @@
         ]
     ])
     
-    <!-- /Title -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="form-wrap">
+                            <form method="get" action="{{url('front/customer')}}">
+                                {!! csrf_field() !!}
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">Cari </label>
+                                    <input type="text" class="form-control" value="{{\Input::get('search')}}" name="search"
+                                        placeholder="Nomer kartu / nama" required>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span
+                                            class="btn-text">submit</span></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Row -->
     <div class="row">
@@ -39,6 +62,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
+                                            <th>Nomer Kartu</th>
                                             <th>Default Account</th>
                                             <th>Identity Type</th>
                                             <th>Identity Number</th>
@@ -57,19 +81,24 @@
                                         <tr id="tr-{{$customer->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{$customer->name}}</td>
+                                            <td>{{$customer->card_number}}</td>
                                             <td>{!! $customer->user ? $customer->showDefaultAccount() : 'belum diset ' . $customer->createRandomUser() !!}</td>
                                             <td>{{$customer->identity_type}}</td>
                                             <td>{{$customer->identity_number}}</td>
                                             <td>{{$customer->email}}</td>
                                             <td>{{$customer->phone}}</td>
                                             <td>{{$customer->address}}</td>
-                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo)}}</td>
+                                            <td class="td-saldo-customer-{{$customer->id}}">{{format_price($customer->saldo + $customer->saldo_pens)}}</td>
                                             <td>{{$customer->client ? $customer->client->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->vendingMachine ? $customer->vendingMachine->name : 'SYSTEM'}}</td>
                                             <td>{{$customer->created_at ? date_format_view($customer->created_at) : '-'}}</td>
                                             <td>
                                                 <a onclick="showDetail('{{url('front/customer/'.$customer->id.'/topup')}}')" data-toggle="modal" data-target=".detail-modal"  data-original-title="Topup">
                                                     <button class="btn btn-success btn-icon-anim btn-square btn-sm"><i class="fa fa-dollar"></i></button>
+                                                </a>
+
+                                                <a href="{{url('front/customer/'.$customer->id.'/history-transaction')}}" data-original-title="Transaction">
+                                                    <button class="btn btn-primary btn-icon-anim btn-square btn-sm"><i class="fa fa-file"></i></button>
                                                 </a>
                                                 
                                                 <a href="{{url('front/customer/'.$customer->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">

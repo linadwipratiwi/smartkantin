@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\VendingMachineTransaction;
 use App\Helpers\DateHelper;
 use Illuminate\Http\Request;
+use App\Models\TransferSaldo;
 use App\Http\Controllers\Controller;
+use App\Models\VendingMachineTransaction;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function transaction()
     {
-        $view = view('frontend.report.index');
+        $view = view('frontend.report.transaction');
         $view->list_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->orderBy('created_at', 'desc')->paginate(50);
         $view->total_profit =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->sum('profit_client');
         $view->total_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->count();
+        $view->total_transaction_failed =  VendingMachineTransaction::search()->failed()->where('client_id', client()->id)->count();
+        $view->total_transaction_success =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->count();
         return $view;
+    }
+
+    public function topup()
+    {
+        $view = view('frontend.report.topup');
+
+        $view->list_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->get();
+        $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');;
+        return $view; 
     }
 
     public function download(Request $request) 

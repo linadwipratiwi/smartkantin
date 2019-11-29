@@ -11,7 +11,7 @@
                         <div class="clearfix"></div>
                         <br>
                         <div class="form-wrap">
-                            <form class="form-inline" method="get" action="{{url('front/report/transaction')}}">
+                            <form class="form-inline" method="get" action="{{url('front/customer/'.$customer->id.'/history-transaction')}}">
                                 <div class="form-group mr-15">
                                     <label class="control-label mr-10" for="date">Date</label>
                                     <select name="type" class="form-control" id="type" onchange="selectDate(this.value)">
@@ -53,25 +53,12 @@
 
                     <div class="col-sm-3">
                         <div class="pull-left">
-                            <h6 class="panel-title txt-dark">Total Income</h6>
-                        </div>
-                        <div class="clearfix"></div>
-                        <span style="font-size:24px" class="text-success">
-                            Rp. {{format_price($total_profit)}}
-                        </span>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <div class="pull-left">
                             <h6 class="panel-title txt-dark">Total Transaction</h6>
                         </div>
                         <div class="clearfix"></div>
                         <span style="font-size:24px" class="text-info">
                             <i class="fa fa-repeat"></i>
                             {{format_quantity($total_transaction)}}
-                        </span> <br>
-                        <span style="font-size:14px" class="text-success">
-                            Success : {{format_quantity($total_transaction_success)}} / <label class="text-info"> Failed : {{format_quantity($total_transaction_failed)}} </label>
                         </span>
                     </div>
                 </div>

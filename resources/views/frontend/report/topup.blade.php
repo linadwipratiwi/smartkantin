@@ -3,7 +3,7 @@
 @section('content')
     <!-- Title -->
     @include('backend._bread-crumb', [
-        'title' => 'Transaction',
+        'title' => 'History Topup',
         'breadcrumbs' => [
             0 => [
                 'link' => url('front'),
@@ -11,13 +11,13 @@
             ],
             1 => [
                 'link' => '#',
-                'label' => 'Transaction'
+                'label' => 'History Topup'
             ],
         ]
     ])
     
     <!-- /Title -->
-    @include('frontend.report._filter')
+    @include('frontend.report._filter-topup')
     <!-- Row -->
     <div class="row">
         <div class="col-sm-12">
@@ -39,35 +39,26 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Food Nama</th>
-                                            <th>Vending Machine</th>
-                                            <th>Client</th>
-                                            <th>Customer</th>
-                                            <th>Selling Price VM</th>
-                                            <th>Profit Client</th>
                                             <th>Date</th>
-                                            <th>Status Transaction</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Topup by</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($list_transaction as $row => $transaction)
-                                        <tr id="tr-{{$transaction->id}}">
+                                        @foreach($list_topup as $row => $topup)
+                                        <tr id="tr-{{$topup->id}}">
                                             <td>{{$row + 1}}</td>
-                                            <td>{{$transaction->food_name}}</td>
-                                            <td>{{$transaction->vendingMachine->name}}</td>
-                                            <td>{{$transaction->client->name}}</td>
-                                            <td>{{$transaction->customer->name}}</td>
-                                            <td>{{format_price($transaction->selling_price_vending_machine)}}</td>
-                                            <td>{{format_price($transaction->profit_client)}}</td>
-                                            <td>{{date_format_view($transaction->created_at)}}</td>
-                                            <td>{!! $transaction->status() !!}</td>
+                                            <td>{{date_format_view($topup->created_at)}}</td>
+                                            <td>{{$topup->toType() ? $topup->toType()->name : '-'}}</td>
+                                            <td>{{format_price($topup->saldo)}}</td>
+                                            <td>{{$topup->createdBy ? $topup->createdBy->name : '-'}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        {{$list_transaction->appends(['type' => \Input::get('type'), 'date' => \Input::get('date'), 'month' => \Input::get('month')])->links()}}
                     </div>
                 </div>
             </div>	

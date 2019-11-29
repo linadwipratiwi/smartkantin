@@ -12,13 +12,14 @@ use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Helpers\TempDataHelper;
 use App\Http\Controllers\Controller;
+use App\Models\VendingMachineTransaction;
 
 class CustomerController extends Controller
 {
     public function index(Request $request)
     {
         $view = view('frontend.customer.index');
-        $view->customers = Customer::clientId(client()->id)->orderBy('created_at', 'desc')->paginate(25);
+        $view->customers = Customer::search()->clientId(client()->id)->orderBy('created_at', 'desc')->paginate(25);
         return $view;
     }
 
@@ -123,7 +124,7 @@ class CustomerController extends Controller
         foreach ($list_topup as $row => $topup) {
             $customer = $topup->to_type::find($topup->to_type_id);
             array_push($content, [++$row, date_format_view($topup->created_at), format_price($topup->saldo),
-                $customer->name, $customer->identity_type, $customer->identity_number, $topup->createdBy->name]);
+                $customer->name, $customer->identity_type, $customer->card_number, $topup->createdBy->name]);
         }
 
         $file_name = 'RIWAYAT TOPUP KE  ' .$customer->name;
@@ -206,5 +207,15 @@ class CustomerController extends Controller
         toaster_success('unggahan Anda telah berhasil disimpan didatabase');
         return redirect()->back();
 
+    }
+
+    public function _historyTransaction($id) 
+    {
+        $view = view('frontend.customer.history-transaction');
+        $view->customer = Customer::findOrFail($id);
+        $view->list_transaction = VendingMachineTransaction::search()->where('customer_id', $id)->orderBy('created_at', 'desc')->paginate(100);
+        $view->total_transaction =  VendingMachineTransaction::search()->where('customer_id', $id)->count();
+
+        return $view;
     }
 }

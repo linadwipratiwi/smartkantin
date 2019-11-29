@@ -30,6 +30,17 @@ class Customer extends Model
         $q->where('register_at_client_id', $client_id);
     }
 
+    public function scopeSearch($q)
+    {
+        $search = \Input::get('search');
+        $q->where(function($query) use ($search) {
+            if ($search) {
+                $query->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('card_number', 'like', '%'.$search.'%');
+            }
+        });
+    }
+
     public function createRandomUser()
     {
         if ($this->user) return;

@@ -12,7 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group(['prefix' => 'v1'], function () {
+  Route::group(['prefix' => 'mobile', 'namespace' => 'Api'], function () {
+    Route::post('topup', 'MobileApiController@topup');
+    Route::post('transaction', 'MobileApiController@transaction');
+    Route::get('customer/{id}', 'MobileApiController@findCustomer');
+  });
 
+});
 // API
 Route::post('slot', 'ApiController@findSlot');
 Route::get('customer/{id}', 'ApiController@findCustomer');
