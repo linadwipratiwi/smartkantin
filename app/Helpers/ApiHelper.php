@@ -84,10 +84,10 @@ class ApiHelper
         $transaction->vending_machine_slot_id = $vending_machine_slot->id;
         $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
         $transaction->customer_id = $customer->id;
-        $transaction->hpp = $vending_machine_slot->hpp;
-        $transaction->food_name = $vending_machine_slot->food_name;
-        $transaction->selling_price_client = $vending_machine_slot->selling_price_client;
-        $transaction->profit_client = $vending_machine_slot->profit_client;
+        $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+        $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+        $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
+        $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
         $transaction->profit_platform_type = $client->profit_platform_type;
         $transaction->profit_platform_percent = $client->profit_platform_percent;
         $transaction->profit_platform_value = $client->profit_platform_value;
