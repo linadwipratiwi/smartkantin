@@ -14,6 +14,11 @@ class StockMutation extends Model
         return $this->belongsTo('App\Models\Client', 'client_id');
     }
 
+    public function food()
+    {
+        return $this->belongsTo('App\Models\Client', 'client_id');
+    }
+
     public function vendingMachine()
     {
         return $this->belongsTo('App\Models\VendingMachine', 'vending_machine_id');

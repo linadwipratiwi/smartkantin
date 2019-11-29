@@ -276,13 +276,14 @@ class AdminHelper
         DB::beginTransaction();
         $id = $request->vending_machine_stock_id;
         $stock_mutation = $id ? StockMutation::findOrFail($id) : new StockMutation;
+        $stock_mutation->food_id = $vending_machine_slot->food ? $vending_machine_slot->food->id : null;
         $stock_mutation->vending_machine_id = $request->input('vending_machine_id');
         $stock_mutation->vending_machine_slot_id = $request->input('slot_id');
         $stock_mutation->stock = $request->input('stock');
         $stock_mutation->type = 'stock_mutation';
-        $stock_mutation->food_name = $vending_machine_slot->food_name;
-        $stock_mutation->hpp = $vending_machine_slot->hpp;
-        $stock_mutation->selling_price_client = $vending_machine_slot->selling_price_client;
+        $stock_mutation->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+        $stock_mutation->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+        $stock_mutation->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : 0;
         $stock_mutation->created_by = auth()->user()->id;
 
         $vending_machine_slot->stock = $vending_machine_slot->stock + $stock_mutation->stock;

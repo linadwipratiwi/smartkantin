@@ -21,7 +21,6 @@
                                 <th class="text-center">HPP</th>
                                 <th class="text-center">Harga Jual Client</th>
                                 <th class="text-center">Harga Jual Di Vending</th>
-                                <th class="text-center">Tgl. Expired</th>
                             </tr>
                             </thead>
                             @foreach($vending_machine->slots as $i => $slot)
@@ -54,7 +53,6 @@
                                     <td>{{$slot->food ? format_price($slot->food->hpp) : '-'}}</td>
                                     <td>{{$slot->food ? format_price($slot->food->selling_price_client) : '-'}}</td>
                                     <td>{{format_price($profit_vm)}}</td>
-                                    <td>{{$slot->expired_date}}</td>
                                     
                                 </tr>
                             @endforeach
