@@ -383,12 +383,18 @@ class MobileApiController extends Controller
             $harga=$transaction->selling_price_vending_machine;
             $quantity= $transaction->quantity;
             $hargaTotal=$hargaTotal+( $harga* $quantity);
+            $hasil[]= $transaction;
             
          }
 
+        if(!$hasil){
+            return response()->json([
+                "status"=>0,
+                "msg"=>"no bill found"
+            ]);
+        }
 
-         $customer_id= $transaction-> customer_id;
-            $customer=Customer::findOrFail($customer_id);
+        
             $saldo=$customer->saldo;
             
             /**cek saldo apakahmencukupi */
@@ -398,19 +404,20 @@ class MobileApiController extends Controller
                     'msg' => 'not enough saldo'
                 ]);
             }
-            $saldo=$saldo-$harga;
+            $saldo=$saldo-$hargaTotal;
             $customer->saldo=$saldo;
             $customer->save();
-
+            DB::commit();  
             foreach ($transactions as $transaction){
                 $transaction->status_transaction=1;
                 $transaction->save();
                 DB::commit();    
             }
          
-         
+        $customer_= json_decode($customer,true);
+        $customer_['msg']="success";
          return response()->json(
-             $customer
+             $customer_
          );  
  
 
@@ -448,6 +455,7 @@ class MobileApiController extends Controller
             $text= json_decode($data,true);
             $text['customer_name']=$customer->name;   
             $text['customer_identity_number']=$customer->identity_number;
+            $text['msg']="success";
             $hasil[]=$text;
         
         }
