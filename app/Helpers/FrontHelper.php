@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\User;
 use Carbon\Carbon;
+use App\Models\Food;
 use App\Models\Item;
 use App\Models\Client;
 use App\Models\Customer;
@@ -22,38 +23,44 @@ use Illuminate\Support\Facades\DB;
 class FrontHelper
 {
     // Produk di Stand
-    public static function createProduct($request, $id='')
+    public static function createProduct($request)
     {
-        $file = $request->file;
+        $food_id = $request->food_id;
 
         DB::beginTransaction();
-        $id = $request->vending_machine_slot_id;
-        $product = $id ? VendingMachineSlot::findOrFail($id) : new VendingMachineSlot;
-        $product->name = str_random(40);
-        $product->vending_machine_id = $request->input('vending_machine_id');
-        $product->alias = str_random(40);
-        $product->food_name = $request->input('food_name');
-        $product->capacity = 1000;
-        $product->category_id = $request->input('category_id');
-        $product->stock = $request->input('stock');;
-        $product->expired_date = null;
-        $product->selling_price_client = format_db($request->selling_price_client);
-        $product->selling_price_vending_machine = format_db($request->selling_price_client);
-        $product->profit_platform_type = null;
-        $product->profit_platform_value = 'value'; // set static value
-        if ($file) {
-            $product->photo = FileHelper::upload($file, 'uploads/product/');;
+        for ($i=0; $i < count($food_id); $i++) { 
+            $food = Food::findOrFail($food_id[$i]);
+            $cek = VendingMachineSlot::where('vending_machine_id', $request->input('vending_machine_id'))
+                ->where('food_id', $food_id[$i])
+                ->first();
+            if ($cek) continue;
+            $product = new VendingMachineSlot;
+            $product->vending_machine_id = $request->input('vending_machine_id');
+            $product->name = $food->name;
+            $product->alias = str_random(40);
+            $product->food_name = $food->name;
+            $product->food_id = $food->id;
+            $product->capacity = null;
+            $product->category_id = null;
+            $product->stock = 1000;
+            $product->expired_date = null;
+            $product->selling_price_client = format_db($food->selling_price_client);
+            $product->selling_price_vending_machine = format_db($food->selling_price_vending_machine);
+            $product->profit_platform_type = $food->profit_platform_type;
+            $product->profit_platform_value = $food->profit_platform_value; // set static value
+            
+            try {
+                $product->save();
+                $stock_mutation = self::creteStockFromCreateProduct($product);
+                $product->ref_stock_mutation_id = $stock_mutation->id;
+                $product->save();
+            } catch (\Exception $e) {
+                dd($e);
+                throw new AppException("Failed to save data", 503);
+            }
         }
 
-        try {
-            $product->save();
-            $stock_mutation = self::creteStockFromCreateProduct($product, $id);
-            $product->ref_stock_mutation_id = $stock_mutation->id;
-            $product->save();
-        } catch (\Exception $e) {
-            info($e);
-            throw new AppException("Failed to save data", 503);
-        }
+        
 
         DB::commit();
         return $product;
@@ -72,6 +79,7 @@ class FrontHelper
         $stock_mutation->hpp = $product->hpp;
         $stock_mutation->selling_price_client = $product->selling_price_client;
         $stock_mutation->created_by = auth()->user()->id;
+        $stock_mutation->food_id = $product->food->id;
 
         $vending_machine = $product->vendingMachine;
         $vending_machine->flaging_transaction = Str::random(10);;

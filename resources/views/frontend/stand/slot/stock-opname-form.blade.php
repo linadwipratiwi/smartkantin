@@ -32,15 +32,13 @@
                                             <th style="min-width: 50px">#</th>
                                             <th>Makanan</th>
                                             <th>Stok</th>
-                                            <th>Harga Jual</th>
                                         </tr>
                                     </thead>
                                     @foreach($vending_machine->slots as $i => $slot)
                                     <tr id="tr-slot-{{$slot->id}}">
-                                        <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td>
-                                        <td><input type="text" onchange="save({{$slot->id}})" id="food-name-{{$slot->id}}" class="form-control" value="{{$slot->food_name}}" name="food_name[{{$slot->id}}]"></td>
+                                        <td>{!!$slot->food->photo ? '<img width="50px" height="50px" src="'.asset($slot->food->photo).'">' : '-'!!}</td>
+                                        <td>{{$slot->food->name}}</td>
                                         <td><input type="text" onchange="save({{$slot->id}})" id="stock-{{$slot->id}}" class="form-control format-price" value="{{$slot->stock}}" name="stock[{{$slot->id}}]"></td>
-                                        <td><input type="text" onchange="save({{$slot->id}})" id="price-{{$slot->id}}" class="form-control format-price" value="{{$slot->selling_price_vending_machine}}" name="selling_price_vending_machine[{{$slot->id}}]"></td>
                                     </tr>
                                     @endforeach
                                 </table>

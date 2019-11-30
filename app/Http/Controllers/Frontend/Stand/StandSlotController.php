@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Stand;
 
+use App\Models\Food;
 use App\Models\Category;
 use App\Helpers\AdminHelper;
 use App\Helpers\FrontHelper;
@@ -23,31 +24,17 @@ class StandSlotController extends Controller
 
     public function create($vending_machine_id)
     {
-        $view = view('frontend.stand.slot._create');
+        $view = view('frontend.stand.slot.create');
         $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
         $view->categories = Category::food()->get();
+        $view->list_food = Food::where('client_id', client()->id)->get();
         return $view;
     }
 
     public function store(Request $request, $vending_machine_id)
     {
-        // store
         FrontHelper::createProduct($request);
-
-        // show index
-        $view = view('frontend.stand.slot._index');
-        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
-        return $view;
-    }
-
-    public function edit($vending_machine_id, $id)
-    {
-        $view = view('frontend.stand.slot._edit');
-        $view->vending_machine = VendingMachine::findOrFail($vending_machine_id);
-        $view->vending_machine_slot = VendingMachineSlot::findOrFail($id);
-        $view->categories = Category::food()->get();
-
-        return $view;
+        return redirect('front/stand');
     }
 
     public function destroy($vending_machine_id, $id)
@@ -77,10 +64,9 @@ class StandSlotController extends Controller
     {
         $product = VendingMachineSlot::findOrFail($request->id);
         $product->stock = format_db($request->stock);
-        $product->food_name = $request->food_name;
-        $product->selling_price_client = format_db($request->price);
-        $product->selling_price_vending_machine = format_db($request->price);
         $product->save();
+
+        FrontHelper::creteStockFromCreateProduct($product);
 
         $vending_machine = $product->vendingMachine;
         $vending_machine->flaging_transaction = str_random(10);;

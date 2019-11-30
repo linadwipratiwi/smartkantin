@@ -3,7 +3,7 @@
         <div class="modal-header">
             <h4 class="modal-title" >{{$vending_machine->name}}</h4>
             <p>Pengaturan produk yang dijual untuk setiap warung</p>
-            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/create")}}')"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Tambah produk baru</span></a>
+            <a class="btn btn-info btn-sm btn-lable-wrap left-label pull-right" href="{{url("front/stand/".$vending_machine->id."/product/create")}}"> <span class="btn-label"><i class="fa fa-plus"></i> </span><span class="btn-text">Tambah produk baru</span></a>
             <a class="btn btn-success btn-sm btn-lable-wrap left-label pull-right mr-5" href="{{url("front/stand/".$vending_machine->id."/product/stock-opname")}}"> <span class="btn-label"><i class="fa fa-cube"></i> </span><span class="btn-text">Stock Opname Semua produk</span></a> 
 
         </div>
@@ -29,15 +29,15 @@
                                             data-toggle="tooltip" data-original-title="Delete">
                                             <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>
                                         </a>
-                                        <a  onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
+                                        {{-- <a  onclick="showDetail('{{url("front/stand/".$vending_machine->id."/product/".$slot->id."/edit")}}')"data-toggle="tooltip" data-original-title="Edit">
                                             <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
-                                        </a>
+                                        </a> --}}
                                     </td>
-                                    <td>{!!$slot->photo ? '<img width="50px" height="50px" src="'.asset($slot->photo).'">' : '-'!!}</td>
-                                    <td>{{$slot->food_name}}</td>
-                                    <td>{{$slot->category ? $slot->category->name : '-' }}</td>
+                                    <td>{!!$slot->food->photo ? '<img width="50px" height="50px" src="'.asset($slot->food->photo).'">' : '-'!!}</td>
+                                    <td>{{$slot->food->name}}</td>
+                                    <td>{{$slot->food->category ? $slot->food->category->name : '-' }}</td>
                                     <td class="text-right">{{$slot->stock}}</td>
-                                    <td class="text-right">{{format_price($slot->selling_price_vending_machine)}}</td>
+                                    <td class="text-right">{{format_price($slot->food->selling_price_vending_machine)}}</td>
                                 </tr>
                             @endforeach
                         </table>
