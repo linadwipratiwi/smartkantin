@@ -302,8 +302,8 @@ class MobileApiController extends Controller
         }      
     }
 
-    public static function billpayment(Request $request){
-        $transaction_id= $request->input("transaction_id");
+    public static function billpaytransaction( $request){
+        $transaction_id= $request;
         $transaction= VendingMachineTransaction::find($transaction_id);
         /**cek status transaction */
         $status_transaction= $transaction->status_transaction;
@@ -346,32 +346,96 @@ class MobileApiController extends Controller
         $transaction->status_transaction=1;
         $transaction->save();
         DB::commit();
-        return response()->json(
-            $customer
-        );
+        return true;
+    }
+
+    public static function billpayment(Request $request){
+               // $vending_machine_alias="vm_pens";
+         // $customer_identity_number=$request;
+         $customer_identity_number= $request->input('customer_identity_number');       
+         $vending_machine_alias= $request->input('vending_machine_alias');
+         $customer= Customer::where('identity_number',$customer_identity_number)->first();
+         if(!$customer){
+             return response()->json([[
+                 'status' => 0,
+                 'msg' => 'customer identity not found'
+             ]]);
+         }
+         $customer_id=$customer->id;
+         /*cek vending machine*/
+         $vending_machine=VendingMachine::Where('alias',$vending_machine_alias)->first();
+         if(!$vending_machine){
+             return response()->json([[
+                 'status' => 0,
+                 'msg' => 'vending machine not found'
+             ]]);
+         }
+         $vending_machine_id=$vending_machine->id;
+ 
+         $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
+                                     'vending_machine_id'=>$vending_machine_id,
+                                     'status_transaction'=>'2'])->get();
+ 
+         $hasil=[];
+         $hargaTotal=0;
+         foreach ($transactions as $transaction){
+            $status_transaction= $transaction->status_transaction;
+            $harga=$transaction->selling_price_vending_machine;
+            $quantity= $transaction->quantity;
+            $hargaTotal=$hargaTotal+( $harga* $quantity);
+            
+         }
+
+
+         $customer_id= $transaction-> customer_id;
+            $customer=Customer::findOrFail($customer_id);
+            $saldo=$customer->saldo;
+            
+            /**cek saldo apakahmencukupi */
+            if($saldo<$hargaTotal){
+                return response()->json([
+                    'status'=>0,
+                    'msg' => 'not enough saldo'
+                ]);
+            }
+            $saldo=$saldo-$harga;
+            $customer->saldo=$saldo;
+            $customer->save();
+
+            foreach ($transactions as $transaction){
+                $transaction->status_transaction=1;
+                $transaction->save();
+                DB::commit();    
+            }
+         
+         
+         return response()->json(
+             $customer
+         );  
+ 
+
     }
     /**Bill check */
     public static function billcheck(Request $request){
         // $vending_machine_alias="vm_pens";
-        $customer_identity_number= $request->input('customer_identity_number');
-        // $customer_identity_number=$request;
-        $vending_machine_alias=$request->input('vending_machine_alias');
-      
+         // $customer_identity_number=$request;
+        $customer_identity_number= $request->input('customer_identity_number');       
+        $vending_machine_alias= $request->input('vending_machine_alias');
         $customer= Customer::where('identity_number',$customer_identity_number)->first();
         if(!$customer){
-            return response()->json([
+            return response()->json([[
                 'status' => 0,
                 'msg' => 'customer identity not found'
-            ]);
+            ]]);
         }
         $customer_id=$customer->id;
         /*cek vending machine*/
         $vending_machine=VendingMachine::Where('alias',$vending_machine_alias)->first();
         if(!$vending_machine){
-            return response()->json([
+            return response()->json([[
                 'status' => 0,
                 'msg' => 'vending machine not found'
-            ]);
+            ]]);
         }
         $vending_machine_id=$vending_machine->id;
 
@@ -381,16 +445,20 @@ class MobileApiController extends Controller
 
         $hasil=[];
         foreach ($transactions as $data){
-            $hasil[]=$data;
+            $text= json_decode($data,true);
+            $text['customer_name']=$customer->name;   
+            $text['customer_identity_number']=$customer->identity_number;
+            $hasil[]=$text;
+        
         }
         if(!$hasil){
-            return response()->json([
+            return response()->json([[
                 'status' => 0,
                 'msg' => 'no bill found'
-            ]);  
+            ]]);  
         }
         return response()->json(
-            $transactions   
+            $hasil
         );  
     }
 
