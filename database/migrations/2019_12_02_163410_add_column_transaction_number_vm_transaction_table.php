@@ -14,7 +14,10 @@ class AddColumnTransactionNumberVmTransactionTable extends Migration
     public function up()
     {
         Schema::table('vending_machine_transactions', function ($table) {
+            $table->integer('food_id')->unsigned()->index()->nullable();
+            $table->foreign('food_id')->references('id')->on('foods')->onDelete('cascade');
             $table->string('transaction_number')->nullable();
+            $table->decimal('total')->nullable();
         });
     }
 
@@ -26,7 +29,7 @@ class AddColumnTransactionNumberVmTransactionTable extends Migration
     public function down()
     {
         Schema::table('vending_machine_transactions', function ($table) {
-            $table->dropColumn(['transaction_number']);
+            $table->dropColumn(['transaction_number', 'food_id', 'total']);
         });
     }
 }

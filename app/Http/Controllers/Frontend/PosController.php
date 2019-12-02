@@ -6,10 +6,12 @@ use App\Models\Temp;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Helpers\PosHelper;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\VendingMachine;
 use App\Helpers\TempDataHelper;
 use App\Models\VendingMachineSlot;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\VendingMachineTransaction;
 
@@ -65,7 +67,8 @@ class PosController extends Controller
             'selling_price_item' => $item->food->selling_price_vending_machine,
             'quantity' => $quantity,
             'photo' => asset($item->photo),
-            'stand_id' => $item->vending_machine_id
+            'stand_id' => $item->vending_machine_id,
+            'total' => $quantity * $item->food->selling_price_vending_machine,
         ];
 
         /** jika qty 0, hapus row */
@@ -123,40 +126,87 @@ class PosController extends Controller
     {
         $temp_key = PosHelper::getTempKey();
         $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
+        DB::beginTransaction();
+
+        /** create transaction */
+        $customer = customer();
+        $transaction_number = VendingMachineTransaction::generateNumber();
+    
+        $total_payment = 0;
+        foreach ($list_cart as $cart) {
+            $total_payment += $cart['total'];
+        }
+
+        /** Cek saldo */
+        $saldo = $customer->saldo;
+        $saldo_pens = $customer->saldo_pens;
+        $saldo_total = $saldo + $saldo_pens;
+
+        /** jika saldo total kurang dari harga jual */
+        if ($saldo_total < $total_payment) {
+            toaster_error('Saldo Anda tidak mencukupi');
+            return redirect('c/cart');
+        }
+
 
         foreach ($list_cart as $cart) {
-            // $vending_machine_slot = VendingMachineSlot::findOrFail($cart['item_id']);
-            // $customer = Customer::where('identity_number', $customer_identity_number)->first();
+            $vending_machine_slot = VendingMachineSlot::findOrFail($cart['item_id']);
+            $vending_machine = $vending_machine_slot->vendingMachine;
+            $customer = customer();
 
-            // $client = $vending_machine_slot->vendingMachine->client;
-            // $transaction = new VendingMachineTransaction;
+            if ($vending_machine_slot->stock < $cart['quantity']) {
+                toaster_error('Stok tidak mencukupi / kosong. Hapus barang dari daftar belanja Anda');
+                return redirect('c/cart');
+            }
 
-            // $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
-            // $transaction->vending_machine_slot_id = $vending_machine_slot->id;
-            // $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
-            // $transaction->customer_id = $customer->id;
-            // $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
-            // $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
-            // $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
-            // $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
-            // $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
-            // $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
-            // $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
-            
-            // // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
-            // $transaction->profit_platform = $client->profit_platform_value;
-            // if ($transaction->profit_platform_type == 'percent') {
-            //     $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
-            // }
 
-            // $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
-            // $transaction->quantity = $cart['quantity'];
-            // $transaction->status_transaction = 2; // set pending payment
+            $client = $vending_machine_slot->vendingMachine->client;
+            $transaction = new VendingMachineTransaction;
+            $transaction->transaction_number = $transaction_number;
+            $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
+            $transaction->vending_machine_slot_id = $vending_machine_slot->id;
+            $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
+            $transaction->customer_id = $customer->id;
+            $transaction->food_id = $vending_machine_slot->food->client_id;
+            $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+            $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+            $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
+            $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
+            $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
+            $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
+            $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
+            // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
+            $transaction->profit_platform = $client->profit_platform_value;
+            if ($transaction->profit_platform_type == 'percent') {
+                $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
+            }
 
-            // /** Update flaging transaksi. Digunakan untuk Smansa */
-            // $vending_machine = $transaction->vendingMachine;
-            // $vending_machine->flaging_transaction = Str::random(10);;
-            // $vending_machine->save();
+            $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+            $transaction->quantity = $cart['quantity'];
+            $transaction->total = $cart['quantity'] * $vending_machine_slot->food->selling_price_vending_machine;
+            $transaction->status_transaction = 2; // set pending payment
+            $transaction->save();
+
+            /** Update flaging transaksi. Digunakan untuk Smansa */
+            $vending_machine = $transaction->vendingMachine;
+            $vending_machine->flaging_transaction = Str::random(10);;
+            $vending_machine->save();
         }
+
+        /** clear temp */
+        $temp_key = PosHelper::getTempKey();
+        TempDataHelper::clear($temp_key, auth()->user()->id);
+
+        DB::commit();
+        toaster_error('Pesanan Anda berhasil ditempatkan.');
+        return redirect('c/success-order/'.$transaction_number);
+    }
+
+    /** success order */
+    public function successOrder($transaction_number)
+    {
+        $view = view('frontend.c.pos.success-order');
+        $view->list_transaction = VendingMachineTransaction::where('transaction_number', $transaction_number)->get();
+        return $view;
     }
 }

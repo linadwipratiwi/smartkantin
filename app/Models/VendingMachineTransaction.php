@@ -31,6 +31,11 @@ class VendingMachineTransaction extends Model
         return $this->belongsTo('App\Models\Customer', 'customer_id');
     }
 
+    public function food()
+    {
+        return $this->belongsTo('App\Models\Food', 'food_id');
+    }
+
     public function scopeSuccess($q)
     {
         $q->where('status_transaction', 1);
@@ -87,5 +92,13 @@ class VendingMachineTransaction extends Model
             if ($type == 'excel') return 'Failed';
             return '<span class="label label-info capitalize-font inline-block ml-10">Failed</span>';
         }
+    }
+
+    /** generate number transaction */
+    public static function generateNumber()
+    {
+        # format : TAHUN/BULAN/KODE Pelanggan/JAM:DETIK
+        return 'POS-'.date('Y').'-'.date('m').'-'.customer()->id.'-'.date('his');
+
     }
 }
