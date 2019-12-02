@@ -115,6 +115,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
 /** Customer */
 Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth', 'role:customer']], function () {
     Route::get('add-to-cart/{id}', 'PosController@_addToCart');
+    Route::get('checkout', 'PosController@checkout');
+    Route::get('cart', 'PosController@cart');
     Route::get('/', 'PosController@index');
 
 });

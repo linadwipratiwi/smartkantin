@@ -16,7 +16,7 @@
     <button data-toggle="modal" data-target=".bs-example-modal-sm" style="position:fixed; bottom:25px; z-index:1031" class="btn btn-primary btn-square shadow-2dp">
         <i class="zmdi zmdi-shopping-basket"></i>
     </button>
-    <div id="setting_panel_btn">
+    <div id="setting_panel_btn" onclick="gotoCart()">
         @if ($cart['total_item'] > 0)
             <button  class="btn btn-success setting-panel-btn shadow-2dp">
                 <div id="cart-item" style="float:right">
@@ -72,6 +72,11 @@
 <script>
     initDatatable('#datatable');
 
+    /** goto cart **/
+    function gotoCart() {
+        location.href='{{url("c/cart")}}';
+    }
+    
     /** switch stand **/
     function switchStand(id) {
         
