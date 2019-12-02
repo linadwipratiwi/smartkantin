@@ -25,19 +25,23 @@ class PosController extends Controller
         $stand_active = null;
 
         $cart = [];
+        $stand_id = [];
         foreach ($data as $key => $value) {
             $quantity = $value['quantity'];
             $price = $quantity * $value['selling_price_item'];
             $total_price += $price;
             $stand_active = VendingMachine::find($value['stand_id']);
+            if (!in_array($value['stand_id'], $stand_id)) {
+                array_push($stand_id, $value['stand_id']);
+            }
         }
-        $cart['stand'] = $stand_active;
+        $cart['stand_id'] = $stand_id;
         $cart['total_item'] = $total_item;
         $cart['total_price'] = format_price($total_price);
         
         $view = view('frontend.c.pos.index');
         $view->list_stand = VendingMachine::clientId(customer()->client->id)->stand()->get();
-        $view->stand = VendingMachine::clientId(customer()->client->id)->stand()->first();
+        // $view->stand = VendingMachine::clientId(customer()->client->id)->stand()->get();
         $view->categories = Category::food()->get();
         $view->cart = $cart;
         return $view;
@@ -83,16 +87,20 @@ class PosController extends Controller
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
         $total_price = 0;
-        $stand_active = null;
+        $stand_id = [];
         foreach ($data as $key => $value) {
             $quantity = $value['quantity'];
             $price = $quantity * $value['selling_price_item'];
             $total_price += $price;
             $stand_active = VendingMachine::find($value['stand_id']);
-
+            if (!in_array($value['stand_id'], $stand_id)) {
+                array_push($stand_id, $stand_active->id);
+            }
         }
-
-        $search['stand'] = $stand_active;
+        $stand_name = VendingMachine::whereIn('id', $stand_id)->select('name')->get()->pluck('name')->toArray();
+        $str_stand_name = implode(', ', $stand_name);
+        
+        $search['stand_name'] = $str_stand_name;
         $search['total_item'] = $total_item;
         $search['total_price'] = format_price($total_price);
         return $search;

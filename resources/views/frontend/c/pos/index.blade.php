@@ -21,7 +21,10 @@
             <button  class="btn btn-success setting-panel-btn shadow-2dp">
                 <div id="cart-item" style="float:right">
                     {{$cart['total_item']}} items | Rp. {{$cart['total_price']}}<br>
-                    {{$cart['stand']->name}}
+                    <?php $stand_name = \App\Models\VendingMachine::whereIn('id', $cart['stand_id'])->select('name')->get()->pluck('name')->toArray();
+                    $str_stand_name = implode(', ', $stand_name);
+                    ?>
+                    {{$str_stand_name}}
                 </div>
             </button>
         @endif
@@ -79,13 +82,15 @@
     
     /** switch stand **/
     function switchStand(id) {
-        
+        var top = document.getElementById('stand-'+id).offsetTop; //Getting Y of target element
+        window.scrollTo(0, top);  
     }
 
     function addToCart(id, is_remove) {
         $.ajax({
             url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
             success: function (res) {
+                
                 if (res.quantity > 0) {
                     var html = '<div class="row text-centers" style="font-weight:bold; ">'+
                         '<div style="font-weight:bold;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
@@ -103,7 +108,7 @@
                     var cart = '<button  class="btn btn-success setting-panel-btn shadow-2dp">'+
                         '<div id="cart-item" style="float:right">'+
                             res.total_item+' items | Rp. '+res.total_price+ '<br>' +
-                            res.stand.name
+                            res.stand_name
                         '</div>'+
                     '</button>';
                     // var cart = res.total_item+' items | Rp. '+res.total_price;
