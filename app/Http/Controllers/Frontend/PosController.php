@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Temp;
 use App\Models\Category;
+use App\Models\Customer;
 use App\Helpers\PosHelper;
 use Illuminate\Http\Request;
 use App\Models\VendingMachine;
 use App\Helpers\TempDataHelper;
 use App\Models\VendingMachineSlot;
 use App\Http\Controllers\Controller;
+use App\Models\VendingMachineTransaction;
 
 class PosController extends Controller
 {
@@ -95,5 +97,58 @@ class PosController extends Controller
         $search['total_price'] = format_price($total_price);
         return $search;
 
+    }
+
+    /** cart */
+    public function cart()
+    {
+        $temp_key = PosHelper::getTempKey();
+
+        $data = TempDataHelper::get($temp_key, auth()->user()->id);
+        $view = view('frontend.c.pos.cart');
+        $view->list_cart = $data;
+        return $view;
+    }
+
+    /** proses checkout */
+    public function checkout()
+    {
+        $temp_key = PosHelper::getTempKey();
+        $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
+
+        foreach ($list_cart as $cart) {
+            // $vending_machine_slot = VendingMachineSlot::findOrFail($cart['item_id']);
+            // $customer = Customer::where('identity_number', $customer_identity_number)->first();
+
+            // $client = $vending_machine_slot->vendingMachine->client;
+            // $transaction = new VendingMachineTransaction;
+
+            // $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
+            // $transaction->vending_machine_slot_id = $vending_machine_slot->id;
+            // $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
+            // $transaction->customer_id = $customer->id;
+            // $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+            // $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+            // $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
+            // $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
+            // $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
+            // $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
+            // $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
+            
+            // // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
+            // $transaction->profit_platform = $client->profit_platform_value;
+            // if ($transaction->profit_platform_type == 'percent') {
+            //     $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
+            // }
+
+            // $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+            // $transaction->quantity = $cart['quantity'];
+            // $transaction->status_transaction = 2; // set pending payment
+
+            // /** Update flaging transaksi. Digunakan untuk Smansa */
+            // $vending_machine = $transaction->vendingMachine;
+            // $vending_machine->flaging_transaction = Str::random(10);;
+            // $vending_machine->save();
+        }
     }
 }
