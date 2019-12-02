@@ -55,6 +55,7 @@ class PosController extends Controller
             'selling_price_item' => $item->food->selling_price_vending_machine,
             'quantity' => $quantity,
             'photo' => asset($item->photo),
+            'stand_id' => $item->vending_machine_id
         ];
 
         /** jika qty 0, hapus row */
