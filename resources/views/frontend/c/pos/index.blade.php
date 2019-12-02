@@ -20,7 +20,8 @@
         @if ($cart['total_item'] > 0)
             <button  class="btn btn-success setting-panel-btn shadow-2dp">
                 <div id="cart-item" style="float:right">
-                    {{$cart['total_item']}} items | Rp. {{$cart['total_price']}}
+                    {{$cart['total_item']}} items | Rp. {{$cart['total_price']}}<br>
+                    {{$cart['stand']->name}}
                 </div>
             </button>
         @endif
@@ -96,7 +97,8 @@
                 if (res.total_item > 0) {
                     var cart = '<button  class="btn btn-success setting-panel-btn shadow-2dp">'+
                         '<div id="cart-item" style="float:right">'+
-                            res.total_item+' items | Rp. '+res.total_price+
+                            res.total_item+' items | Rp. '+res.total_price+ '<br>' +
+                            res.stand.name
                         '</div>'+
                     '</button>';
                     // var cart = res.total_item+' items | Rp. '+res.total_price;

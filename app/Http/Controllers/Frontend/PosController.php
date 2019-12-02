@@ -20,12 +20,16 @@ class PosController extends Controller
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
         $total_price = 0;
+        $stand_active = null;
+
         $cart = [];
         foreach ($data as $key => $value) {
             $quantity = $value['quantity'];
             $price = $quantity * $value['selling_price_item'];
             $total_price += $price;
+            $stand_active = VendingMachine::find($value['stand_id']);
         }
+        $cart['stand'] = $stand_active;
         $cart['total_item'] = $total_item;
         $cart['total_price'] = format_price($total_price);
         
@@ -77,11 +81,16 @@ class PosController extends Controller
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
         $total_price = 0;
+        $stand_active = null;
         foreach ($data as $key => $value) {
             $quantity = $value['quantity'];
             $price = $quantity * $value['selling_price_item'];
             $total_price += $price;
+            $stand_active = VendingMachine::find($value['stand_id']);
+
         }
+
+        $search['stand'] = $stand_active;
         $search['total_item'] = $total_item;
         $search['total_price'] = format_price($total_price);
         return $search;
