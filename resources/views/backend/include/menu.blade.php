@@ -91,8 +91,11 @@
 					<i class="zmdi zmdi-more"></i>
 				</li>
 				<li>
-					<a @if((\Request::segment(2) == '') && (\Request::segment(1) != 'profile')) class="active" @endif  href="{{url('front/')}}"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="clearfix"></div></a>
+					<a @if((\Request::segment(2) == '') && (\Request::segment(1) != 'profile')) class="active" @endif  href="{{url('front/')}}"><div class="pull-left"><i class="zmdi zmdi-shopping-basket mr-20"></i><span class="right-nav-text">Pos</span></div><div class="clearfix"></div></a>
 				</li>
+				<li>
+						<a @if(\Request::segment(2) == 'history-transaction') class="active" @endif  href="{{url('c/history-transaction')}}"><div class="pull-left"><i class="zmdi zmdi-file mr-20"></i><span class="right-nav-text">Riwayat Transaksi</span></div><div class="clearfix"></div></a>
+					</li>
 			@endrole
 				
 				<li><hr class="light-grey-hr mb-10"/></li>

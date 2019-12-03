@@ -92,6 +92,11 @@ class VendingMachineTransaction extends Model
             if ($type == 'excel') return 'Failed';
             return '<span class="label label-info capitalize-font inline-block ml-10">Failed</span>';
         }
+
+        if ($this->status_transaction == 2) {
+            if ($type == 'excel') return 'Payment Pending';
+            return '<span class="label label-warning capitalize-font inline-block ml-10">Payment Pending</span>';
+        }
     }
 
     /** generate number transaction */
