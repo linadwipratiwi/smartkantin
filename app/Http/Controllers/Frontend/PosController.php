@@ -231,7 +231,7 @@ class PosController extends Controller
         TempDataHelper::clear($temp_key, auth()->user()->id);
 
         DB::commit();
-        toaster_error('Pesanan Anda berhasil ditempatkan.');
+        toaster_success('Pesanan Anda berhasil ditempatkan.');
         return redirect('c/success-order/'.$transaction_number);
     }
 
