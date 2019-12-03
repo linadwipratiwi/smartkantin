@@ -116,9 +116,37 @@ class PosController extends Controller
         $temp_key = PosHelper::getTempKey();
 
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
+
+        if (count($data) < 1) {
+            toaster_error('Anda belum menambahkan barang belanja Anda di cart. Silahkan berbelanja dulu.');
+            return redirect('c');
+        }
+
         $view = view('frontend.c.pos.cart');
         $view->list_cart = $data;
         return $view;
+    }
+
+    /** destroy item */
+    public function _destroyItem($id)
+    {
+        /** delete */
+        TempDataHelper::remove($id);
+
+        /** create respon */
+        $temp_key = PosHelper::getTempKey();
+
+        $data = TempDataHelper::get($temp_key, auth()->user()->id);
+        $total_item = count($data);
+        $total_price = 0;
+
+        foreach ($data as $key => $value) {
+            $quantity = $value['quantity'];
+            $price = $quantity * $value['selling_price_item'];
+            $total_price += $price;
+        }
+
+        return format_price($total_price);
     }
 
     /** proses checkout */
@@ -128,6 +156,11 @@ class PosController extends Controller
         $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
         DB::beginTransaction();
 
+        /** cek jumalh */
+        if (count($list_cart) < 1) {
+            toaster_error('Anda belum menambahkan barang belanja Anda di cart. Silahkan berbelanja dulu.');
+            return redirect('c');
+        }
         /** create transaction */
         $customer = customer();
         $transaction_number = VendingMachineTransaction::generateNumber();

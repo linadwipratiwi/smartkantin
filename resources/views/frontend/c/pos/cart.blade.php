@@ -64,15 +64,15 @@
                                             <td>{{format_price($cart['selling_price_item'])}}</td>
                                             <td>{{format_price($cart['quantity'] * $cart['selling_price_item'])}}</td>
                                             <td>
-                                                <a onclick="secureDelete('{{url('front/cart/'.$cart['rowid'])}}', '#tr-{{$cart['rowid']}}')" data-toggle="tooltip" data-original-title="Close">
-                                                    <a href="{{url('c/checkout')}}" class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></a>                                                    
+                                                <a onclick="secureDeleteCart('{{url('c/cart/'.$cart['rowid'])}}', '#tr-{{$cart['rowid']}}');" data-toggle="tooltip" data-original-title="Close">
+                                                    <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
                                                 </a>
                                             </td>
                                         </tr>
                                         @endforeach
                                         <tr style="background: #eee">
                                             <td colspan="5" class="text-right" style="font-weight:bold">Total Belanja</td>
-                                            <td>{{format_price($total)}}</td>
+                                            <td id="total-price">{{format_price($total)}}</td>
                                             <td><a href="{{url('c/checkout')}}" class="btn btn-primary">Masukkan ke tagihan saya</a></td>
                                         </tr>
                                     </tbody>
@@ -89,5 +89,39 @@
 
 @section('scripts')
 <script>
+
+function secureDeleteCart(url, tr_callback) {
+    swal({
+        title: "Anda yakin ingin menghapus data?",
+        text: "Data yang dihapus tidak bisa dikembalikan lagi",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#f2b701",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    }, function () {
+        deleteExecCart(url, tr_callback);
+    });
+}
+
+function deleteExecCart(url, tr_callback) {
+    $.ajax({
+        url: url,
+        type: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (res) {
+            $('#total-price').html(res);
+            swal_success('Berhasil', 'data berhasil dihapus');
+            if (tr_callback) {
+                $(tr_callback).fadeOut();
+            }
+        },
+        error: function (result) {
+            swal("Failed something went wrong");
+        }
+    });
+}
 </script>
 @stop
