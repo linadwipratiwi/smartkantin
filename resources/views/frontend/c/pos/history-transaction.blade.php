@@ -28,6 +28,7 @@
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
+                        @if($list_transaction->count())
                         <div class="table-wrap">
                             <div class="table-responsive">
                                 <table id="datatable" class="table table-hover display  pb-30" >
@@ -76,6 +77,9 @@
                                 </table>
                             </div>
                         </div>
+                        @else
+                        <div class="alert alert-info">Riwayat transaksi Anda masih kosong. Silahkan berbelanja dulu. :-)</div>
+                        @endif
                     </div>
                 </div>
             </div>	
