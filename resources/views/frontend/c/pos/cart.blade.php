@@ -21,8 +21,11 @@
         <div class="col-sm-12">
             <div class="panel panel-default card-view">
                 <div class="panel-heading">
-                    <div class="pull-right">
+                    <div class="pull-left">
                         <h6 class="panel-title txt-dark"></h6>
+                        <button onclick="location.href='{{url('c')}}'" class="btn btn-default btn-square btn-icon btn-icon-anim">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
