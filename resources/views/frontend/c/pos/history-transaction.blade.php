@@ -23,6 +23,19 @@
                 <div class="panel-heading">
                     <div class="pull-left">
                         <h6 class="panel-title txt-dark">Riwayat Transaksi</h6>
+                        <div class="pull-right">
+                            <select name="status" class="form-control" onchange="filter(this.value)" id="">
+                                <option value="" @if (\Input::get('status') == null )
+                                    selected
+                                @endif>Semua</option>
+                                <option value="1" @if (\Input::get('status') == 1 )
+                                selected
+                            @endif>Lunas</option>
+                                <option value="2" @if (\Input::get('status') == 2 )
+                                selected
+                            @endif>Menunggu Pembayaran</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -90,7 +103,9 @@
 
 @section('scripts')
 <script>
-
+function filter(status) {
+    location.href="{{url('c/history-transaction?status=')}}"+status;
+}
 function secureDeleteCart(url, tr_callback) {
     swal({
         title: "Anda yakin ingin menghapus data?",

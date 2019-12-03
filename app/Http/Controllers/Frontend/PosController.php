@@ -246,9 +246,14 @@ class PosController extends Controller
     /** history transaction */
     public function historyTransaction()
     {
+        $status = \Input::get('status');
         $view = view('frontend.c.pos.history-transaction');
         $view->list_transaction = VendingMachineTransaction::where('customer_id', customer()->id)
-            ->where('status_transaction', 2)
+            ->where(function($q) use ($status) {
+                if ($status) {
+                    $q->where('status_transaction', $status);
+                }
+            })
             ->whereNotNull('transaction_number')
             ->groupBy('transaction_number')
             ->orderBy('transaction_number', 'desc')
