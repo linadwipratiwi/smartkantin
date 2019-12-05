@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
+use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
@@ -17,6 +18,7 @@ use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\VendingMachineTransaction;
+use App\User;
 
 class MobileApiController extends Controller
 {
@@ -24,6 +26,7 @@ class MobileApiController extends Controller
     public function findCustomer($identity_number)
     {
         $customer = Customer::where('identity_number', $identity_number)->first();
+       
         if (!$customer) {
             return response()->json([
                 'status' => 0,
@@ -155,7 +158,7 @@ class MobileApiController extends Controller
             ApiHelper::updateStockTransaction($transaction);
             \DB::commit();
 
-            $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
+            $transaction = VendingMachineTransaction::where('id', $transaction->id)->first();
             $transaction->status = 1;
             $transaction->msg = 'success';
             return json_encode(
@@ -169,6 +172,66 @@ class MobileApiController extends Controller
             ]);
         }
 
+    }
+
+    /** Transaction multipayment */
+    public static function multipayment(Request $request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $amount = $request->input('amount');
+        $payment_type = $request->input('payment_type'); // in : out
+        $notes = $request->input('notes');
+
+        /** Cek customer ada apa tidak */
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Identity number customer not found'
+            ]);
+        }
+
+        /** Cek saldo */
+        $saldo = $customer->saldo;
+        $saldo_pens = $customer->saldo_pens;
+        $saldo_total = $saldo + $saldo_pens;
+
+        /** jika saldo total kurang dari harga jual */
+        if ($saldo_total < $amount) {
+            return json_encode([
+                'status' => 0,
+                'msg' => 'Saldo Anda tidak mencukupi'
+            ]);
+        }
+
+
+        $multipayment = new Multipayment;
+        $multipayment->customer_id = $customer->id;
+        $multipayment->amount = $amount;
+        $multipayment->payment_type = $payment_type;
+        $multipayment->save();
+
+        /** pengurangan saldo */
+        $saldo_pens_akhir = $saldo_pens - $amount;
+        if ($saldo_pens_akhir < 0) {
+            /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
+            $customer->saldo_pens = 0;
+
+            $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
+            $customer->saldo = $saldo - $biaya_kekurangan;
+        } else {
+            /** saldo pens masih sisa */
+            $customer->saldo_pens = $saldo_pens_akhir;
+        }
+
+        $customer->save();
+
+        $multipayment = Multipayment::where('id', $multipayment->id)->first();
+        $multipayment->status = 1;
+        $multipayment->msg = 'success';
+        return json_encode(
+            $multipayment
+        );
     }
 
     /** Topup */
@@ -185,7 +248,7 @@ class MobileApiController extends Controller
                 'msg' => 'Identity number customer not found'
             ]);
         }
-
+        
         DB::beginTransaction();
         $transfer_saldo = new TransferSaldo;
         $transfer_saldo->from_type = get_class(new Client);
@@ -209,5 +272,313 @@ class MobileApiController extends Controller
         return json_encode(
             $customer
         ); 
+    }
+
+    /**Login */
+    public static function login(Request $request){
+        $username= $request->input('username');
+        $password=$request->input('password');
+        
+        $user=User::where('username',$username)->first();
+        if(!$user){
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            // Success
+            return response()->json([
+                'status' => 1,
+                'msg' => 'access granted'
+            ]);
+        }
+        else{
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }      
+    }
+
+    public static function billpaytransaction( $request){
+        $transaction_id= $request;
+        $transaction= VendingMachineTransaction::find($transaction_id);
+        /**cek status transaction */
+        $status_transaction= $transaction->status_transaction;
+        if($status_transaction==1){
+            return response()->json([
+                'status'=>0,
+                'msg'=>'transaction already paid'
+            ]);
+        }
+        elseif($status_transaction==3){
+            return response()->json([
+                'status'=>0,
+                'msg'=>'transaction has expired'
+            ]);
+        }
+          
+        if(!$transaction){
+            return response()->json([
+                'status'=>0,
+                'msg'=> "transaction not found"
+            ]);
+        }
+        $harga=$transaction->selling_price_vending_machine;
+        $quantity= $transaction->quantity;
+        $hargaTotal= $harga* $quantity;
+        $customer_id= $transaction-> customer_id;
+        $customer=Customer::findOrFail($customer_id);
+        $saldo=$customer->saldo;
+        
+        /**cek saldo apakahmencukupi */
+        if($saldo<$hargaTotal){
+            return response()->json([
+                'status'=>0,
+                'msg' => 'not enough saldo'
+            ]);
+        }
+        $saldo=$saldo-$harga;
+        $customer->saldo=$saldo;
+        $customer->save();
+        $transaction->status_transaction=1;
+        $transaction->save();
+        DB::commit();
+        return true;
+    }
+
+    public static function billpayment(Request $request){
+               // $vending_machine_alias="vm_pens";
+         // $customer_identity_number=$request;
+         $customer_identity_number= $request->input('customer_identity_number');       
+         $vending_machine_alias= $request->input('vending_machine_alias');
+         $customer= Customer::where('identity_number',$customer_identity_number)->first();
+         if(!$customer){
+             return response()->json([[
+                 'status' => 0,
+                 'msg' => 'customer identity not found'
+             ]]);
+         }
+         $customer_id=$customer->id;
+         /*cek vending machine*/
+         $vending_machine=VendingMachine::Where('alias',$vending_machine_alias)->first();
+         if(!$vending_machine){
+             return response()->json([[
+                 'status' => 0,
+                 'msg' => 'vending machine not found'
+             ]]);
+         }
+         $vending_machine_id=$vending_machine->id;
+ 
+         $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
+                                     'vending_machine_id'=>$vending_machine_id,
+                                     'status_transaction'=>'2'])->get();
+ 
+         $hasil=[];
+         $hargaTotal=0;
+         foreach ($transactions as $transaction){
+            $status_transaction= $transaction->status_transaction;
+            $harga=$transaction->selling_price_vending_machine;
+            $quantity= $transaction->quantity;
+            $hargaTotal=$hargaTotal+( $harga* $quantity);
+            $hasil[]= $transaction;
+            
+         }
+
+        if(!$hasil){
+            return response()->json([
+                "status"=>0,
+                "msg"=>"no bill found"
+            ]);
+        }
+
+        
+            $saldo=$customer->saldo;
+            
+            /**cek saldo apakahmencukupi */
+            if($saldo<$hargaTotal){
+                return response()->json([
+                    'status'=>0,
+                    'msg' => 'not enough saldo'
+                ]);
+            }
+            $saldo=$saldo-$hargaTotal;
+            $customer->saldo=$saldo;
+            $customer->save();
+            DB::commit();  
+            foreach ($transactions as $transaction){
+                $transaction->status_transaction=1;
+                $transaction->save();
+                DB::commit();    
+            }
+         
+        $customer_= json_decode($customer,true);
+        $customer_['msg']="success";
+         return response()->json(
+             $customer_
+         );  
+ 
+
+    }
+    /**Bill check */
+    public static function billcheck(Request $request){
+        // $vending_machine_alias="vm_pens";
+         // $customer_identity_number=$request;
+        $customer_identity_number= $request->input('customer_identity_number');       
+        $vending_machine_alias= $request->input('vending_machine_alias');
+        $customer= Customer::where('identity_number',$customer_identity_number)->first();
+        if(!$customer){
+            return response()->json([[
+                'status' => 0,
+                'msg' => 'customer identity not found'
+            ]]);
+        }
+        $customer_id=$customer->id;
+        /*cek vending machine*/
+        $vending_machine=VendingMachine::Where('alias',$vending_machine_alias)->first();
+        if(!$vending_machine){
+            return response()->json([[
+                'status' => 0,
+                'msg' => 'vending machine not found'
+            ]]);
+        }
+        $vending_machine_id=$vending_machine->id;
+
+        $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
+                                    'vending_machine_id'=>$vending_machine_id,
+                                    'status_transaction'=>'2'])->get();
+
+        $hasil=[];
+        foreach ($transactions as $data){
+            $text= json_decode($data,true);
+            $text['customer_name']=$customer->name;   
+            $text['customer_identity_number']=$customer->identity_number;
+            $text['msg']="success";
+            $hasil[]=$text;
+        
+        }
+        if(!$hasil){
+            return response()->json([[
+                'status' => 0,
+                'msg' => 'no bill found'
+            ]]);  
+        }
+        return response()->json(
+            $hasil
+        );  
+    }
+
+    /**All history */
+    public static function allHistory($request){
+       $stand_alias=$request;
+        
+        /* cek alias */
+        $stand = VendingMachine::where('alias', $stand_alias)->first();
+        if(!$stand){
+            return json_encode([
+                'status' => 0,
+                'msg' => 'stand not found'
+            ]);
+        }
+        /*id stand*/
+        $stand_id= $stand->id;
+        /** Cek customer ada apa tidak */
+        $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
+        
+        $hasil=[];
+        if($transaction){
+            
+            foreach($transaction as $data){
+             
+                $text= json_decode($data,true);
+                $text['type_transaction']="buy";
+                $customer_id=$data->customer_id;
+                $customer=Customer::find($customer_id);
+                $text['customer_name']=$customer->name;
+                $text['customer_identity_number']=$customer->customer_identity_number;
+                $hasil[]=($text);
+            }
+        }
+        $topup_transaction= TransferSaldo::where('from_type_id',$stand_id)->get();
+        if($topup_transaction){
+            foreach($topup_transaction as $data){
+                $text= json_decode($data,true);
+                $text['type_transaction']="topup";
+                $customer_id= $data->to_type_id;
+                $customer=Customer::find($customer_id);
+                $text['customer_name']=$customer->name;
+                $text['customer_identity_number']=$customer->customer_identity_number;
+                $hasil[]=($text);
+            }
+        }
+
+        if(!$hasil){
+            return response()->json([
+                'status'=> 0,
+                'msg' => 'no transaction'
+            ]);
+        }
+        return response()->json(
+            $hasil
+        );
+    }
+
+   
+    /**History */
+    public static function history($request){
+     
+        $stand_alias=$request;
+        
+        /* cek alias */
+        $stand = VendingMachine::where('alias', $stand_alias)->first();
+        if(!$stand){
+            return json_encode([
+                'status' => 0,
+                'msg' => 'stand not found'
+            ]);
+        }
+        /*id stand*/
+        $stand_id= $stand->id;
+        /** Cek customer ada apa tidak */
+        $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
+        
+        $hasil=[];
+        if($transaction){
+            
+            foreach($transaction as $data){
+             
+                $text= json_decode($data,true);
+                $text['type_transaction']="buy";
+                $customer_id=$data->customer_id;
+                $customer=Customer::find($customer_id);
+                $text['customer_name']=$customer->name;
+                $text['customer_identity_number']=$customer->customer_identity_number;
+                $hasil[]=($text);
+            }
+        }
+        // $topup_transaction= TransferSaldo::where('from_type_id',$stand_id)->get();
+        // if($topup_transaction){
+        //     foreach($topup_transaction as $data){
+        //         $text= json_decode($data,true);
+        //         $text['type_transaction']="topup";
+        //         $customer_id= $data->to_type_id;
+        //         $customer=Customer::find($customer_id);
+        //         $text['customer_name']=$customer->name;
+        //         $text['customer_identity_number']=$customer->customer_identity_number;
+        //         $hasil[]=($text);
+        //     }
+        // }
+
+        if(!$hasil){
+            return response()->json([
+                'status'=> 0,
+                'msg' => 'no transaction'
+            ]);
+        }
+        return response()->json(
+            $hasil
+        );
     }
 }

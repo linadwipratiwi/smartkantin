@@ -33,6 +33,7 @@
     <div class="right-sidebar-backdrop"></div>
     <!-- /Right Sidebar Backdrop -->
 
+<<<<<<< HEAD
     @include('frontend.c.pos._data-item')
 
     <!-- sample modal content -->
