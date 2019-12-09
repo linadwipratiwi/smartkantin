@@ -29,6 +29,16 @@ class VendingMachineSlot extends Model
         return $this->belongsTo('App\Models\Client', 'client_id');
     }
 
+    public function scopeJoinVendingMachine($q)
+    {
+        $q->join('vending_machines', 'vending_machines.id', '=', $this->table.'.vending_machine_id');
+    }
+
+    public function scopeJoinFood($q)
+    {
+        $q->join('foods', 'foods.id', '=', $this->table.'.food_id');
+    }
+
     public function profitPlatform()
     {
         $client = $this->vendingMachine->client;

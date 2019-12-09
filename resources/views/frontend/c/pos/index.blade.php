@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-lg-12">
             <form action="">
-                <input type="text" class="form-control" style="border-radius:30px" placeholder="cari nama makanan..">
+                <input type="text" class="form-control" name="search" value="{{\Input::get('search')}}" style="border-radius:30px" placeholder="cari nama makanan..">
             </form>
         </div>
     </div>
@@ -32,8 +32,11 @@
         <!-- Right Sidebar Backdrop -->
     <div class="right-sidebar-backdrop"></div>
     <!-- /Right Sidebar Backdrop -->
-
+    @if (\Input::get('search'))
+    @include('frontend.c.pos._data-item-search')        
+    @else
     @include('frontend.c.pos._data-item')
+    @endif
 
     <!-- sample modal content -->
     <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">

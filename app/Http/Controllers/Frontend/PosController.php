@@ -19,8 +19,8 @@ class PosController extends Controller
 {
     public function index()
     {
+        $search = \Input::get('search');
         $temp_key = PosHelper::getTempKey();
-
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
         $total_price = 0;
@@ -46,6 +46,14 @@ class PosController extends Controller
         // $view->stand = VendingMachine::clientId(customer()->client->id)->stand()->get();
         $view->categories = Category::food()->get();
         $view->cart = $cart;
+        $view->search_result = $search ? VendingMachineSlot::joinVendingMachine()
+            ->joinFood()
+            ->where('vending_machines.client_id', customer()->client->id)
+            ->where('vending_machines.type', 2)
+            ->where('foods.name', 'like', '%'.$search.'%')
+            ->select(['vending_machine_slots.*'])
+            ->get() : null;
+        
         return $view;
     }
 
