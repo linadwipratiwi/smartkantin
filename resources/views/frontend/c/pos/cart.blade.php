@@ -83,9 +83,6 @@
                         @endif
                         <?php ++$row;?>
                         @endforeach
-
-                        {{-- btn pesan --}}
-                        
                     </div>
                     
                 </div>
@@ -101,6 +98,12 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="panel" style="border:none">
+                <div class="panel-wrapper" style="color: black">
+                    <button style="border-radius:10px" class="btn btn-warning btn-block"> Pesan</button>
                 </div>
             </div>
         </div>
