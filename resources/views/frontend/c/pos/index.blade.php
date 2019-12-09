@@ -92,8 +92,8 @@
             success: function (res) {
                 
                 if (res.quantity > 0) {
-                    var html = '<div class="row text-centers" style="font-weight:bold; ">'+
-                        '<div style="font-weight:bold;padding:10px; background:#eee;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+                    var html = '<div class="row text-center" style="font-weight:bold; ">'+
+                        '<div style="font-weight:bold;padding:9px; background:#f0f4f5;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
                             '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4" onclick="addToCart('+id+', 1)"><i class="fa fa-minus"></i></div>'+
                             '<div style="border-radius:0px; font-size:14px; font-weight:bold;" class="col-xs-4">'+res.quantity+'</div>'+
                             '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4" onclick="addToCart('+id+', 0)"><i class="fa fa-plus"></i></div>'+
