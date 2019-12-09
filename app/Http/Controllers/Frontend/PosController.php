@@ -248,7 +248,7 @@ class PosController extends Controller
     public function successOrder($transaction_number)
     {
         $view = view('frontend.c.pos.success-order');
-        $view->list_transaction = VendingMachineTransaction::where('transaction_number', $transaction_number)->get();
+        $view->list_transaction = VendingMachineTransaction::where('transaction_number', $transaction_number)->groupBy('vending_machine_id')->get();
         return $view;
     }
 

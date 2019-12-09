@@ -114,40 +114,6 @@
 @section('scripts')
 <script>
 
-function secureDeleteCart(url, tr_callback) {
-    swal({
-        title: "Anda yakin ingin menghapus data?",
-        text: "Data yang dihapus tidak bisa dikembalikan lagi",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#f2b701",
-        confirmButtonText: "Yes, delete it!",
-        closeOnConfirm: false
-    }, function () {
-        deleteExecCart(url, tr_callback);
-    });
-}
-
-function deleteExecCart(url, tr_callback) {
-    $.ajax({
-        url: url,
-        type: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function (res) {
-            $('#total-price').html(res);
-            swal_success('Berhasil', 'data berhasil dihapus');
-            if (tr_callback) {
-                $(tr_callback).fadeOut();
-            }
-        },
-        error: function (result) {
-            swal("Failed something went wrong");
-        }
-    });
-}
-
 function addToCart(id, is_remove) {
     $.ajax({
         url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,

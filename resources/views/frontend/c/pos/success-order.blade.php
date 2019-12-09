@@ -15,67 +15,88 @@
             ],
         ]
     ])
+    
     <!-- Row -->
     <div class="row">
         <div class="col-sm-12">
             <div class="alert alert-success">
                 Silahkan bayar dan ambil pesanan Anda di Warung yang ditempat Anda beli.
             </div>
-
             <div class="panel panel-default card-view">
                 <div class="panel-heading">
-                    <div class="pull-right">
-                        <h6 class="panel-title txt-dark">NO# {{$list_transaction->first()->transaction_number}}</h6>
+                    <div class="pull-left">
+                        <h6 class="panel-title txt-dark"><h6 class="panel-title txt-dark">NO# {{$list_transaction->first()->transaction_number}}</h6>
                     </div>
                     <div class="clearfix"></div>
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
-                        <div class="table-wrap">
-                            <div class="table-responsive">
-                                <table id="datatable" class="table table-hover display  pb-30" >
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Foto</th>
-                                            <th>Item</th>
-                                            <th>Jumlah</th>
-                                            <th>Harga</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <?php $total = 0; ?>
-                                    <tbody>
-                                        @foreach($list_transaction as $row => $transaction)
-                                        <?php $total += $transaction->quantity * $transaction->selling_price_vending_machine;?>
-                                        <tr>
-                                            <td>{{$row + 1}}</td>
-                                            <td>{!!$transaction->food->photo ? '<img width="50px" height="50px" src="'.asset($transaction->food->photo).'">' : '-'!!}</td>
-                                            <td>{{$transaction->food->name}} <br> <i style="font-size:10px" class="text-warning">{{$transaction->vendingMachine->name}}</i></td>
-                                            <td>
-                                                {{$transaction->quantity}}
-                                            </td>
-                                            <td>{{format_price($transaction->selling_price_vending_machine)}}</td>
-                                            <td>{{format_price($transaction->quantity * $transaction->selling_price_vending_machine)}}</td>
-                                        </tr>
-                                        @endforeach
-                                        <tr style="background: #eee">
-                                            <td colspan="5" class="text-right" style="font-weight:bold">Total Belanja</td>
-                                            <td rowspan="2">{{format_price($total)}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <?php $total = 0; ?>
+                        @foreach($list_transaction as $row => $transaction_group)
+                        <?php
+                            $list_transaction_by_stand = \App\Models\VendingMachineTransaction::where('transaction_number', $transaction_group->transaction_number)
+                                ->where('vending_machine_id', $transaction_group->vending_machine_id)
+                                ->get();
+                        ?>
+
+                        @foreach($list_transaction_by_stand as $transaction)
+                        <?php
+                            $t = $transaction->quantity * $transaction->selling_price_vending_machine;
+                            $total += $t;
+                            $item = $transaction->vendingMachineSlot;
+
+                        ?>
+                        <div class="panel panel-default contact-card card-view" style="border:none">
+                            <div class="panel-heading" style="color: black">
+                                <div class="pull-left">
+                                    <div class="pull-left user-img-wrap mr-15">
+                                        {!!$item->food->photo ? '<img width="50px" class="card-user-img pull-left" height="50px" src="'.asset($item->food->photo).'">' : '-'!!}
+                                    </div>
+                                    <div class="pull-left user-detail-wrap">
+                                        <span class="block card-user-desn" style="color: black">
+                                            {{$item->vendingMachine->name}}
+                                        </span>
+                                        <span class="block card-user-name" style="color: black">
+                                            {{$item->food->name}}
+                                        </span>
+                                        <span class="block card-user-desn" style="color: black">
+                                            Rp. {{format_price($transaction->selling_price_vending_machine)}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="pull-right bg-yellow pa-10" style="border-radius:5px">
+                                    
+                                    <a class="pull-left inline-block" href="#">
+                                        {{$transaction->quantity}}
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
+                        @endforeach
+                        @if((count($list_transaction) - $row) > 1)
+                        <hr style="border-style:dotted; border-color: #000; border-width:1px" />
+                        @endif
+                        <?php ++$row;?>
+                        @endforeach
                     </div>
+                    
                 </div>
             </div>	
+            <div class="panel panel-default card-view" style="border:none">
+                <div class="panel-wrapper pb-10" style="color: black">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <b>Total Pembayaran</b>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" id="total-price">
+                            <b>Rp. {{format_price($total)}}</b>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /Row -->
-@stop
-
-@section('scripts')
-<script>
-</script>
 @stop
