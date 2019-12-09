@@ -113,6 +113,22 @@ class TempDataHelper extends Facade
         return $row_id;
     }
 
+    public static function getAllRowGroupByKey($name, $user_id, $key)
+    {
+        $temp = self::get($name, $user_id, ['is_pagination' => false]);
+        $row_id = [];
+        $data = [];
+
+        for ($i = 0; $i < count($temp); $i++) {
+            if (!in_array($temp[$i][$key], $data)) {
+                array_push($data, $temp[$i][$key]);
+                array_push($row_id, $temp[$i]);
+            }
+        }
+
+        return $row_id;
+    }
+
     /**
      * @param $id
      * @return bool|null

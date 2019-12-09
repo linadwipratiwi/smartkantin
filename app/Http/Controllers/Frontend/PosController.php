@@ -115,7 +115,8 @@ class PosController extends Controller
     {
         $temp_key = PosHelper::getTempKey();
 
-        $data = TempDataHelper::get($temp_key, auth()->user()->id);
+        // $data = TempDataHelper::get($temp_key, auth()->user()->id);
+        $data = TempDataHelper::getAllRowGroupByKey($temp_key, auth()->user()->id, 'stand_id');
 
         if (count($data) < 1) {
             toaster_error('Anda belum menambahkan barang belanja Anda di cart. Silahkan berbelanja dulu.');
@@ -123,7 +124,7 @@ class PosController extends Controller
         }
 
         $view = view('frontend.c.pos.cart');
-        $view->list_cart = $data;
+        $view->list_cart_group_by_stand = $data;
         return $view;
     }
 

@@ -31,60 +31,78 @@
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
-                        <div class="table-wrap">
-                            <div class="table-responsive">
-                                <table id="datatable" class="table table-hover display  pb-30" >
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Foto</th>
-                                            <th>Item</th>
-                                            <th>Jumlah</th>
-                                            <th>Harga</th>
-                                            <th>Total</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <?php $total = 0; ?>
-                                    <tbody>
-                                        @foreach($list_cart as $row => $cart)
-                                        <?php
-                                        $item = \App\Models\VendingMachineSlot::findOrFail($cart['item_id']);
-                                        $t = $cart['quantity'] * $cart['selling_price_item'];
-                                        $total += $t;
+                        <?php $total = 0; ?>
+                        @foreach($list_cart_group_by_stand as $row => $cart_group)
+                        <?php
+                            $temp_key = \App\Helpers\PosHelper::getTempKey();
+                            $list_cart_by_stand = \App\Helpers\TempDataHelper::getAllRowHaveKeyValue($temp_key, auth()->user()->id, 'stand_id', $cart_group['stand_id']);
+                        ?>
 
-                                        ?>
-                                        <tr id="tr-{{$cart['rowid']}}">
-                                            <td>{{$row + 1}}</td>
-                                            <td>{!!$item->food->photo ? '<img width="50px" height="50px" src="'.asset($item->food->photo).'">' : '-'!!}</td>
-                                            <td>{{$item->food->name}} <br> <i style="font-size:10px" class="text-warning">{{$item->vendingMachine->name}}</i></td>
-                                            <td>
-                                                {{$cart['quantity']}}
-                                                @if ($item->stock < $cart['quantity'])
-                                                    <span class="label label-warning">Stok tidak mencukupi / habis</span>
-                                                @endif
-                                            </td>
-                                            <td>{{format_price($cart['selling_price_item'])}}</td>
-                                            <td>{{format_price($cart['quantity'] * $cart['selling_price_item'])}}</td>
-                                            <td>
-                                                <a onclick="secureDeleteCart('{{url('c/cart/'.$cart['rowid'])}}', '#tr-{{$cart['rowid']}}');" data-toggle="tooltip" data-original-title="Close">
-                                                    <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                        <tr style="background: #eee">
-                                            <td colspan="5" class="text-right" style="font-weight:bold">Total Belanja</td>
-                                            <td id="total-price">{{format_price($total)}}</td>
-                                            <td><a href="{{url('c/checkout')}}" class="btn btn-primary">Masukkan ke tagihan saya</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        @foreach($list_cart_by_stand as $cart)
+                        <?php
+                            $item = \App\Models\VendingMachineSlot::findOrFail($cart['item_id']);
+                            $t = $cart['quantity'] * $cart['selling_price_item'];
+                            $total += $t;
+
+                        ?>
+                        <div class="panel panel-default contact-card card-view" style="border:none">
+                            <div class="panel-heading" style="color: black">
+                                <div class="pull-left">
+                                    <div class="pull-left user-img-wrap mr-15">
+                                        {!!$item->food->photo ? '<img width="50px" class="card-user-img pull-left" height="50px" src="'.asset($item->food->photo).'">' : '-'!!}
+                                    </div>
+                                    <div class="pull-left user-detail-wrap">
+                                        <span class="block card-user-desn" style="color: black">
+                                            {{$item->vendingMachine->name}}
+                                        </span>
+                                        <span class="block card-user-name" style="color: black">
+                                            {{$item->food->name}}
+                                        </span>
+                                        <span class="block card-user-desn" style="color: black">
+                                            Rp. {{format_price($cart['selling_price_item'])}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="pull-right bg-yellow pa-10" style="border-radius:5px">
+                                    <a class="pull-left inline-block mr-15" href="#">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                    <a class="pull-left inline-block mr-15" href="#">
+                                        {{$cart['quantity']}}
+                                    </a>
+                                    <a class="pull-left inline-block" href="#">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
+                        @endforeach
+                        @if((count($list_cart_group_by_stand) - $row) > 1)
+                        <hr style="border-style:dotted; border-color: #000; border-width:1px" />
+                        @endif
+                        <?php ++$row;?>
+                        @endforeach
+
+                        {{-- btn pesan --}}
+                        
                     </div>
+                    
                 </div>
             </div>	
+            <div class="panel panel-default card-view" style="border:none">
+                <div class="panel-wrapper pb-10" style="color: black">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <b>Total Pembayaran</b>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                            <b>Rp. {{format_price($total)}}</b>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /Row -->
