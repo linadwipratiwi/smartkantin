@@ -16,7 +16,7 @@
                         <div class="panel-body pa-5">
                             <article class="col-item">
                                 <div class="photo">
-                                    <a href="javascript:void(0);"> <img src="{{asset($item->food->photo)}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:100%" alt="Product Image" /> </a>
+                                    <a href="javascript:void(0);"> <img src="{{asset($item->food->photo)}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:150px; height:150px" alt="Product Image" /> </a>
                                 </div>
                                 <div class="pt-5">
                                     <div class="product-rating inline-block" style="font-size:12px">
@@ -27,13 +27,13 @@
                                     <br>
                                     <div id="btn-action-{{$item->id}}">
                                         @if(!$search)
-                                            <button class="btn btn-warning btn-sm btn-block" onclick="addToCart({{$item->id}}, 0)">Tambah</button>
+                                            <button class="btn btn-warning btn-sm btn-block" style="font-size:14px; font-weight:bold;" onclick="addToCart({{$item->id}}, 0)">Tambah</button>
                                         @else 
-                                        <div class="row text-centers" style="font-weight:bold; ">
-                                            <div style="font-weight:bold;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 btn btn-default btn-xs" onclick="addToCart({{$item->id}}, 1)"><i class="fa fa-minus"></i></div>
-                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; " class="col-xs-4 btn btn-default btn-xs">{{$search['quantity']}}</div>
-                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 btn btn-default btn-xs" onclick="addToCart({{$item->id}}, 0)"><i class="fa fa-plus"></i></div>
+                                        <div class="row text-centers" style="font-weight:bold;">
+                                            <div style="font-weight:bold;background:#eee; padding:10px;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 " onclick="addToCart({{$item->id}}, 1)"><i class="fa fa-minus"></i></div>
+                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; " class="col-xs-4 ">{{$search['quantity']}}</div>
+                                                <div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 " onclick="addToCart({{$item->id}}, 0)"><i class="fa fa-plus"></i></div>
                                             </div>
                                         </div>
                                         @endif

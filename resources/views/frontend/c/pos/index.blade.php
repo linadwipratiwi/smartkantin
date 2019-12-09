@@ -2,16 +2,16 @@
 
 @section('content')
     <!-- Title -->
-    @include('frontend._bread-crumb', [
-        'title' => 'Pos',
-        'breadcrumbs' => [
-            0 => [
-                'link' => url('/'),
-                'label' => 'pos'
-            ]
-        ]
-    ])
     
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="">
+                <input type="text" class="form-control" style="border-radius:30px" placeholder="cari nama makanan..">
+            </form>
+        </div>
+    </div>
+    <hr style="border-style:dotted" />
     <!-- /Title -->
     <button data-toggle="modal" data-target=".bs-example-modal-sm" style="position:fixed; bottom:25px; z-index:1031" class="btn btn-primary btn-square shadow-2dp">
         <i class="zmdi zmdi-shopping-basket"></i>
@@ -33,7 +33,6 @@
     <div class="right-sidebar-backdrop"></div>
     <!-- /Right Sidebar Backdrop -->
 
-<<<<<<< HEAD
     @include('frontend.c.pos._data-item')
 
     <!-- sample modal content -->
@@ -94,14 +93,14 @@
                 
                 if (res.quantity > 0) {
                     var html = '<div class="row text-centers" style="font-weight:bold; ">'+
-                        '<div style="font-weight:bold;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
-                            '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 btn btn-default btn-xs" onclick="addToCart('+id+', 1)"><i class="fa fa-minus"></i></div>'+
-                            '<div style="border-radius:0px; font-size:14px; font-weight:bold;" class="col-xs-4 btn btn-default btn-xs">'+res.quantity+'</div>'+
-                            '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4 btn btn-default btn-xs" onclick="addToCart('+id+', 0)"><i class="fa fa-plus"></i></div>'+
+                        '<div style="font-weight:bold;padding:10px; background:#eee;" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+                            '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4" onclick="addToCart('+id+', 1)"><i class="fa fa-minus"></i></div>'+
+                            '<div style="border-radius:0px; font-size:14px; font-weight:bold;" class="col-xs-4">'+res.quantity+'</div>'+
+                            '<div style="border-radius:0px; font-size:14px; font-weight:bold; color:#f2b700 !important" class="col-xs-4" onclick="addToCart('+id+', 0)"><i class="fa fa-plus"></i></div>'+
                         '</div>'+
                     '</div>';
                 } else {
-                    var html = '<button class="btn btn-warning btn-sm btn-block" onclick="addToCart('+id+', 0)">Tambah</button>';
+                    var html = '<button class="btn btn-warning btn-sm btn-block" style="font-size:14px; font-weight:bold;" onclick="addToCart('+id+', 0)">Tambah</button>';
                 }
 
                 var cart = '';
