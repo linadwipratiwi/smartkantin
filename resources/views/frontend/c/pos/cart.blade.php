@@ -63,14 +63,14 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="pull-right bg-yellow pa-10" style="border-radius:5px">
-                                    <a class="pull-left inline-block mr-15" href="#">
+                                <div class="pull-right bg-yellow pa-10" style="border-radius:5px" id="btn-action-add-to-cart-{{$item->id}}">
+                                    <a class="pull-left inline-block mr-15" style="color:#000" onclick="addToCart({{$item->id}}, 1)">
                                         <i class="fa fa-minus"></i>
                                     </a>
-                                    <a class="pull-left inline-block mr-15" href="#">
+                                    <a class="pull-left inline-block mr-15" href="#" id="quantity-item-{{$item->id}}">
                                         {{$cart['quantity']}}
                                     </a>
-                                    <a class="pull-left inline-block" href="#">
+                                    <a class="pull-left inline-block" onclick="addToCart({{$item->id}}, 0)">
                                         <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
@@ -93,7 +93,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <b>Total Pembayaran</b>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" id="total-price">
                             <b>Rp. {{format_price($total)}}</b>
                         </div>
 
@@ -103,7 +103,7 @@
             <br><br>
             <div class="panel" style="border:none">
                 <div class="panel-wrapper" style="color: black">
-                    <button style="border-radius:10px" class="btn btn-warning btn-block"> Pesan</button>
+                    <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan</a>
                 </div>
             </div>
         </div>
@@ -146,6 +146,39 @@ function deleteExecCart(url, tr_callback) {
             swal("Failed something went wrong");
         }
     });
+}
+
+function addToCart(id, is_remove) {
+    $.ajax({
+        url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
+        success: function (res) {
+            
+            if (res.quantity > 0) {
+                if (res.quantity == 0) {
+                    $('#quantity-item-'+id).html(res.quantity);
+                } else {
+                    var html = '<a class="pull-left inline-block mr-15" onclick="addToCart('+id+', 1)">'+
+                        '<i class="fa fa-minus"></i>'+
+                    '</a>'+
+                    '<a class="pull-left inline-block mr-15" href="#" id="quantity-item-'+id+'">'+res.quantity+'</a>'+
+                    '<a class="pull-left inline-block" onclick="addToCart('+id+', 0)">'+
+                        '<i class="fa fa-plus"></i>'+
+                    '</a>';
+                    $('#btn-action-add-to-cart-'+id).html(html);
+                }
+            } else {
+                var html = '<a class="pull-left inline-block" style="font-size:14px; font-weight:bold;" onclick="addToCart('+id+', 0)">Tambah</a>';
+                $('#btn-action-add-to-cart-'+id).html(html);
+            }
+
+            $('#total-price').html("Rp. " +res.total_price);
+            if (is_remove) {
+                notification('Berhasil', 'Jumlah berhasil dikurangi');
+            } else {
+                notification('Berhasil', 'Item telah ditambahkan ke keranjang Anda');
+            }
+        }
+    })
 }
 </script>
 @stop
