@@ -417,6 +417,7 @@ class MobileApiController extends Controller
         
         $customer_= json_decode($customer, true);
         $customer_['msg']="success";
+        $customer_['status']=1;
 
         return response()->json(
             $customer_
@@ -550,7 +551,8 @@ class MobileApiController extends Controller
                 $customer_id=$data->customer_id;
                 $customer=Customer::find($customer_id);
                 $text['customer_name']=$customer->name;
-                $text['customer_identity_number']=$customer->customer_identity_number;
+                $text['customer_identity_number']=$customer->identity_number;
+                $text['msg']="success";
                 $hasil[]=($text);
             }
         }
@@ -568,13 +570,14 @@ class MobileApiController extends Controller
         // }
 
         if (!$hasil) {
-            return response()->json([
+            return response()->json([[
                 'status'=> 0,
                 'msg' => 'no transaction'
-            ]);
+            ]]);
         }
         return response()->json(
             $hasil
         );
     }
 }
+
