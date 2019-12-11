@@ -289,8 +289,13 @@ class MobileApiController extends Controller
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
             // Success
+
+            $client=Client::where('user_id',$user->id)->first();
+            $vending=VendingMachine::where('client_id',$client->id)->first();
+            $vendingAlias=$vending->alias;
             return response()->json([
                 'status' => 1,
+                 'alias'=>$vendingAlias,
                 'msg' => 'access granted'
             ]);
         } else {
@@ -352,7 +357,21 @@ class MobileApiController extends Controller
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $vending_machine_alias = $request->input('vending_machine_alias');
-        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+      
+        /*cek vending machine*/
+        $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+        if (!$vending_machine) {
+            return response()->json([[
+                'status' => 0,
+                'msg' => 'vending machine not found'
+            ]]);
+        }         
+        $vending_machine_id = $vending_machine->id;
+        $vending_machine_client_id = $vending_machine->client_id;
+      
+        $customer = Customer::where(['identity_number'=> $customer_identity_number,
+                                     'register_at_client_id'=> $vending_machine_client_id        
+        ])->first();
         if (!$customer) {
             return response()->json([[
                 'status' => 0,
@@ -361,16 +380,7 @@ class MobileApiController extends Controller
         }
 
         $customer_id = $customer->id;
-        /*cek vending machine*/
-        $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
-        if (!$vending_machine) {
-            return response()->json([[
-                'status' => 0,
-                'msg' => 'vending machine not found'
-            ]]);
-        }
-         
-        $vending_machine_id = $vending_machine->id;
+      
         $where = [
             'customer_id' => $customer_id,
             'vending_machine_id' => $vending_machine_id,
@@ -429,14 +439,7 @@ class MobileApiController extends Controller
     {
         $customer_identity_number= $request->input('customer_identity_number');
         $vending_machine_alias= $request->input('vending_machine_alias');
-        $customer= Customer::where('identity_number', $customer_identity_number)->first();
-        if (!$customer) {
-            return response()->json([[
-                'status' => 0,
-                'msg' => 'customer identity not found'
-            ]]);
-        }
-        $customer_id=$customer->id;
+       
         /*cek vending machine*/
         $vending_machine=VendingMachine::Where('alias', $vending_machine_alias)->first();
         if (!$vending_machine) {
@@ -446,6 +449,18 @@ class MobileApiController extends Controller
             ]]);
         }
         $vending_machine_id=$vending_machine->id;
+        $vending_machine_client_id=$vending_machine->client_id;
+        
+        //    cek customer 
+        $customer= Customer::where(['identity_number' => $customer_identity_number,
+                                    'register_at_client_id'=>$vending_machine_client_id])->first();
+        if (!$customer) {
+            return response()->json([[
+                'status' => 0,
+                'msg' => 'customer identity not found'
+            ]]);
+        }
+        $customer_id=$customer->id;
 
         $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
                                     'vending_machine_id'=>$vending_machine_id,
