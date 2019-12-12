@@ -293,11 +293,13 @@ class MobileApiController extends Controller
             $client=Client::where('user_id',$user->id)->first();
             $vending=VendingMachine::where(['client_id'=>$client->id,
                                             'type'=>2])->first();
-            $vendingAlias=$vending->alias;
+            
             return response()->json([
                 'status' => 1,
-                 'alias'=>$vendingAlias,
-                'msg' => 'access granted'
+                 'alias'=>$vending->alias,
+                 'name'=> $vending->name,
+                 'location'=>$vending->location,
+                 'msg' => 'access granted'
             ]);
         } else {
             return response()->json([
