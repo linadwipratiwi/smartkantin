@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['prefix' => 'mobile', 'namespace' => 'Api'], function () {
+    Route::post('gopay/notification', 'MobileApiController@gopayNotification');
     Route::post('multipayment', 'MobileApiController@multipayment');
     Route::post('topup', 'MobileApiController@topup');
     Route::post('transaction', 'MobileApiController@transaction');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use MidtransTrait;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
@@ -45,6 +46,10 @@ class ApiController extends Controller
     /** Store data transaction */
     public function transaction(Request $request)
     {
+        if ($request->payment_type == 'gopay') {
+            return ApiHelper::gopayTransaction($request);
+        }
+
         return ApiHelper::transaction($request);
     }
 

@@ -5,14 +5,21 @@ namespace App\Helpers;
 use App\Helpers;
 use App\Models\Customer;
 use App\Helpers\ApiHelper;
+use App\Midtrans\Midtrans;
+use Illuminate\Support\Str;
 use App\Models\StockMutation;
 use App\Models\VendingMachine;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
-use Illuminate\Support\Str;
 
 class ApiHelper
 {
+    public function __construct()
+    {   
+        Midtrans::$serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0';
+        Midtrans::$isProduction = true;
+    }
+
     public static function transaction($request)
     {
         $customer_identity_number = $request->input('customer_identity_number');
@@ -302,5 +309,164 @@ class ApiHelper
             'status' => 1, // return true
             'data' => $customer
         ]);
+    }
+
+    /** gopay */
+    public static function gopayTransaction($request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $slot_alias = $request->input('slot_alias');
+        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
+
+        /** Cek customer ada apa tidak */
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Identity number customer not found'
+            ]);
+        }
+
+        
+
+        /** Cek slot vending machine */
+        $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
+        if (!$vending_machine_slot) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Vending Machine Slot not found'
+            ]);
+        }
+
+        /** cek stok */
+        if ($vending_machine_slot->stock < 1) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+            ]);
+        }
+
+        \DB::beginTransaction();
+        $client = $vending_machine_slot->vendingMachine->client;
+
+        $transaction = new VendingMachineTransaction;
+        $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
+        $transaction->vending_machine_slot_id = $vending_machine_slot->id;
+        $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
+        $transaction->customer_id = $customer->id;
+        $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+        $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+        $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
+        $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
+        $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
+        $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
+        $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
+        
+        // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
+        $transaction->profit_platform = $client->profit_platform_value;
+        if ($transaction->profit_platform_type == 'percent') {
+            $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
+        }
+
+        $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+        $transaction->quantity = 1;
+        $transaction->status_transaction = 2; // pending
+
+        /** Update flaging transaksi. Digunakan untuk Smansa */
+        $vending_machine = $transaction->vendingMachine;
+        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->save();
+
+        
+        try {
+            $transaction->save();
+
+            // self::updateStockTransaction($transaction);
+            \DB::commit();
+            return self::gopay($transaction->id);
+
+        } catch (\Throwable $th) {
+            info($th);
+            return json_encode([
+                'status' => 0,
+                'data' => 'Transaction failed'
+            ]);
+        }
+
+    }
+
+    /** create QR Code Gopay */
+    public static function gopay($id) 
+    {
+        $transaction = VendingMachineTransaction::findOrFail($id);
+        $customer = $transaction->customer;
+        $midtrans = new Midtrans;
+
+        $transaction_details = array(
+            'order_id'      => $transaction->id,
+            'gross_amount'  => $transaction->selling_price_vending_machine
+        );
+
+        // Populate items
+        $items = [
+            array(
+                'id'        => $transaction->vendingMachineSlot->id,
+                'price'     => $transaction->selling_price_vending_machine,
+                'quantity'  => $transaction->quantity,
+                'name'      => $transaction->food_name,
+            )
+        ];
+
+
+        // Populate customer's Info
+        $customer_details = array(
+            'first_name'      => $customer->name,
+            'last_name'       => '',
+            'email'           => $customer->email,
+            'phone'           => $customer->phone,
+        );
+
+        // Data yang akan dikirim untuk request redirect_url.
+        $credit_card['secure'] = true;
+        //ser save_card true to enable oneclick or 2click
+        //$credit_card['save_card'] = true;
+
+        $time = time();
+        $custom_expiry = array(
+            'start_time' => date("Y-m-d H:i:s O",$time),
+            'unit'       => 'hour', 
+            'duration'   => 2
+        );
+        
+        $transaction_data = array(
+            'payment_type' => 'gopay',
+            'transaction_details' => $transaction_details,
+            'item_details' => $items,
+            'customer_details' => $customer_details
+        );
+    
+        try {
+            $snap_token = $midtrans->gopayCharge($transaction_data);
+            info($snap_token);
+            return $snap_token;
+        } catch (Exception $e) {   
+            return $e->getMessage;
+        }
+    }
+
+    public function gopayNotification()
+    {
+        $midtrans = new Midtrans;
+        echo 'test notification handler';
+        $json_result = file_get_contents('php://input');
+        $result = json_decode($json_result);
+        info($result);
+
+        if ($result) {
+            $notif = $midtrans->status($result->order_id);
+        }
+
+        error_log(print_r($result, true));
     }
 }
