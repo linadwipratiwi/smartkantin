@@ -463,9 +463,9 @@ class ApiHelper
         $result = json_decode($json_result);
         info($result);
 
-        if ($result) {
-            $notif = $midtrans->status($result->order_id);
-        }
+        // if ($result) {
+        //     $notif = $midtrans->status($result->order_id);
+        // }
 
         error_log(print_r($result, true));
     }

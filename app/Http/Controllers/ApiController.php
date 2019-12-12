@@ -53,6 +53,11 @@ class ApiController extends Controller
         return ApiHelper::transaction($request);
     }
 
+    public function gopayRespon(Request $request)
+    {
+        info($request);
+    }
+
     /** Transaction fail */
     public function transactionFail(Request $request)
     {
