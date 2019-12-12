@@ -76,7 +76,7 @@
                                             <td>{{$row + 1}}</td>
                                             <td>{{$transaction->transactionType()}}</td>
                                             <td>{{format_price($transaction->gopay_gross_amount)}}</td>
-                                            <td>{{$transaction->getCutomer()}}</td>
+                                            <td>{{$transaction->getCustomer()}}</td>
                                             <td>{{$transaction->getStatus()}}</td>
                                             <td>{{$transaction->gopay_transaction_status}}</td>
                                             <td>
