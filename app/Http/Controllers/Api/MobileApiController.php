@@ -291,7 +291,8 @@ class MobileApiController extends Controller
             // Success
 
             $client=Client::where('user_id',$user->id)->first();
-            $vending=VendingMachine::where('client_id',$client->id)->first();
+            $vending=VendingMachine::where(['client_id'=>$client->id,
+                                            'type'=>2])->first();
             $vendingAlias=$vending->alias;
             return response()->json([
                 'status' => 1,
