@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\VendingMachineTransaction;
 
 class GopayTransaction extends Model
 {
@@ -17,5 +18,32 @@ class GopayTransaction extends Model
         $new->gopay_gross_amount = $gross_amount;
         $new->save();
         return $new;
+    }
+
+    public function transactionType()
+    {
+        $refer = $this->refer_type::find($this->refer_type_id);
+
+        if (get_class($refer) == get_class(new VendingMachineTransaction)) {
+            return 'Transaksi Vending Mesin';
+        }
+
+        return 'Topup';
+    }
+
+    public function getCustomer()
+    {
+        $refer = $this->refer_type::find($this->refer_type_id);
+
+        if (get_class($refer) == get_class(new VendingMachineTransaction)) {
+            return $refer->customer->name;
+        }
+
+        return '-';
+    }
+
+    public function getStatus()
+    {
+        return $this->status == 0 ? 'Belum diproses' : 'Sudah diproses';
     }
 }

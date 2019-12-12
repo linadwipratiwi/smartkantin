@@ -48,7 +48,6 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     
     // Setting
     Route::resource('setting', 'SettingController');
-    Route::get('report', 'ReportController@index');
 
     // User
     Route::resource('user', 'UserController', ['except' => ['show']]);
@@ -58,6 +57,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     });
 
     // Report
+    Route::get('gopay-transaction', 'ReportController@gopayTransaction');
     Route::get('transaction', 'ReportController@transaction');
     Route::get('report', 'ReportController@report');
     
