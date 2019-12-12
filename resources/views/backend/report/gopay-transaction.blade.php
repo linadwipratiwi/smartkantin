@@ -80,7 +80,7 @@
                                             <td>{{$transaction->getStatus()}}</td>
                                             <td>{{$transaction->gopay_transaction_status}}</td>
                                             <td>
-                                                {{ $transaction->gopay_transaction_status ? \App\Helpers\DateHelper::formatView($transaction->gopay_transaction_status, true) : '-'}}
+                                                {{ $transaction->gopay_transaction_time ? \App\Helpers\DateHelper::formatView($transaction->gopay_transaction_time, true) : '-'}}
                                             </td>
                                         </tr>
                                         @endforeach
