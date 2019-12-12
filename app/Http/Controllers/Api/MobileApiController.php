@@ -276,7 +276,8 @@ class MobileApiController extends Controller
     /**Login */
     public static function login(Request $request)
     {
-        $username= $request->input('username');
+        // user dan password client sebagai masukan
+        $username= $request->input('username'); 
         $password=$request->input('password');
         
         $user = User::where('username', $username)->first();
@@ -289,8 +290,9 @@ class MobileApiController extends Controller
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
             // Success
-
+            // get client    
             $client=Client::where('user_id',$user->id)->first();
+            // get vending
             $vending=VendingMachine::where(['client_id'=>$client->id,
                                             'type'=>2])->first();
             
@@ -298,8 +300,10 @@ class MobileApiController extends Controller
                 'status' => 1,
                  'alias'=>$vending->alias,
                  'name'=> $vending->name,
-                 'location'=>$vending->location,
+                 'client_location'=>$client->address,
+                 'client_name'=> $client->name,
                  'msg' => 'access granted'
+                 
             ]);
         } else {
             return response()->json([
