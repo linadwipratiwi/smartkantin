@@ -67,7 +67,7 @@ class ApiController extends Controller
             if ($request->transaction_status == 'settlement') {
                 $refer->status_transaction = 1; // Lunas
                 $refer->save();
-                ApiHelper::updateStockTransaction($transaction);
+                ApiHelper::updateStockTransaction($refer);
 
                 $gopay_transaction->status = 1;
                 $gopay_transaction->gopay_transaction_time = $request->transaction_time;
