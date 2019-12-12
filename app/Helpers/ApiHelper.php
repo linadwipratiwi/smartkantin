@@ -9,6 +9,7 @@ use App\Midtrans\Midtrans;
 use Illuminate\Support\Str;
 use App\Models\StockMutation;
 use App\Models\VendingMachine;
+use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
 
@@ -400,11 +401,15 @@ class ApiHelper
     public static function gopay($id) 
     {
         $transaction = VendingMachineTransaction::findOrFail($id);
+        
+        /** init gopay transaction id */
+        $gopay_transaction = GopayTransaction::init($transaction, $id, $transaction->selling_price_vending_machine);
+
         $customer = $transaction->customer;
         $midtrans = new Midtrans;
 
         $transaction_details = array(
-            'order_id'      => $transaction->id,
+            'order_id'      => $gopay_transaction->id,
             'gross_amount'  => $transaction->selling_price_vending_machine
         );
 

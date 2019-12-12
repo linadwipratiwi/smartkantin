@@ -12,7 +12,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
+use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
+use App\Models\VendingMachineTransaction;
 
 class ApiController extends Controller
 {
@@ -56,6 +58,27 @@ class ApiController extends Controller
     public function gopayRespon(Request $request)
     {
         info($request);
+        $gopay_transaction = GopayTransaction::find($request->order_id);
+        if (!$gopay_transaction) return null;
+
+        $refer = $gopay_transaction->refer_type::find($gopay_transaction->refer_type_id);
+        if (get_class($refer) == get_class(new VendingMachineTransaction)) {
+            /** jika refer, adalah vm transaksi */
+            if ($request->transaction_status == 'settlement') {
+                $refer->status_transaction = 1; // Lunas
+                $refer->save();
+                ApiHelper::updateStockTransaction($transaction);
+
+                $gopay_transaction->status = 1;
+                $gopay_transaction->gopay_transaction_time = $request->transaction_time;
+                $gopay_transaction->gopay_transaction_status = $request->transaction_status;
+                $gopay_transaction->gopay_status_message = $request->status_message;
+                $gopay_transaction->gopay_status_code = $request->status_code;
+                $gopay_transaction->gopay_fraud_status = $request->fraud_status;
+                $gopay_transaction->save();
+            }
+
+        }
     }
 
     /** Transaction fail */
