@@ -12,7 +12,7 @@ class ReportController extends Controller
 {
     public function gopayTransaction()
     {
-        $view = view('backend.transaction.gopay-transaction');
+        $view = view('backend.report.gopay-transaction');
         $view->list_transaction =  GopayTransaction::orderBy('created_at', 'desc')->paginate(50);
         return $view;
     }
