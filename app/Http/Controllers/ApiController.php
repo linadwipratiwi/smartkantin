@@ -90,7 +90,7 @@ class ApiController extends Controller
                 // update saldo customer
                 if ($refer->toType()) {
                     $customer = $refer->toType();
-                    $customer->saldo += $saldo;
+                    $customer->saldo += $gopay_transaction->gopay_gross_amount;
                     $customer->save();
                 }
 
