@@ -10,6 +10,7 @@ use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
 use App\Models\GopayTransaction;
@@ -55,6 +56,7 @@ class ApiController extends Controller
         return ApiHelper::transaction($request);
     }
 
+    /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {
         info($request);
@@ -77,8 +79,37 @@ class ApiController extends Controller
                 $gopay_transaction->gopay_fraud_status = $request->fraud_status;
                 $gopay_transaction->save();
             }
-
         }
+
+        if (get_class($refer) == get_class(new TransferSaldo)) {
+            /** jika refer, adalah vm transaksi */
+            if ($request->transaction_status == 'settlement') {
+                $refer->payment_status = 1; // Lunas
+                $refer->save();
+                
+                // update saldo customer
+                if ($refer->toType()) {
+                    $customer = $refer->toType();
+                    $customer->saldo += $saldo;
+                    $customer->save();
+                }
+
+                $gopay_transaction->status = 1;
+                $gopay_transaction->gopay_transaction_time = $request->transaction_time;
+                $gopay_transaction->gopay_transaction_status = $request->transaction_status;
+                $gopay_transaction->gopay_status_message = $request->status_message;
+                $gopay_transaction->gopay_status_code = $request->status_code;
+                $gopay_transaction->gopay_fraud_status = $request->fraud_status;
+                $gopay_transaction->save();
+            }
+        }
+
+    }
+
+    /** Topup transaction */
+    public function topupTransaction(Request $request)
+    {
+        return ApiHelper::topupTransaction($request);
     }
 
     /** Transaction fail */

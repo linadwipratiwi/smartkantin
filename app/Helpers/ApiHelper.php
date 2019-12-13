@@ -8,6 +8,7 @@ use App\Helpers\ApiHelper;
 use App\Midtrans\Midtrans;
 use Illuminate\Support\Str;
 use App\Models\StockMutation;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
@@ -21,6 +22,7 @@ class ApiHelper
         Midtrans::$isProduction = true;
     }
 
+    /** Vending Machine Transaction by Saldo */
     public static function transaction($request)
     {
         $customer_identity_number = $request->input('customer_identity_number');
@@ -160,6 +162,7 @@ class ApiHelper
 
     }
 
+    /** Vending Machine Transaction Fail */
     public static function transactionFail($request)
     {
         $transaction_id = $request->input('transaction_id');
@@ -221,6 +224,7 @@ class ApiHelper
         ]);
     }
 
+    /** Update stock transaction */
     public static function updateStockTransaction($transaction)
     {
         // tambah record stock opname
@@ -241,6 +245,7 @@ class ApiHelper
         $vending_machine_slot->save();
     }
 
+    /** Create Customer */
     public static function createCustomer($request)
     {
         $name = $request->input('name');
@@ -312,7 +317,7 @@ class ApiHelper
         ]);
     }
 
-    /** gopay */
+    /** Vending Machine Transaction by Gopay */
     public static function gopayTransaction($request)
     {
         $customer_identity_number = $request->input('customer_identity_number');
@@ -397,7 +402,7 @@ class ApiHelper
 
     }
 
-    /** create QR Code Gopay */
+    /** Create QR Code Gopay */
     public static function gopay($id) 
     {
         $transaction = VendingMachineTransaction::findOrFail($id);
@@ -420,6 +425,92 @@ class ApiHelper
                 'price'     => $transaction->selling_price_vending_machine,
                 'quantity'  => $transaction->quantity,
                 'name'      => $transaction->food_name,
+            )
+        ];
+
+
+        // Populate customer's Info
+        $customer_details = array(
+            'first_name'      => $customer->name,
+            'last_name'       => '',
+            'email'           => $customer->email,
+            'phone'           => $customer->phone,
+        );
+
+        // Data yang akan dikirim untuk request redirect_url.
+        $credit_card['secure'] = true;
+        //ser save_card true to enable oneclick or 2click
+        //$credit_card['save_card'] = true;
+
+        $time = time();
+        $custom_expiry = array(
+            'start_time' => date("Y-m-d H:i:s O",$time),
+            'unit'       => 'hour', 
+            'duration'   => 2
+        );
+        
+        $transaction_data = array(
+            'payment_type' => 'gopay',
+            'transaction_details' => $transaction_details,
+            'item_details' => $items,
+            'customer_details' => $customer_details
+        );
+    
+        try {
+            $snap_token = $midtrans->gopayCharge($transaction_data);
+            info($snap_token);
+            return $snap_token;
+        } catch (Exception $e) {   
+            return $e->getMessage;
+        }
+    }
+
+    /** Customer topup by Gopay */
+    public static function topupTransaction($request)
+    {
+        $customer_identity_number = $request->input('customer_identity_number');
+        $saldo = $request->input('saldo');
+
+        /** Cek customer ada apa tidak */
+        $customer = Customer::where('identity_number', $customer_identity_number)->first();
+        if (!$customer) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Identity number customer not found'
+            ]);
+        }
+
+        /** generate transfer saldo */
+        $transfer_saldo = new TransferSaldo;
+        $transfer_saldo->payment_status = 2; // pending
+        $transfer_saldo->to_type = get_class($customer);
+        $transfer_saldo->to_type_id = $customer->id;
+        $transfer_saldo->saldo = $saldo;
+        $transfer_saldo->created_by = 1; // system
+        $transfer_saldo->save();
+
+        /** init gopay transaction id */
+        $gopay_transaction = GopayTransaction::init($transfer_saldo, $transfer_saldo->id, $saldo);
+        $midtrans = new Midtrans;
+
+        /** update transfer saldo */
+        $transfer_saldo->from_type = get_class($gopay_transaction);
+        $transfer_saldo->from_type_id = $gopay_transaction->id;
+        $transfer_saldo->save();
+
+
+        $transaction_details = array(
+            'order_id'      => $gopay_transaction->id,
+            'gross_amount'  => $transfer_saldo->saldo
+        );
+
+        // Populate items
+        $items = [
+            array(
+                'id'        => $transfer_saldo->id,
+                'price'     => $transfer_saldo->saldo,
+                'quantity'  => 1,
+                'name'      => 'Topup by Gopay',
             )
         ];
 
