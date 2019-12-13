@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use MidtransTrait;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
@@ -9,9 +10,12 @@ use App\Models\Inventory;
 use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
+use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
+use App\Models\VendingMachineTransaction;
 
 class ApiController extends Controller
 {
@@ -45,7 +49,70 @@ class ApiController extends Controller
     /** Store data transaction */
     public function transaction(Request $request)
     {
+        if ($request->payment_type == 'gopay') {
+            return ApiHelper::gopayTransaction($request);
+        }
+        elseif($request->payment_type == 'gopayAnonim'){
+            return ApiHelper::gopayTransactionAnonim($request);
+        }
+
         return ApiHelper::transaction($request);
+    }
+
+    /** Hadler gopay respon */
+    public function gopayRespon(Request $request)
+    {
+        info($request);
+        $gopay_transaction = GopayTransaction::find($request->order_id);
+        if (!$gopay_transaction) return null;
+
+        $refer = $gopay_transaction->refer_type::find($gopay_transaction->refer_type_id);
+        if (get_class($refer) == get_class(new VendingMachineTransaction)) {
+            /** jika refer, adalah vm transaksi */
+            if ($request->transaction_status == 'settlement') {
+                $refer->status_transaction = 1; // Lunas
+                $refer->save();
+                ApiHelper::updateStockTransaction($refer);
+
+                $gopay_transaction->status = 1;
+                $gopay_transaction->gopay_transaction_time = $request->transaction_time;
+                $gopay_transaction->gopay_transaction_status = $request->transaction_status;
+                $gopay_transaction->gopay_status_message = $request->status_message;
+                $gopay_transaction->gopay_status_code = $request->status_code;
+                $gopay_transaction->gopay_fraud_status = $request->fraud_status;
+                $gopay_transaction->save();
+            }
+        }
+
+        if (get_class($refer) == get_class(new TransferSaldo)) {
+            /** jika refer, adalah vm transaksi */
+            if ($request->transaction_status == 'settlement') {
+                $refer->payment_status = 1; // Lunas
+                $refer->save();
+                
+                // update saldo customer
+                if ($refer->toType()) {
+                    $customer = $refer->toType();
+                    $customer->saldo += $gopay_transaction->gopay_gross_amount;
+                    $customer->save();
+                }
+
+                $gopay_transaction->status = 1;
+                $gopay_transaction->gopay_transaction_time = $request->transaction_time;
+                $gopay_transaction->gopay_transaction_status = $request->transaction_status;
+                $gopay_transaction->gopay_status_message = $request->status_message;
+                $gopay_transaction->gopay_status_code = $request->status_code;
+                $gopay_transaction->gopay_fraud_status = $request->fraud_status;
+                $gopay_transaction->save();
+            }
+        }
+
+    }
+
+    /** Topup transaction */
+    public function topupTransaction(Request $request)
+    {
+        return ApiHelper::topupTransaction($request);
     }
 
     /** Transaction fail */
