@@ -37,11 +37,11 @@ class GopayTransaction extends Model
         $refer = $this->refer_type::find($this->refer_type_id);
 
         if (get_class($refer) == get_class(new VendingMachineTransaction)) {
-            return $refer->customer->name;
+            return $refer->customer ? $refer->customer->name : '-';
         }
 
         if (get_class($refer) == get_class(new TransferSaldo)) {
-            return $refer->toType()->name;
+            return $refer->toType() ? $refer->toType()->name : '-';
         }
 
         return '-';
