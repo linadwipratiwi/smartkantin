@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\TransferSaldo;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VendingMachineTransaction;
 
@@ -37,6 +38,10 @@ class GopayTransaction extends Model
 
         if (get_class($refer) == get_class(new VendingMachineTransaction)) {
             return $refer->customer->name;
+        }
+
+        if (get_class($refer) == get_class(new TransferSaldo)) {
+            return $refer->toType()->name;
         }
 
         return '-';
