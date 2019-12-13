@@ -411,7 +411,7 @@ class ApiHelper
           $type = $request->input('type') ? : 'normal'; // normal, mini
           $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
 
-            
+        
           /** Cek slot vending machine */
           $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
           if (!$vending_machine_slot) {
@@ -436,7 +436,7 @@ class ApiHelper
           $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
           $transaction->vending_machine_slot_id = $vending_machine_slot->id;
           $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
-          $transaction->customer_id = 0;
+          $transaction->customer_id = 189;
           $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
           $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
           $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
