@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('clients', 'ApiController@getClient');
     Route::get('firmware/{vending_machine_alias}', 'ApiController@getFirmware');
     Route::post('transaction/fail', 'ApiController@transactionFail');
+    Route::get('transaction/{id}', 'ApiController@transactionDetail');
     Route::post('transaction', 'ApiController@transaction');
     Route::post('customer', 'ApiController@customer');
     Route::get('get-stock/{vending_alias}', 'ApiController@getStock');

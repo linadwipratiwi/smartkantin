@@ -56,6 +56,12 @@ class ApiController extends Controller
         return ApiHelper::transaction($request);
     }
 
+    /** Transaction detail */
+    public function transactionDetail($id)
+    {
+        return VendingMachineTransaction::findOrFail($id);
+    }
+
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {
