@@ -427,7 +427,9 @@ class ApiHelper
                   'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
               ]);
           }
-  
+        
+          $customer= Customer::where('name','anonim')->first();
+
           \DB::beginTransaction();
           $client = $vending_machine_slot->vendingMachine->client;
   
@@ -435,7 +437,7 @@ class ApiHelper
           $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
           $transaction->vending_machine_slot_id = $vending_machine_slot->id;
           $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
-          $transaction->customer_id = 189;
+          $transaction->customer_id = $customer->id;
           $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
           $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
           $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
@@ -619,9 +621,15 @@ class ApiHelper
         );
     
         try {
-            $snap_token = $midtrans->gopayCharge($transaction_data);
-            info($snap_token);
-            return $snap_token;
+            // $snap_token = $midtrans->gopayCharge($transaction_data);
+            // info($snap_token);
+
+            $respon_= $midtrans->gopayCharge($transaction_data);
+            $respon= json_decode($respon_, true);
+            $respon['id']=$transfer_saldo->id;
+
+            return($respon);
+            // return $snap_token;
         } catch (Exception $e) {   
             return $e->getMessage;
         }
