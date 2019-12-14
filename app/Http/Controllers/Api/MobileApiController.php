@@ -33,7 +33,6 @@ class MobileApiController extends Controller
                 'msg' => 'Data not found'
             ]);
         }
-
         $customer->status = 1;
         $customer->msg = '';
         return response()->json(

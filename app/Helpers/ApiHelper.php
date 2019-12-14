@@ -411,7 +411,6 @@ class ApiHelper
           $type = $request->input('type') ? : 'normal'; // normal, mini
           $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
 
-        
           /** Cek slot vending machine */
           $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
           if (!$vending_machine_slot) {
@@ -466,7 +465,12 @@ class ApiHelper
   
               // self::updateStockTransaction($transaction);
               \DB::commit();
-              return self::gopay($transaction->id);
+              
+              $respon_= self::gopay($transaction->id);
+              $respon= json_decode($respon_, true);
+              $respon['id']=$transaction->id;
+
+              return($respon);
   
           } catch (\Throwable $th) {
               info($th);
@@ -531,7 +535,7 @@ class ApiHelper
             'customer_details' => $customer_details
         );
     
-        try {
+        try {   
             $snap_token = $midtrans->gopayCharge($transaction_data);
             info($snap_token);
             return $snap_token;
@@ -545,7 +549,6 @@ class ApiHelper
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $saldo = $request->input('saldo');
-
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
         if (!$customer) {
@@ -554,7 +557,6 @@ class ApiHelper
                 'data' => 'Identity number customer not found'
             ]);
         }
-
         /** generate transfer saldo */
         $transfer_saldo = new TransferSaldo;
         $transfer_saldo->payment_status = 2; // pending
@@ -563,7 +565,6 @@ class ApiHelper
         $transfer_saldo->saldo = $saldo;
         $transfer_saldo->created_by = 1; // system
         $transfer_saldo->save();
-
         /** init gopay transaction id */
         $gopay_transaction = GopayTransaction::init($transfer_saldo, $transfer_saldo->id, $saldo);
         $midtrans = new Midtrans;
