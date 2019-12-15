@@ -70,7 +70,7 @@ class ApiController extends Controller
         }
         return response()->json([
             'status'=>1,
-            'data'=>$transaction->statusTransaction
+            'data'=>$transaction->status_transaction
         ]);
     }
 
