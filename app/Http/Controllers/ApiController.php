@@ -58,6 +58,37 @@ class ApiController extends Controller
 
         return ApiHelper::transaction($request);
     }
+    /** get status transaction */
+    public function statusTransaction($request)
+    {
+        $transaction=VendingMachineTransaction::find($request);
+        if(!$transaction){
+            return response()->json([
+                'status'=>0,
+                'data'=>'no transaction found'
+            ]);    
+        }
+        return response()->json([
+            'status'=>1,
+            'data'=>$transaction->statusTransaction
+        ]);
+    }
+
+      /** get status topup */
+      public function statusTopup($request)
+      {
+          $transaction=TransferSaldo::find($request);
+          if(!$transaction){
+              return response()->json([
+                  'status'=>0,
+                  'data'=>'no transaction found'
+              ]);    
+          }
+          return response()->json([
+              'status'=>1,
+              'data'=>$transaction->payment_status
+          ]);
+      }
 
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
