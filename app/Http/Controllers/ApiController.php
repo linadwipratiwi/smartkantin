@@ -51,22 +51,22 @@ class ApiController extends Controller
     {
         if ($request->payment_type == 'gopay') {
             return ApiHelper::gopayTransaction($request);
-        }
-        elseif($request->payment_type == 'gopayAnonim'){
+        } elseif ($request->payment_type == 'gopayAnonim') {
             return ApiHelper::gopayTransactionAnonim($request);
         }
 
         return ApiHelper::transaction($request);
     }
+
     /** get status transaction */
     public function statusTransaction($request)
     {
         $transaction=VendingMachineTransaction::find($request);
-        if(!$transaction){
+        if (!$transaction) {
             return response()->json([
                 'status'=>0,
                 'data'=>'no transaction found'
-            ]);    
+            ]);
         }
         return response()->json([
             'status'=>1,
@@ -74,21 +74,21 @@ class ApiController extends Controller
         ]);
     }
 
-      /** get status topup */
-      public function statusTopup($request)
-      {
-          $transaction=TransferSaldo::find($request);
-          if(!$transaction){
-              return response()->json([
+    /** get status topup */
+    public function statusTopup($request)
+    {
+        $transaction=TransferSaldo::find($request);
+        if (!$transaction) {
+            return response()->json([
                   'status'=>0,
                   'data'=>'no transaction found'
-              ]);    
-          }
-          return response()->json([
+              ]);
+        }
+        return response()->json([
               'status'=>1,
               'data'=>$transaction->payment_status
           ]);
-      }
+    }
 
     /** Transaction detail */
     public function transactionDetail($id)
@@ -99,9 +99,10 @@ class ApiController extends Controller
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {
-        info($request);
         $gopay_transaction = GopayTransaction::find($request->order_id);
-        if (!$gopay_transaction) return null;
+        if (!$gopay_transaction) {
+            return null;
+        }
 
         $refer = $gopay_transaction->refer_type::find($gopay_transaction->refer_type_id);
         if (get_class($refer) == get_class(new VendingMachineTransaction)) {
@@ -143,7 +144,6 @@ class ApiController extends Controller
                 $gopay_transaction->save();
             }
         }
-
     }
 
     /** Topup transaction */
@@ -233,7 +233,7 @@ class ApiController extends Controller
         return response()->json([
             'status' => 1,
             'data' => $vending ? $vending->slots : []
-        ]); 
+        ]);
     }
 
     /** Get flag transaction */
@@ -243,7 +243,7 @@ class ApiController extends Controller
         return response()->json([
             'status' => 1,
             'code' => $vending ? $vending->flaging_transaction : null
-        ]); 
+        ]);
     }
 
     /**
@@ -265,7 +265,6 @@ class ApiController extends Controller
     /** Get flag semua VM di client */
     public function getFlagTransactionClient($username)
     {
-
         return ApiStandHelper::getFlagClient($username);
     }
 }

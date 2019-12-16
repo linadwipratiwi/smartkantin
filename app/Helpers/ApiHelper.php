@@ -17,7 +17,7 @@ use App\Models\VendingMachineTransaction;
 class ApiHelper
 {
     public function __construct()
-    {   
+    {
         Midtrans::$serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0';
         Midtrans::$isProduction = true;
     }
@@ -43,8 +43,6 @@ class ApiHelper
                 'data' => 'Identity number customer not found'
             ]);
         }
-
-        
 
         /** Cek slot vending machine */
         $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
@@ -114,7 +112,8 @@ class ApiHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->flaging_transaction = Str::random(10);
+        ;
         $vending_machine->save();
 
         
@@ -126,7 +125,6 @@ class ApiHelper
             if ($saldo_pens_akhir < 0) {
                 /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
                 $customer->saldo_pens = 0;
-
                 $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
                 $customer->saldo = $saldo - $biaya_kekurangan;
             } else {
@@ -148,7 +146,6 @@ class ApiHelper
                 'status' => 1,
                 'data' => $transaction
             ]);
-
         } catch (\Throwable $th) {
             if ($type == 'mini') {
                 return '0:Transaction failed';
@@ -159,7 +156,6 @@ class ApiHelper
                 'data' => 'Transaction failed'
             ]);
         }
-
     }
 
     /** Vending Machine Transaction Fail */
@@ -170,7 +166,7 @@ class ApiHelper
 
         \DB::beginTransaction();
         /**
-         * Ketika terjadi gagal 
+         * Ketika terjadi gagal
          * 1. Ubah status vending machine
          * 2. kembalikan stok dengan proses stock opname
          * 3. Update stok di vending mesin
@@ -274,18 +270,6 @@ class ApiHelper
         }
 
         $customer = Customer::where('identity_number', $identity_number)->first();
-        // if ($customer) {
-
-        //     if ($type == 'mini') {
-        //         return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
-        //     }
-
-        //     return json_encode([
-        //         'status' => 1, // return true
-        //         'data' => $customer
-        //     ]);
-        // }
-
         $customer = $customer ? : new Customer;
         $customer->name = $name;
         $customer->identity_type = $identity_type;
@@ -334,8 +318,6 @@ class ApiHelper
             ]);
         }
 
-        
-
         /** Cek slot vending machine */
         $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
         if (!$vending_machine_slot) {
@@ -381,27 +363,20 @@ class ApiHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->flaging_transaction = Str::random(10);
         $vending_machine->save();
 
-        
         try {
             $transaction->save();
-
-            // self::updateStockTransaction($transaction);
             \DB::commit();
             return self::gopay($transaction->id);
-
         } catch (\Throwable $th) {
-            info($th);
-           
             return json_encode([
                 'status' => 0,
                 'data' => 'Transaction failed'
                 
             ]);
         }
-
     }
 
     /** Vending Machine Transaction by Gopay */
@@ -456,14 +431,11 @@ class ApiHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->flaging_transaction = Str::random(10);
         $vending_machine->save();
-
         
         try {
             $transaction->save();
-
-            // self::updateStockTransaction($transaction);
             \DB::commit();
             
             $respon_= self::gopay($transaction->id);
@@ -471,25 +443,21 @@ class ApiHelper
             $respon['id']=$transaction->id;
 
             return($respon);
-
         } catch (\Throwable $th) {
-            info($th);
             return json_encode([
                 'status' => 0,
                 'data' => 'Transaction failed'
             ]);
         }
-
     }
     
     /** Create QR Code Gopay */
-    public static function gopay($id) 
+    public static function gopay($id)
     {
         $transaction = VendingMachineTransaction::findOrFail($id);
         
         /** init gopay transaction id */
         $gopay_transaction = GopayTransaction::init($transaction, $id, $transaction->selling_price_vending_machine);
-
         $customer = $transaction->customer;
         $midtrans = new Midtrans;
 
@@ -508,7 +476,6 @@ class ApiHelper
             )
         ];
 
-
         // Populate customer's Info
         $customer_details = array(
             'first_name'      => $customer->name,
@@ -517,15 +484,11 @@ class ApiHelper
             'phone'           => $customer->phone,
         );
 
-        // Data yang akan dikirim untuk request redirect_url.
         $credit_card['secure'] = true;
-        //ser save_card true to enable oneclick or 2click
-        //$credit_card['save_card'] = true;
-
         $time = time();
         $custom_expiry = array(
-            'start_time' => date("Y-m-d H:i:s O",$time),
-            'unit'       => 'hour', 
+            'start_time' => date("Y-m-d H:i:s O", $time),
+            'unit'       => 'hour',
             'duration'   => 2
         );
         
@@ -536,11 +499,10 @@ class ApiHelper
             'customer_details' => $customer_details
         );
     
-        try {   
+        try {
             $snap_token = $midtrans->gopayCharge($transaction_data);
-            info($snap_token);
             return $snap_token;
-        } catch (Exception $e) {   
+        } catch (Exception $e) {
             return $e->getMessage;
         }
     }
@@ -578,7 +540,6 @@ class ApiHelper
         if ($transfer_saldo->fee_topup_type == 'percent') {
             $transfer_saldo->fee_topup_percent = $client->fee_topup_gopay_percent;
             $total_topup = ($saldo * $client->fee_topup_gopay_percent / 100) + $saldo;
-
         }
 
         $transfer_saldo->total_topup = $total_topup;
@@ -608,7 +569,6 @@ class ApiHelper
             )
         ];
 
-
         // Populate customer's Info
         $customer_details = array(
             'first_name'      => $customer->name,
@@ -617,15 +577,11 @@ class ApiHelper
             'phone'           => $customer->phone,
         );
 
-        // Data yang akan dikirim untuk request redirect_url.
         $credit_card['secure'] = true;
-        //ser save_card true to enable oneclick or 2click
-        //$credit_card['save_card'] = true;
-
         $time = time();
         $custom_expiry = array(
-            'start_time' => date("Y-m-d H:i:s O",$time),
-            'unit'       => 'hour', 
+            'start_time' => date("Y-m-d H:i:s O", $time),
+            'unit'       => 'hour',
             'duration'   => 2
         );
         
@@ -637,32 +593,13 @@ class ApiHelper
         );
     
         try {
-            // $snap_token = $midtrans->gopayCharge($transaction_data);
-            // info($snap_token);
-
             $respon_= $midtrans->gopayCharge($transaction_data);
             $respon= json_decode($respon_, true);
             $respon['id']=$transfer_saldo->id;
 
             return($respon);
-            // return $snap_token;
-        } catch (Exception $e) {   
+        } catch (Exception $e) {
             return $e->getMessage;
         }
-    }
-
-    public function gopayNotification()
-    {
-        $midtrans = new Midtrans;
-        echo 'test notification handler';
-        $json_result = file_get_contents('php://input');
-        $result = json_decode($json_result);
-        info($result);
-
-        // if ($result) {
-        //     $notif = $midtrans->status($result->order_id);
-        // }
-
-        error_log(print_r($result, true));
     }
 }
