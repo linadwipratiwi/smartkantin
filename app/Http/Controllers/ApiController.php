@@ -230,9 +230,24 @@ class ApiController extends Controller
     public function getStock($vending_alias)
     {
         $vending = VendingMachine::where('alias', $vending_alias)->first();
+        if(!$vending){
+            return response()->json([
+                'status' => 0,
+                'data' => "vending machine not found"
+            ]);
+        }
+        $slots=$vending->slots; 
+        $hasil=[];
+        foreach($slots as $slot){
+            $vendingSlot=VendingMachineSlot::find($slot->id);
+            $food= $vendingSlot->food;
+            $slotjson= json_decode($slot, true);
+            $slotjson['photo2']=$food->photo;
+            $hasil[]=$slotjson;
+        }
         return response()->json([
             'status' => 1,
-            'data' => $vending ? $vending->slots : []
+            'data' => $hasil
         ]);
     }
 
