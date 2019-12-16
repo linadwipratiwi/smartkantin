@@ -240,10 +240,12 @@ class ApiController extends Controller
         $hasil=[];
         foreach($slots as $slot){
             $vendingSlot=VendingMachineSlot::find($slot->id);
-            $food= $vendingSlot->food;
-            $slotjson= json_decode($slot, true);
-            $slotjson['photo2']=$food->photo;
-            $hasil[]=$slotjson;
+            if($vendingSlot){
+                $food= $vendingSlot->food;
+                $slotjson= json_decode($slot, true);
+                $slotjson['photo2']=$food->photo;
+                $hasil[]=$slotjson;
+            }
         }
         return response()->json([
             'status' => 1,
