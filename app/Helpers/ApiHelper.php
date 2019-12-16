@@ -427,8 +427,6 @@ class ApiHelper
                 'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
             ]);
         }
-    
-        $customer= Customer::where('name','anonim')->first();
 
         \DB::beginTransaction();
         $client = $vending_machine_slot->vendingMachine->client;
@@ -437,7 +435,7 @@ class ApiHelper
         $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
         $transaction->vending_machine_slot_id = $vending_machine_slot->id;
         $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
-        $transaction->customer_id = $customer->id;
+        $transaction->customer_id = 1;
         $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
         $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
         $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
@@ -452,7 +450,7 @@ class ApiHelper
             $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
         }
 
-        $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+        $transaction->selling_price_vending_machine = ($vending_machine_slot->food->selling_price_vending_machine)+1000;
         $transaction->quantity = 1;
         $transaction->status_transaction = 2; // pending
 
