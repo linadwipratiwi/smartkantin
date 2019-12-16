@@ -25,13 +25,10 @@ class VerifyRole
      */
     public function handle($request, Closure $next, $role, $guard = null)
     {
-
         if (Auth::guard($guard)->check() && Auth::guard($guard)->user()->isRole($role)) {
             return $next($request);
         }
 
         return redirect(url('check-user'));
-        
     }
-
 }
