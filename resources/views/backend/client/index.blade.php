@@ -45,6 +45,8 @@
                                             <th>Alamat</th>
                                             <th>Tipe Share</th>
                                             <th>Value</th>
+                                            <th>Biaya Topup Manual</th>
+                                            <th>Biaya Topup Gopay</th>
                                             <th>Jumlah Vending Machine</th>
                                             <th>Jumlah Stan</th>
                                             <th>Jumlah Customer</th>
@@ -60,7 +62,12 @@
                                             <td>{{$client->phone}}</td>
                                             <td>{{$client->address}}</td>
                                             <td>{{$client->profit_platform_type}}</td>
-                                            <td>{{$client->profit_platform_type == 'value' ? format_quantity($client->profit_platform_value): $client->profit_platform_percent}}</td>
+                                            <td>{{$client->profit_platform_type == 'value' ? format_quantity($client->profit_platform_value): $client->profit_platform_percent. ' %'}}</td>
+                                            <td>{{$client->fee_topup_manual_type}} <br>
+                                                {{$client->fee_topup_manual_type == 'value' ? format_quantity($client->fee_topup_manual_value): $client->fee_topup_manual_percent. ' %'}}</td>
+                                            <td>{{$client->fee_topup_gopay_type}} <br>
+                                                {{$client->fee_topup_gopay_type == 'value' ? format_quantity($client->fee_topup_gopay_value): $client->fee_topup_gopay_percent. ' %'}}</td>
+
                                             <td>{{$client->vendingMachines->count()}} unit</td>
                                             <td>{{$client->stands->count()}} stand</td>
                                             <td>{{$client->customers->count()}} orang</td>
