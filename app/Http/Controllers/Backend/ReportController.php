@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\VendingMachineTransaction;
 use App\Helpers\DateHelper;
 use Illuminate\Http\Request;
+use App\Models\GopayTransaction;
 use App\Http\Controllers\Controller;
+use App\Models\VendingMachineTransaction;
 
 class ReportController extends Controller
 {
+    public function gopayTransaction()
+    {
+        $view = view('backend.report.gopay-transaction');
+        $view->list_transaction =  GopayTransaction::orderBy('created_at', 'desc')->paginate(50);
+        return $view;
+    }
+
     public function transaction()
     {
         $view = view('backend.transaction.transaction');

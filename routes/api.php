@@ -27,16 +27,26 @@ Route::group(['prefix' => 'v1'], function () {
     
   });
 });
+
+/** API vending machine */
+Route::post('gopay/notification', 'ApiController@gopayRespon'); /** gopay respon */
+Route::group(['prefix' => 'v1'], function () {
+  Route::group(['prefix' => 'vending-machine'], function () {
+    Route::post('topup', 'ApiController@topupTransaction');
+    Route::post('slot', 'ApiController@findSlot');
+    Route::get('customer/{id}', 'ApiController@findCustomer');
+    Route::get('clients', 'ApiController@getClient');
+    Route::get('firmware/{vending_machine_alias}', 'ApiController@getFirmware');
+    Route::post('transaction/fail', 'ApiController@transactionFail');
+    Route::get('transaction/{id}', 'ApiController@transactionDetail');
+    Route::post('transaction', 'ApiController@transaction');
+    Route::post('customer', 'ApiController@customer');
+    Route::get('get-stock/{vending_alias}', 'ApiController@getStock');
+    Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransaction');      
+  });
+});
 // API
-Route::post('slot', 'ApiController@findSlot');
-Route::get('customer/{id}', 'ApiController@findCustomer');
-Route::get('clients', 'ApiController@getClient');
-Route::get('firmware/{vending_machine_alias}', 'ApiController@getFirmware');
-Route::post('transaction/fail', 'ApiController@transactionFail');
-Route::post('transaction', 'ApiController@transaction');
-Route::post('customer', 'ApiController@customer');
-Route::get('get-stock/{vending_alias}', 'ApiController@getStock');
-Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransaction');
+
 
 /** API stand */
 Route::get('get-all-stock/{username}', 'ApiController@getStockAllVending');
