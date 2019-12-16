@@ -8,12 +8,24 @@
             <form id="form-topup">
                 {!! csrf_field() !!}
                 <input type="hidden" id="customer_id" name="customer_id" value="{{$customer->id}}">
-                
+                <input type="text" name="topup_type" id="topup_type" value="manual">
+                <input type="text" name="fee_topup_type" id="fee_topup_type" value="{{client()->fee_topup_manual_type}}">
+                <input type="text" name="fee_topup_percent" id="fee_topup_percent" value="{{client()->fee_topup_manual_percent}}">
+                <input type="text" name="fee_topup_value" id="fee_topup_value" value="{{client()->fee_topup_manual_value}}">
+
                 <div class="form-group mt-20" id="">
                     <label class="control-label mb-10">Nominal yang akan di topup</label>
                     <div class="input-group"> 
                         <span class="input-group-addon" id="lb-type">Rp.</span>
-                        <input type="text" id="saldo" name="saldo" class="form-control format-price" placeholder="">
+                        <input type="text" id="saldo" name="saldo" onkeyup="calculate()" class="form-control format-price" placeholder="">
+                    </div>
+                    <p class="txt-danger">Biaya Admin: {{client()->fee_topup_manual_type == 'value' ? 'Rp. '.format_quantity(client()->fee_topup_manual_value) : format_quantity(client()->fee_topup_manual_percent). ' % dari jumlah topup'}} </p>
+                </div>
+                <div class="form-group mt-20" id="">
+                    <label class="control-label mb-10">Total Topup + Biaya Admin</label>
+                    <div class="input-group"> 
+                        <span class="input-group-addon" id="lb-biaya-admin">Rp.</span>
+                        <input type="text" id="total_topup" name="total_topup" readonly value="0" class="form-control format-price" placeholder="">
                     </div>
                 </div>
             </form>
@@ -30,6 +42,24 @@
 <script>
     // init format number    
     initFormatNumber();
+
+    function calculate() {
+        var type = '{{client()->fee_topup_manual_type}}';
+        var saldo = $('#saldo').val();
+        if (type == 'value') {
+            var fee = {{client()->fee_topup_manual_value}};
+
+            var total_topup = dbNum(saldo) + fee;
+            $('#total_topup').val(total_topup);
+        }
+
+        if (type == 'percent') {
+            var fee = {{client()->fee_topup_manual_percent}};
+
+            var total_topup = (dbNum(saldo) * fee / 100) + dbNum(saldo);
+            $('#total_topup').val(total_topup);
+        }
+    }
 
     function store() {
         var data = $( '#form-topup' ).serialize();

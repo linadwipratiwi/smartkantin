@@ -9,14 +9,14 @@ class Midtrans {
     * Your merchant's server key
     * @static
     */
-  // public static $serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0'; // Production
-  public static $serverKey = 'SB-Mid-server-aEwxEFGxMyGKhy5e3EdySMBl';
+  public static $serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0'; // Production
+  // public static $serverKey = 'SB-Mid-server-aEwxEFGxMyGKhy5e3EdySMBl';
   /**
     * true for production
     * false for sandbox mode
     * @static
     */
-  public static $isProduction = false;
+  public static $isProduction = true;
 
     /**
     * Default options for every request
@@ -78,7 +78,6 @@ class Midtrans {
    */
   public static function post($url, $server_key, $data_hash)
   {
-      info($server_key);
       return self::remoteCall($url, $server_key, $data_hash, true);
   }
 
@@ -170,11 +169,7 @@ class Midtrans {
         Midtrans::$serverKey,
         $params);
 
-    // $json = json_encode($result, true);
-    return $result->actions;
-    if ($result->status_code == 201) {
-      return $result;
-    }
+    return json_encode($result, true);
   }
 
 }

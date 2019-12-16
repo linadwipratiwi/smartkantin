@@ -29,6 +29,9 @@
                                 <th class="text-center">No</th>
                                 <th>Tanggal</th>
                                 <th class="text-right">Jumlah Topup</th>
+                                <th class="text-right">Jenis Topup</th>
+                                <th class="text-right">Biaya Admin</th>
+                                <th class="text-right">Total</th>
                                 <th>Topup oleh</th>
                             </tr>
                             </thead>
@@ -37,7 +40,12 @@
                                 <td class="text-center">{{++$i}}</td>
                                 <td>{{date_format_view($topup->created_at)}}</td>
                                 <td class="text-right">{{format_price($topup->saldo)}}</td>
-                                <td>{{$topup->createdBy->name}}</td>
+                                <td>{{$topup->topup_type}}</td>
+                                <td>
+                                    {{$topup->fee_topup_type == 'value' ? 'Rp. ' . format_quantity($topup->fee_topup_value): $topup->fee_topup_percent. ' %'}}
+                                </td>
+                                <td class="text-right">{{format_price($topup->total_topup)}}</td>
+                                <td>{{$topup->createdBy ? $topup->createdBy->name : 'SYSTEM'}}</td>
                             </tr>
                             @endforeach
                         </table>
