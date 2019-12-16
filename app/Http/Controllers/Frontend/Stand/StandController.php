@@ -90,5 +90,4 @@ class StandController extends Controller
         toaster_success('upload success');
         return 1;
     }
-        
 }

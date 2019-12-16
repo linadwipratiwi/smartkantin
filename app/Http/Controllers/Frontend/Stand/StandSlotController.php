@@ -14,7 +14,6 @@ use App\Http\Controllers\Controller;
 
 class StandSlotController extends Controller
 {
-    
     public function index($vending_machine_id)
     {
         $view = view('frontend.stand.slot._index');
@@ -44,7 +43,8 @@ class StandSlotController extends Controller
         $stock_mutation ? $stock_mutation->delete() : '';
 
         $vending_machine = $product->vendingMachine;
-        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->flaging_transaction = str_random(10);
+        ;
         $vending_machine->save();
 
         $delete = AdminHelper::delete($product);
@@ -69,7 +69,8 @@ class StandSlotController extends Controller
         FrontHelper::creteStockFromCreateProduct($product);
 
         $vending_machine = $product->vendingMachine;
-        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->flaging_transaction = str_random(10);
+        ;
         $vending_machine->save();
 
         return 1;

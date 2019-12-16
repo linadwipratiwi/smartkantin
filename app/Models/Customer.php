@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    protected $table = 'customers';   
+    protected $table = 'customers';
     public $timestamps = true;
 
     public function client()
@@ -33,7 +33,7 @@ class Customer extends Model
     public function scopeSearch($q)
     {
         $search = \Input::get('search');
-        $q->where(function($query) use ($search) {
+        $q->where(function ($query) use ($search) {
             if ($search) {
                 $query->where('name', 'like', '%'.$search.'%')
                     ->orWhere('card_number', 'like', '%'.$search.'%');
@@ -43,7 +43,9 @@ class Customer extends Model
 
     public function createRandomUser()
     {
-        if ($this->user) return;
+        if ($this->user) {
+            return;
+        }
         $this->default_password = $this->id.str_random(10);
         $this->save();
 

@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $table = 'settings';   
+    protected $table = 'settings';
     public $timestamps = false;
 
     public static function getValue($key)
     {
         $setting = Setting::where('key', $key)->first();
-        if ($setting) return $setting->value;
+        if ($setting) {
+            return $setting->value;
+        }
         return null;
     }
 }

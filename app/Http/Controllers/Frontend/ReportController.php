@@ -26,11 +26,12 @@ class ReportController extends Controller
         $view = view('frontend.report.topup');
 
         $view->list_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->get();
-        $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');;
-        return $view; 
+        $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');
+        ;
+        return $view;
     }
 
-    public function download(Request $request) 
+    public function download(Request $request)
     {
         $employess = Employee::all();
         $content = array(array('NAMA',  'NIP', 'KARTU', 'TGL. LAHIR', 'ALAMAT', 'TELEPON', 'EMAIL', 'POSISI/JABATAN', 'BAGIAN', 'BIDANG'));

@@ -115,7 +115,6 @@ class PosController extends Controller
         $search['total_item'] = $total_item;
         $search['total_price'] = format_price($total_price);
         return $search;
-
     }
 
     /** cart */
@@ -231,7 +230,8 @@ class PosController extends Controller
 
             /** Update flaging transaksi. Digunakan untuk Smansa */
             $vending_machine = $transaction->vendingMachine;
-            $vending_machine->flaging_transaction = Str::random(10);;
+            $vending_machine->flaging_transaction = Str::random(10);
+            ;
             $vending_machine->save();
         }
 
@@ -258,7 +258,7 @@ class PosController extends Controller
         $status = \Input::get('status');
         $view = view('frontend.c.pos.history-transaction');
         $view->list_transaction = VendingMachineTransaction::where('customer_id', customer()->id)
-            ->where(function($q) use ($status) {
+            ->where(function ($q) use ($status) {
                 if ($status) {
                     $q->where('status_transaction', $status);
                 }
@@ -269,5 +269,4 @@ class PosController extends Controller
             ->get();
         return $view;
     }
-
 }

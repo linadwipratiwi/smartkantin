@@ -6,6 +6,6 @@ class PosHelper
 {
     public static function getTempKey()
     {
-      return 'customer.basket.'.customer()->id;
+        return 'customer.basket.'.customer()->id;
     }
 }

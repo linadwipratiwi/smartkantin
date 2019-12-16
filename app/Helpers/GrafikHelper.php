@@ -14,8 +14,6 @@ class GrafikHelper
      */
     public static function grafikTransaction($year, $month)
     {
-        
-
         $array = [];
         $total_transaction = 0;
         $total_transaction_failed = 0;
@@ -96,7 +94,6 @@ class GrafikHelper
             'total_transaction_failed' => $total_transaction_failed,
             'total_transaction_success' => $total_transaction_success,
         ];
-
     }
 
     /**
@@ -120,6 +117,5 @@ class GrafikHelper
             'rasio_yang_tidak_mengajukan' => $rasio_yang_tidak_mengajukan,
             'total' => $total,
         ];
-
     }
 }

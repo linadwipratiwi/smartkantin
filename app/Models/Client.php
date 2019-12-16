@@ -7,7 +7,7 @@ use App\Models\VendingMachineTransaction;
 
 class Client extends Model
 {
-    protected $table = 'clients';   
+    protected $table = 'clients';
     public $timestamps = true;
 
     public function user()
@@ -39,10 +39,14 @@ class Client extends Model
     public function profitShare()
     {
         $vending_machine = $this->vendingMachines->first();
-        if (!$vending_machine) return null;
+        if (!$vending_machine) {
+            return null;
+        }
 
         $slot = $vending_machine->slots->first();
-        if (!$slot) return null;
+        if (!$slot) {
+            return null;
+        }
 
         return $slot->profitPlatform();
     }
@@ -59,7 +63,7 @@ class Client extends Model
     public function totalTransaction($status=3)
     {
         return VendingMachineTransaction::search()->where('client_id', $this->id)
-            ->where(function($q) use ($status) {
+            ->where(function ($q) use ($status) {
                 if ($status != 3) {
                     $q->where('status_transaction', $status);
                 }

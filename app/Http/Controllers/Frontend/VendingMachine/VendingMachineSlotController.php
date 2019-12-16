@@ -61,7 +61,8 @@ class VendingMachineSlotController extends Controller
         $product->save();
 
         $vending_machine = $product->vendingMachine;
-        $vending_machine->flaging_transaction = str_random(10);;
+        $vending_machine->flaging_transaction = str_random(10);
+        ;
         $vending_machine->save();
 
         return 1;

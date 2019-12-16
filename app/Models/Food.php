@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Food extends Model
 {
-    protected $table = 'foods';   
+    protected $table = 'foods';
     public $timestamps = true;
 
     public function client()

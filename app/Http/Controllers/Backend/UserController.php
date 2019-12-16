@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $view = view('backend.user.create');
         $view->roles =  Role::all();
-        $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu' )
+        $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu')
             ->select('users.*')
             ->groupBy('type')
             ->orderBy('type')
@@ -46,9 +46,9 @@ class UserController extends Controller
             $user->photo = FileHelper::upload($file, 'uploads/users/');
         }
         
-        try{
+        try {
             $user->save();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -75,7 +75,7 @@ class UserController extends Controller
         $view = view('backend.user.edit');
         $view->user = User::findOrFail($id);
         $view->roles =  Role::all();
-        $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu' )
+        $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu')
             ->groupBy('type')
             ->orderBy('type')
             ->get();
@@ -96,10 +96,10 @@ class UserController extends Controller
 
         if ($request->password) {
             $user->password = bcrypt($request->password);
-        } 
-        try{
+        }
+        try {
             $user->save();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -137,8 +137,8 @@ class UserController extends Controller
         $view = view('backend.user.permission');
         $view->user =  User::findOrFail($user_id);
         $view->role =  Role::findOrFail($role_id);
-        $view->permissions = $role_id == 1 ? 
-            $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu' )
+        $view->permissions = $role_id == 1 ?
+            $view->permissions =  Permission::where('permissions.action', '!=', 'Access Menu')
                 ->groupBy('type')
                 ->orderBy('type')
                 ->get()
@@ -181,15 +181,14 @@ class UserController extends Controller
 
         if ($request->password) {
             $user->password = bcrypt($request->password);
-        } 
-        try{
+        }
+        try {
             $user->save();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
         toaster_success('update form success');
         return redirect('profile');
-
     }
 }

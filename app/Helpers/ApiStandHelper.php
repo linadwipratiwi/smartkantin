@@ -16,7 +16,7 @@ use App\Models\VendingMachineTransaction;
 
 class ApiStandHelper
 {
-    /** 
+    /**
      * Digunakan untuk mengambil stock di semua vending yang ada di client
      */
     public static function getStockAllVending($username)
@@ -47,7 +47,7 @@ class ApiStandHelper
         ]);
     }
 
-    /** 
+    /**
      * Digunakan untuk mengambil flag di semua vending yang ada di client
      */
     public static function getFlagClient($username)
@@ -149,7 +149,8 @@ class ApiStandHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->flaging_transaction = Str::random(10);
+        ;
         $vending_machine->save();
 
         try {
@@ -166,7 +167,6 @@ class ApiStandHelper
                 'status' => 1,
                 'data' => $transaction
             ]);
-
         } catch (\Throwable $th) {
             if ($type == 'mini') {
                 return '0:Transaction failed';
@@ -177,10 +177,9 @@ class ApiStandHelper
                 'data' => 'Transaction failed'
             ]);
         }
-
     }
 
-    /** 
+    /**
      * Update stock setelah transaksi
      */
     public static function updateStockTransaction($transaction)
@@ -202,5 +201,4 @@ class ApiStandHelper
         $vending_machine_slot->stock = $vending_machine_slot->stock - $transaction->quantity; // stok di vending machine dikurang quantity
         $vending_machine_slot->save();
     }
-
 }

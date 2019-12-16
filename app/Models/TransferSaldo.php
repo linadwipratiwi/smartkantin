@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TransferSaldo extends Model
 {
-    protected $table = 'transfer_saldo';   
+    protected $table = 'transfer_saldo';
     public $timestamps = true;
 
     public function scopeFromClient($q, $to_type_id="")
@@ -41,7 +41,9 @@ class TransferSaldo extends Model
     public function toType()
     {
         $model = $this->to_type::find($this->to_type_id);
-        if (!$model) return null;
+        if (!$model) {
+            return null;
+        }
 
         return $model;
     }
@@ -75,7 +77,6 @@ class TransferSaldo extends Model
             $date_end = DateHelper::formatDB(trim($date[1]), 'end');
 
             $q->whereBetween('created_at', [$date_start, $date_end]);
-            
         }
 
         return $q;

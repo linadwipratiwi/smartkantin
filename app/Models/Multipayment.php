@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Multipayment extends Model
 {
-    protected $table = 'multipayments';   
+    protected $table = 'multipayments';
     public $timestamps = true;
 
     public function customer()

@@ -8,7 +8,7 @@ use App\Helpers\DateHelper;
 
 class VendingMachineTransaction extends Model
 {
-    protected $table = 'vending_machine_transactions';   
+    protected $table = 'vending_machine_transactions';
     public $timestamps = true;
 
     public function vendingMachine()
@@ -75,7 +75,6 @@ class VendingMachineTransaction extends Model
             $date_end = DateHelper::formatDB(trim($date[1]), 'end');
 
             $q->whereBetween('created_at', [$date_start, $date_end]);
-            
         }
 
         return $q;
@@ -84,17 +83,23 @@ class VendingMachineTransaction extends Model
     public function status($type=null)
     {
         if ($this->status_transaction == 1) {
-            if ($type == 'excel') return 'Success';
+            if ($type == 'excel') {
+                return 'Success';
+            }
             return '<span class="label label-success capitalize-font inline-block ml-10">Success</span>';
         }
 
         if ($this->status_transaction == 0) {
-            if ($type == 'excel') return 'Failed';
+            if ($type == 'excel') {
+                return 'Failed';
+            }
             return '<span class="label label-info capitalize-font inline-block ml-10">Failed</span>';
         }
 
         if ($this->status_transaction == 2) {
-            if ($type == 'excel') return 'Payment Pending';
+            if ($type == 'excel') {
+                return 'Payment Pending';
+            }
             return '<span class="label label-warning capitalize-font inline-block ml-10">Payment Pending</span>';
         }
     }
@@ -104,6 +109,5 @@ class VendingMachineTransaction extends Model
     {
         # format : TAHUN/BULAN/KODE Pelanggan/JAM:DETIK
         return 'POS-'.date('Y').'-'.date('m').'-'.customer()->id.'-'.date('his');
-
     }
 }

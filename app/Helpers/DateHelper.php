@@ -28,7 +28,7 @@ class DateHelper
             $array = explode('/', $date);
         } elseif ($date_input == 'm/d/Y') {
             $array = explode('/', $date);
-        } 
+        }
         $date = $array[2] . '-' . $array[0] . '-' . $array[1];
         // return database format
         if ($hour == 'start') {
@@ -136,17 +136,17 @@ class DateHelper
     public static function getAllMonths()
     {
         return [
-            '01' => 'Januari',  
-            '02' => 'Pebruari',  
-            '03' => 'Maret',  
-            '04' => 'April',  
-            '05' => 'Mei',  
-            '06' => 'Juni',  
-            '07' => 'Juli',  
+            '01' => 'Januari',
+            '02' => 'Pebruari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
             '08' => 'Agustus',
-            '09' => 'September',  
-            '10' => 'Oktober',  
-            '11' => 'Nopember',  
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'Nopember',
             '12' => 'Desember'
         ];
     }

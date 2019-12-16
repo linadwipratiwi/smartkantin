@@ -18,25 +18,33 @@ class ApprovalHelper extends Facade
     public static function checkStatus($code, $from=null)
     {
         if ($code == 0) {
-            if ($from == 'excel') return 'Belum mengajukan';
+            if ($from == 'excel') {
+                return 'Belum mengajukan';
+            }
 
             return '<span class="label label-default">Belum mengajukan</span>';
         }
 
         if ($code == 1) {
-            if ($from == 'excel') return 'Menunggu';
+            if ($from == 'excel') {
+                return 'Menunggu';
+            }
 
             return '<span class="label label-warning">Menunggu</span>';
         }
 
         if ($code == 2) {
-            if ($from == 'excel') return 'Sudah disetujui';
+            if ($from == 'excel') {
+                return 'Sudah disetujui';
+            }
 
             return '<span class="label label-info">Sudah disetujui</span>';
         }
 
         if ($code == 3) {
-            if ($from == 'excel') return 'Ditolak';
+            if ($from == 'excel') {
+                return 'Ditolak';
+            }
 
             return '<span class="label label-danger">Ditolak</span>';
         }

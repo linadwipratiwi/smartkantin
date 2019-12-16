@@ -24,7 +24,7 @@ class AdminHelper
 {
     public static function delete($model)
     {
-        try{
+        try {
             $model->delete();
             return true;
         } catch (\Exception $e) {
@@ -44,7 +44,7 @@ class AdminHelper
             $firmware->link = FileHelper::upload($file, 'uploads/firmware/');
         }
         
-        try{
+        try {
             $firmware->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
@@ -108,7 +108,7 @@ class AdminHelper
             $client->user_id = $user->id;
         }
 
-        try{
+        try {
             $client->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
@@ -126,9 +126,9 @@ class AdminHelper
         $user->name = $request->name;
         $user->password = bcrypt($request->password);
         $user->username = $request->username;
-        try{
+        try {
             $user->save();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -152,7 +152,7 @@ class AdminHelper
         //     $customer->saldo = format_db($saldo);
         // }
         
-        try{
+        try {
             $customer->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
@@ -178,7 +178,7 @@ class AdminHelper
 
         try {
             $vending_machine->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -205,7 +205,6 @@ class AdminHelper
         }
 
         return $vending_machine;
-
     }
 
     public static function createVendingMachineSlot($request)
@@ -222,7 +221,7 @@ class AdminHelper
         
         try {
             $vending_machine->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
         }
@@ -253,7 +252,7 @@ class AdminHelper
 
         try {
             $vending_machine->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
         }
@@ -280,11 +279,12 @@ class AdminHelper
         $vending_machine->selling_price_vending_machine = format_db($request->input('selling_price_vending_machine'));
         $vending_machine->expired_date = Carbon::createFromFormat('m/d/Y g:i A', $request->input('expired_date'));
         if ($file) {
-            $vending_machine->photo = FileHelper::upload($file, 'uploads/product/');;
+            $vending_machine->photo = FileHelper::upload($file, 'uploads/product/');
+            ;
         }
         try {
             $vending_machine->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
         }
@@ -315,7 +315,7 @@ class AdminHelper
         
         try {
             $stock_mutation->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
         }
@@ -351,7 +351,7 @@ class AdminHelper
 
         try {
             $transfer_saldo->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -380,7 +380,7 @@ class AdminHelper
 
         try {
             $stand->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 
@@ -415,11 +415,12 @@ class AdminHelper
         $food->selling_price_vending_machine = $food->selling_price_client + $profit_vm;
 
         if ($file) {
-            $food->photo = FileHelper::upload($file, 'uploads/food/');;
+            $food->photo = FileHelper::upload($file, 'uploads/food/');
+            ;
         }
         try {
             $food->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);
         }
 

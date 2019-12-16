@@ -73,7 +73,7 @@ class CustomerController extends Controller
         return redirect('front/customer');
     }
 
-    public function download(Request $request) 
+    public function download(Request $request)
     {
         $list_customer = Customer::clientId(client()->id)->orderBy('created_at', 'desc')->get();
         $content = array(array('NAMA', 'JENIS IDENTITAS', 'NOMOR IDENTITAS', 'REGISTER DI VENDING MACHINE', 'TANGGAL DAFTAR'));
@@ -86,37 +86,37 @@ class CustomerController extends Controller
         ExcelHelper::excel($file_name, $content, $header);
     }
 
-     /** List Saldo */
-     public function _topupIndex($id) 
-     {
-         $view = view('frontend.customer.topup._index');
-         $view->customer = Customer::findOrFail($id);
-         $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $id)->orderBy('created_at', 'desc')->paginate(10);
-         return $view;
-     }
+    /** List Saldo */
+    public function _topupIndex($id)
+    {
+        $view = view('frontend.customer.topup._index');
+        $view->customer = Customer::findOrFail($id);
+        $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $id)->orderBy('created_at', 'desc')->paginate(10);
+        return $view;
+    }
  
-     /** Create topup */
-     public function _topupCreate($id)
-     {
-         $view = view('frontend.customer.topup._create');
-         $view->customer = Customer::findOrFail($id);
+    /** Create topup */
+    public function _topupCreate($id)
+    {
+        $view = view('frontend.customer.topup._create');
+        $view->customer = Customer::findOrFail($id);
  
-         return $view;
-     }
+        return $view;
+    }
  
-     /** Store topup */
-     public function _topupStore(Request $request)
-     {
-         $topup = AdminHelper::createTopupCustomer($request);
-         $view = view('frontend.customer.topup._index');
-         $view->customer = Customer::findOrFail($topup->to_type_id);
-         $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $topup->to_type_id)->orderBy('created_at', 'desc')->paginate(10);
+    /** Store topup */
+    public function _topupStore(Request $request)
+    {
+        $topup = AdminHelper::createTopupCustomer($request);
+        $view = view('frontend.customer.topup._index');
+        $view->customer = Customer::findOrFail($topup->to_type_id);
+        $view->list_topup = TransferSaldo::where('to_type', get_class(new Customer))->where('to_type_id', $topup->to_type_id)->orderBy('created_at', 'desc')->paginate(10);
  
-         return $view;
+        return $view;
     }
 
     /** Export Topup ke Customer */
-    public function export($id) 
+    public function export($id)
     {
         $customer = Customer::findOrFail($id);
         $list_topup = TransferSaldo::fromClient(client()->id)->toCustomer($id)->orderBy('created_at', 'desc')->get();
@@ -137,7 +137,7 @@ class CustomerController extends Controller
     {
         $view = view('frontend.customer.import');
         $view->list_data_import = TempDataHelper::get('customer.import', auth()->user()->id);
-        return $view;   
+        return $view;
     }
 
     /** Download template import excel */
@@ -186,7 +186,7 @@ class CustomerController extends Controller
     }
 
     public function storeImportDatabase()
-    {   
+    {
         $list_data_import = TempDataHelper::get('customer.import', auth()->user()->id);
         foreach ($list_data_import as $key => $import) {
             $customer = Customer::where('identity_type', strtoupper($import['jenis_identitas_ktpsim']))->where('identity_number', $import['nomer_identitas'])->first();
@@ -206,10 +206,9 @@ class CustomerController extends Controller
 
         toaster_success('unggahan Anda telah berhasil disimpan didatabase');
         return redirect()->back();
-
     }
 
-    public function _historyTransaction($id) 
+    public function _historyTransaction($id)
     {
         $view = view('frontend.customer.history-transaction');
         $view->customer = Customer::findOrFail($id);

@@ -7,7 +7,7 @@ use App\Models\VendingMachineTransaction;
 
 class VendingMachine extends Model
 {
-    protected $table = 'vending_machines';   
+    protected $table = 'vending_machines';
     public $timestamps = true;
 
     public function client()

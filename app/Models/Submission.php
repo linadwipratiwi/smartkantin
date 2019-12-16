@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Submission extends Model
 {
-    protected $table = 'submissions';   
+    protected $table = 'submissions';
     public $timestamps = true;
 
     public function createdBy()
@@ -30,7 +30,9 @@ class Submission extends Model
     {
         $category = \Input::get('category');
         $submission = Submission::where(function ($q) use ($category) {
-            if ($category) $q->where('category_id', $category);
+            if ($category) {
+                $q->where('category_id', $category);
+            }
         })
         ->orderBy('created_at', 'desc');
 

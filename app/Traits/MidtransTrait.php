@@ -11,12 +11,12 @@ use App\Models\VendingMachineTransaction;
 trait MidtransTrait
 {
     public function __construct()
-    {   
+    {
         Midtrans::$serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0';
         Midtrans::$isProduction = true;
     }
 
-    public function gopay($id) 
+    public function gopay($id)
     {
         $transaction = VendingMachineTransaction::findOrFail($id);
         $customer = $transaction->customer;
@@ -54,8 +54,8 @@ trait MidtransTrait
 
         $time = time();
         $custom_expiry = array(
-            'start_time' => date("Y-m-d H:i:s O",$time),
-            'unit'       => 'hour', 
+            'start_time' => date("Y-m-d H:i:s O", $time),
+            'unit'       => 'hour',
             'duration'   => 2
         );
         
@@ -66,14 +66,11 @@ trait MidtransTrait
             'customer_details'   => $customer_details
         );
     
-        try
-        {
+        try {
             $snap_token = $midtrans->gopayCharge($transaction_data);
             //return redirect($vtweb_url);
             echo $snap_token;
-        } 
-        catch (Exception $e) 
-        {   
+        } catch (Exception $e) {
             return $e->getMessage;
         }
     }
@@ -96,11 +93,11 @@ trait MidtransTrait
         $result = json_decode($json_result);
         info($result);
 
-        if($result){
+        if ($result) {
             $notif = $midtrans->status($result->order_id);
         }
 
-        error_log(print_r($result,TRUE));
+        error_log(print_r($result, true));
 
         /*
         $transaction = $notif->transaction_status;
@@ -115,7 +112,7 @@ trait MidtransTrait
               // TODO set payment status in merchant's database to 'Challenge by FDS'
               // TODO merchant should decide whether this transaction is authorized or not in MAP
               echo "Transaction order_id: " . $order_id ." is challenged by FDS";
-              } 
+              }
               else {
               // TODO set payment status in merchant's database to 'Success'
               echo "Transaction order_id: " . $order_id ." successfully captured using " . $type;
@@ -125,15 +122,14 @@ trait MidtransTrait
         else if ($transaction == 'settlement'){
           // TODO set payment status in merchant's database to 'Settlement'
           echo "Transaction order_id: " . $order_id ." successfully transfered using " . $type;
-          } 
+          }
           else if($transaction == 'pending'){
           // TODO set payment status in merchant's database to 'Pending'
           echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
-          } 
+          }
           else if ($transaction == 'deny') {
           // TODO set payment status in merchant's database to 'Denied'
           echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
         }*/
-   
     }
-}    
+}

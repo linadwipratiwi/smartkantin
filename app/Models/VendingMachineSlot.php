@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class VendingMachineSlot extends Model
 {
-    protected $table = 'vending_machine_slots';   
+    protected $table = 'vending_machine_slots';
     public $timestamps = false;
 
     public function vendingMachine()
@@ -49,7 +49,6 @@ class VendingMachineSlot extends Model
         }
 
         return '<span class="label label-info capitalize-font inline-block ml-10">'.format_quantity($client->profit_platform_percent).' %</span>';
-
     }
 
     public function convertToAsci()

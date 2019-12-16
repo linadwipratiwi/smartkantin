@@ -8,7 +8,7 @@ use App\Models\VendingMachineTransaction;
 
 class GopayTransaction extends Model
 {
-    protected $table = 'gopay_transactions';   
+    protected $table = 'gopay_transactions';
     public $timestamps = true;
 
     public static function init($class, $refer_id, $gross_amount)

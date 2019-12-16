@@ -74,7 +74,7 @@ class StockMutationController extends Controller
         return redirect('vending-machine');
     }
 
-    public function export(Request $request, $vending_machine_id) 
+    public function export(Request $request, $vending_machine_id)
     {
         $vending_machine = VendingMachine::findOrFail($vending_machine_id);
         $list_stock = StockMutation::where('vending_machine_id', $vending_machine_id)->orderBy('created_at', 'desc')->get();

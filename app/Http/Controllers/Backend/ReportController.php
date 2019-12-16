@@ -26,7 +26,7 @@ class ReportController extends Controller
         return $view;
     }
 
-    public function download(Request $request) 
+    public function download(Request $request)
     {
         $employess = Employee::all();
         $content = array(array('NAMA',  'NIP', 'KARTU', 'TGL. LAHIR', 'ALAMAT', 'TELEPON', 'EMAIL', 'POSISI/JABATAN', 'BAGIAN', 'BIDANG'));

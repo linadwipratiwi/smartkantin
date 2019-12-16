@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 
 class StandSlotController extends Controller
 {
-    
     public function index($vending_machine_id)
     {
         $view = view('backend.stand.slot._index');

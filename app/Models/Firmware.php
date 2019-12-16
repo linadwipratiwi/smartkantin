@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Firmware extends Model
 {
-    protected $table = 'firmwares';   
+    protected $table = 'firmwares';
     public $timestamps = true;
 
     public function scopeFirmware($q)

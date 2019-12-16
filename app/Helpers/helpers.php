@@ -9,9 +9,8 @@ use App\Helpers\NumberHelper;
 use App\Helpers\ToasterHelper;
 use App\Helpers\ApprovalHelper;
 
-
 /**
- * Access Helper 
+ * Access Helper
  */
 if (! function_exists('access_is_allowed')) {
     function access_is_allowed($permission_slug)
@@ -180,7 +179,7 @@ if (! function_exists('open_camera')) {
     /**
      * Setting
      */
-     if (! function_exists('setting')) {
+    if (! function_exists('setting')) {
         /**
          * @param $key
          * @return string
@@ -241,7 +240,7 @@ if (! function_exists('date_format_view')) {
      * @param $time boolean
      * @return string
      */
-    function date_format_view($date, $time = TRUE)
+    function date_format_view($date, $time = true)
     {
         return DateHelper::formatView($date, $time);
     }
@@ -269,5 +268,3 @@ if (! function_exists('customer')) {
         return Customer::where('user_id', auth()->user()->id)->first();
     }
 }
-
-

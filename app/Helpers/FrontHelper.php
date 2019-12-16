@@ -28,12 +28,14 @@ class FrontHelper
         $food_id = $request->food_id;
 
         DB::beginTransaction();
-        for ($i=0; $i < count($food_id); $i++) { 
+        for ($i=0; $i < count($food_id); $i++) {
             $food = Food::findOrFail($food_id[$i]);
             $cek = VendingMachineSlot::where('vending_machine_id', $request->input('vending_machine_id'))
                 ->where('food_id', $food_id[$i])
                 ->first();
-            if ($cek) continue;
+            if ($cek) {
+                continue;
+            }
             $product = new VendingMachineSlot;
             $product->vending_machine_id = $request->input('vending_machine_id');
             $product->name = $food->name;
@@ -64,7 +66,6 @@ class FrontHelper
 
         DB::commit();
         return $product;
-
     }
 
     public static function creteStockFromCreateProduct($product, $id='')
@@ -82,12 +83,13 @@ class FrontHelper
         $stock_mutation->food_id = $product->food->id;
 
         $vending_machine = $product->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->flaging_transaction = Str::random(10);
+        ;
         $vending_machine->save();
 
         try {
             $stock_mutation->save();
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             info($e);
             throw new AppException("Failed to save data", 503);
         }

@@ -276,7 +276,7 @@ class MobileApiController extends Controller
     public static function login(Request $request)
     {
         // user dan password client sebagai masukan
-        $username= $request->input('username'); 
+        $username= $request->input('username');
         $password=$request->input('password');
         
         $user = User::where('username', $username)->first();
@@ -289,8 +289,8 @@ class MobileApiController extends Controller
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
             // Success
-            // get client    
-            $client=Client::where('user_id',$user->id)->first();
+            // get client
+            $client=Client::where('user_id', $user->id)->first();
             // get vending
             $vending=VendingMachine::where(['client_id'=>$client->id,
                                             'type'=>2])->first();
@@ -371,12 +371,12 @@ class MobileApiController extends Controller
                 'status' => 0,
                 'msg' => 'vending machine not found'
             ]]);
-        }         
+        }
         $vending_machine_id = $vending_machine->id;
         $vending_machine_client_id = $vending_machine->client_id;
       
         $customer = Customer::where(['identity_number'=> $customer_identity_number,
-                                     'register_at_client_id'=> $vending_machine_client_id        
+                                     'register_at_client_id'=> $vending_machine_client_id
         ])->first();
         if (!$customer) {
             return response()->json([[
@@ -457,7 +457,7 @@ class MobileApiController extends Controller
         $vending_machine_id=$vending_machine->id;
         $vending_machine_client_id=$vending_machine->client_id;
         
-        //    cek customer 
+        //    cek customer
         $customer= Customer::where(['identity_number' => $customer_identity_number,
                                     'register_at_client_id'=>$vending_machine_client_id])->first();
         if (!$customer) {
@@ -601,4 +601,3 @@ class MobileApiController extends Controller
         );
     }
 }
-

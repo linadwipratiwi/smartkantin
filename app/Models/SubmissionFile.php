@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubmissionFile extends Model
 {
-    protected $table = 'submission_files';   
+    protected $table = 'submission_files';
     public $timestamps = false;
 
     public function link()

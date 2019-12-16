@@ -13,8 +13,10 @@ class CategoryController extends Controller
     {
         $type = \Input::get('type');
         $view = view('backend.category.index');
-        $view->categories =  Category::where(function($q) use ($type) {
-            if ($type) $q->whereType($type);
+        $view->categories =  Category::where(function ($q) use ($type) {
+            if ($type) {
+                $q->whereType($type);
+            }
         })->paginate(25);
         return $view;
     }
