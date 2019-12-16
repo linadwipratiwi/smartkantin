@@ -90,6 +90,12 @@ class ApiController extends Controller
           ]);
       }
 
+    /** Transaction detail */
+    public function transactionDetail($id)
+    {
+        return VendingMachineTransaction::findOrFail($id);
+    }
+
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {

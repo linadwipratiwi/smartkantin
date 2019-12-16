@@ -559,6 +559,9 @@ class ApiHelper
                 'data' => 'Identity number customer not found'
             ]);
         }
+
+        $client = $customer->client;
+        $total_topup = 0;
         /** generate transfer saldo */
         $transfer_saldo = new TransferSaldo;
         $transfer_saldo->payment_status = 2; // pending
@@ -566,9 +569,23 @@ class ApiHelper
         $transfer_saldo->to_type_id = $customer->id;
         $transfer_saldo->saldo = $saldo;
         $transfer_saldo->created_by = 1; // system
+
+        $transfer_saldo->topup_type = 'gopay';
+        $transfer_saldo->fee_topup_type = $client->fee_topup_gopay_type;
+        if ($transfer_saldo->fee_topup_type == 'value') {
+            $transfer_saldo->fee_topup_value = $client->fee_topup_gopay_value;
+            $total_topup = $transfer_saldo->fee_topup_value + $saldo;
+        }
+        if ($transfer_saldo->fee_topup_type == 'percent') {
+            $transfer_saldo->fee_topup_percent = $client->fee_topup_gopay_percent;
+            $total_topup = ($saldo * $client->fee_topup_gopay_percent / 100) + $saldo;
+
+        }
+
+        $transfer_saldo->total_topup = $total_topup;
         $transfer_saldo->save();
         /** init gopay transaction id */
-        $gopay_transaction = GopayTransaction::init($transfer_saldo, $transfer_saldo->id, $saldo);
+        $gopay_transaction = GopayTransaction::init($transfer_saldo, $transfer_saldo->id, $total_topup);
         $midtrans = new Midtrans;
 
         /** update transfer saldo */
@@ -579,14 +596,14 @@ class ApiHelper
 
         $transaction_details = array(
             'order_id'      => $gopay_transaction->id,
-            'gross_amount'  => $transfer_saldo->saldo
+            'gross_amount'  => $transfer_saldo->total_topup
         );
 
         // Populate items
         $items = [
             array(
                 'id'        => $transfer_saldo->id,
-                'price'     => $transfer_saldo->saldo,
+                'price'     => $transfer_saldo->total_topup,
                 'quantity'  => 1,
                 'name'      => 'Topup by Gopay',
             )

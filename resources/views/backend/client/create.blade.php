@@ -56,6 +56,38 @@
                                         <input type="text" id="profit_platform_value" name="profit_platform_value" class="form-control format-price" placeholder="">
                                     </div>
                                 </div>
+
+                                {{-- Fee Topup ManuaL --}}
+                                <div class="form-group ">
+                                    <label class="control-label mb-10">Biaya Topup Tambahan Manual</label>
+                                    <select name="fee_topup_manual_type" id="fee_topup_manual_type" onchange="setTypeTopupManual(this.value)" class="form-control">
+                                        <option value="value">Value</option>
+                                        <option value="percent">Percent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="">
+                                    <label class="control-label mb-10">Presentase profit / dengan set value</label>
+                                    <div class="input-group"> 
+                                        <span class="input-group-addon" id="lb-type-topup-manual">Rp</span>
+                                        <input type="text" id="fee_topup_manual_value" name="fee_topup_manual_value" class="form-control format-price" value="" placeholder="">
+                                    </div>
+                                </div>
+
+                                {{-- Fee Topup Gopay --}}
+                                <div class="form-group ">
+                                    <label class="control-label mb-10">Biaya Topup Tambahan Gopay</label>
+                                    <select name="fee_topup_gopay_type" id="fee_topup_gopay_type" onchange="setTypeTopupGopay(this.value)" class="form-control">
+                                        <option value="value">Value</option>
+                                        <option value="percent">Percent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="">
+                                    <label class="control-label mb-10">Presentase profit / dengan set value</label>
+                                    <div class="input-group"> 
+                                        <span class="input-group-addon" id="lb-type-topup-gopay">Rp</span>
+                                        <input type="text" id="fee_topup_gopay_value" name="fee_topup_gopay_value" class="form-control format-price"  placeholder="">
+                                    </div>
+                                </div>
                                 <div class="seprator-block"></div>
                                 {{-- Visit Transaction --}}
                                 <h6 class="txt-dark capitalize-font"><i class="fa fa-user mr-10"></i>Akun Client</h6>
@@ -92,6 +124,24 @@
         }
 
         $('#lb-type').html(type);
+    }
+
+    function setTypeTopupManual(value) {
+        type = 'Rp.'
+        if (value == 'percent') {
+            type = '%'    
+        }
+
+        $('#lb-type-topup-manual').html(type);
+    }
+
+    function setTypeTopupGopay(value) {
+        type = 'Rp.'
+        if (value == 'percent') {
+            type = '%'    
+        }
+
+        $('#lb-type-topup-gopay').html(type);
     }
 
     </script>

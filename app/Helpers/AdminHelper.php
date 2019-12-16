@@ -72,6 +72,8 @@ class AdminHelper
         $client->address = $request->input('address');
         $client->company = $request->input('company');
         $client->phone = $request->input('phone');
+
+        /** Profit Platform */
         $client->profit_platform_type = $request->input('profit_platform_type');
         if ($client->profit_platform_type == 'value') {
             $client->profit_platform_value = format_db($request->input('profit_platform_value'));
@@ -80,6 +82,28 @@ class AdminHelper
         if ($client->profit_platform_type == 'percent') {
             $client->profit_platform_percent = format_db($request->input('profit_platform_value'));
         }
+
+        /** Topup Manual */
+        $client->fee_topup_manual_type = $request->input('fee_topup_manual_type');
+        if ($client->fee_topup_manual_type == 'value') {
+            $client->fee_topup_manual_value = format_db($request->input('fee_topup_manual_value'));
+        }
+
+        if ($client->fee_topup_manual_type == 'percent') {
+            $client->fee_topup_manual_percent = format_db($request->input('fee_topup_manual_value'));
+        }
+
+        /** Topup Gopay */
+        $client->fee_topup_gopay_type = $request->input('fee_topup_gopay_type');
+        if ($client->fee_topup_gopay_type == 'value') {
+            $client->fee_topup_gopay_value = format_db($request->input('fee_topup_gopay_value'));
+        }
+
+        if ($client->fee_topup_gopay_type == 'percent') {
+            $client->fee_topup_gopay_percent = format_db($request->input('fee_topup_gopay_value'));
+        }
+
+
         if (!$id) {
             $client->user_id = $user->id;
         }
@@ -304,6 +328,7 @@ class AdminHelper
     public static function createTopupCustomer($request)
     {
         $saldo = format_db($request->input('saldo'));
+        $total_topup = format_db($request->input('total_topup'));
         
         DB::beginTransaction();
         $transfer_saldo = new TransferSaldo;
@@ -313,6 +338,17 @@ class AdminHelper
         $transfer_saldo->to_type = get_class(new Customer);
         $transfer_saldo->to_type_id = $request->customer_id;
         $transfer_saldo->created_by = auth()->user()->id;
+        $transfer_saldo->topup_type = $request->input('topup_type');
+        $transfer_saldo->fee_topup_type = $request->input('fee_topup_type');
+        if ($transfer_saldo->fee_topup_type == 'value') {
+            $transfer_saldo->fee_topup_value = $request->input('fee_topup_value');
+        }
+        if ($transfer_saldo->fee_topup_type == 'percent') {
+            $transfer_saldo->fee_topup_percent = $request->input('fee_topup_percent');
+        }
+
+        $transfer_saldo->total_topup = $total_topup;
+
         try {
             $transfer_saldo->save();
         } catch (\Exception $e){
