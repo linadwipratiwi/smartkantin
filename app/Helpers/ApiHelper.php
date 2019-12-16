@@ -465,7 +465,6 @@ class ApiHelper
 
             // self::updateStockTransaction($transaction);
             \DB::commit();
-            return $transaction;
             
             $respon_= self::gopay($transaction->id);
             $respon= json_decode($respon_, true);
