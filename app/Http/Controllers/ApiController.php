@@ -52,9 +52,43 @@ class ApiController extends Controller
         if ($request->payment_type == 'gopay') {
             return ApiHelper::gopayTransaction($request);
         }
+        elseif($request->payment_type == 'gopayAnonim'){
+            return ApiHelper::gopayTransactionAnonim($request);
+        }
 
         return ApiHelper::transaction($request);
     }
+    /** get status transaction */
+    public function statusTransaction($request)
+    {
+        $transaction=VendingMachineTransaction::find($request);
+        if(!$transaction){
+            return response()->json([
+                'status'=>0,
+                'data'=>'no transaction found'
+            ]);    
+        }
+        return response()->json([
+            'status'=>1,
+            'data'=>$transaction->status_transaction
+        ]);
+    }
+
+      /** get status topup */
+      public function statusTopup($request)
+      {
+          $transaction=TransferSaldo::find($request);
+          if(!$transaction){
+              return response()->json([
+                  'status'=>0,
+                  'data'=>'no transaction found'
+              ]);    
+          }
+          return response()->json([
+              'status'=>1,
+              'data'=>$transaction->payment_status
+          ]);
+      }
 
     /** Transaction detail */
     public function transactionDetail($id)

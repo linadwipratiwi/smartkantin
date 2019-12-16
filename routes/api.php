@@ -42,7 +42,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('transaction', 'ApiController@transaction');
     Route::post('customer', 'ApiController@customer');
     Route::get('get-stock/{vending_alias}', 'ApiController@getStock');
-    Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransaction');      
+    Route::get('get-flag-transaction/{vending_alias}', 'ApiController@getFlagTransaction');   
+    Route::get('transaction/status/{transaction_id}','ApiController@statusTransaction');   
+    Route::get('topup/status/{transaction_id}','ApiController@statusTopup');   
   });
 });
 // API
