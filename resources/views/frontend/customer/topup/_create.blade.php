@@ -47,14 +47,14 @@
         var type = '{{client()->fee_topup_manual_type}}';
         var saldo = $('#saldo').val();
         if (type == 'value') {
-            var fee = {{format_quantity(client()->fee_topup_manual_value, 0)}};
+            var fee = {{format_db(format_quantity(client()->fee_topup_manual_value, 0))}};
 
             var total_topup = dbNum(saldo) + fee;
             $('#total_topup').val(total_topup);
         }
 
         if (type == 'percent') {
-            var fee = {{format_quantity(client()->fee_topup_manual_percent, 0)}};
+            var fee = {{format_db(format_quantity(client()->fee_topup_manual_percent, 0))}};
 
             var total_topup = (dbNum(saldo) * fee / 100) + dbNum(saldo);
             $('#total_topup').val(total_topup);
