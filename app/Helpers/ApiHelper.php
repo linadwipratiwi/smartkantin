@@ -404,85 +404,86 @@ class ApiHelper
 
     }
 
-      /** Vending Machine Transaction by Gopay */
-      public static function gopayTransactionAnonim($request)
-      {
-          $slot_alias = $request->input('slot_alias');
-          $type = $request->input('type') ? : 'normal'; // normal, mini
-          $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
+    /** Vending Machine Transaction by Gopay */
+    public static function gopayTransactionAnonim($request)
+    {
+        $slot_alias = $request->input('slot_alias');
+        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
 
-          /** Cek slot vending machine */
-          $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
-          if (!$vending_machine_slot) {
-              return json_encode([
-                  'status' => 0,
-                  'data' => 'Vending Machine Slot not found'
-              ]);
-          }
-  
-          /** cek stok */
-          if ($vending_machine_slot->stock < 1) {
-              return json_encode([
-                  'status' => 0,
-                  'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
-              ]);
-          }
+        /** Cek slot vending machine */
+        $vending_machine_slot = VendingMachineSlot::where('alias', $slot_alias)->first();
+        if (!$vending_machine_slot) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Vending Machine Slot not found'
+            ]);
+        }
+
+        /** cek stok */
+        if ($vending_machine_slot->stock < 1) {
+            return json_encode([
+                'status' => 0,
+                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+            ]);
+        }
+    
+        $customer= Customer::where('name','anonim')->first();
+
+        \DB::beginTransaction();
+        $client = $vending_machine_slot->vendingMachine->client;
+
+        $transaction = new VendingMachineTransaction;
+        $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
+        $transaction->vending_machine_slot_id = $vending_machine_slot->id;
+        $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
+        $transaction->customer_id = $customer->id;
+        $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
+        $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
+        $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
+        $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
+        $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
+        $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
+        $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
         
-          $customer= Customer::where('name','anonim')->first();
+        // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
+        $transaction->profit_platform = $client->profit_platform_value;
+        if ($transaction->profit_platform_type == 'percent') {
+            $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
+        }
 
-          \DB::beginTransaction();
-          $client = $vending_machine_slot->vendingMachine->client;
-  
-          $transaction = new VendingMachineTransaction;
-          $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
-          $transaction->vending_machine_slot_id = $vending_machine_slot->id;
-          $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
-          $transaction->customer_id = $customer->id;
-          $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
-          $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
-          $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
-          $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
-          $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : null;
-          $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : null;
-          $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : null;
-          
-          // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
-          $transaction->profit_platform = $client->profit_platform_value;
-          if ($transaction->profit_platform_type == 'percent') {
-              $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
-          }
-  
-          $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
-          $transaction->quantity = 1;
-          $transaction->status_transaction = 2; // pending
-  
-          /** Update flaging transaksi. Digunakan untuk Smansa */
-          $vending_machine = $transaction->vendingMachine;
-          $vending_machine->flaging_transaction = Str::random(10);;
-          $vending_machine->save();
-  
-          
-          try {
-              $transaction->save();
-  
-              // self::updateStockTransaction($transaction);
-              \DB::commit();
-              
-              $respon_= self::gopay($transaction->id);
-              $respon= json_decode($respon_, true);
-              $respon['id']=$transaction->id;
+        $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+        $transaction->quantity = 1;
+        $transaction->status_transaction = 2; // pending
 
-              return($respon);
-  
-          } catch (\Throwable $th) {
-              info($th);
-              return json_encode([
-                  'status' => 0,
-                  'data' => 'Transaction failed'
-              ]);
-          }
-  
-      }
+        /** Update flaging transaksi. Digunakan untuk Smansa */
+        $vending_machine = $transaction->vendingMachine;
+        $vending_machine->flaging_transaction = Str::random(10);;
+        $vending_machine->save();
+
+        
+        try {
+            $transaction->save();
+
+            // self::updateStockTransaction($transaction);
+            \DB::commit();
+            
+            $respon_= self::gopay($transaction->id);
+            $respon= json_decode($respon_, true);
+            $respon['id']=$transaction->id;
+
+            return($respon);
+
+        } catch (\Throwable $th) {
+            info($th);
+            return json_encode([
+                'status' => 0,
+                'data' => 'Transaction failed'
+            ]);
+        }
+
+    }
+    
     /** Create QR Code Gopay */
     public static function gopay($id) 
     {
