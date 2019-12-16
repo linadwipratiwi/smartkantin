@@ -8,10 +8,10 @@
             <form id="form-topup">
                 {!! csrf_field() !!}
                 <input type="hidden" id="customer_id" name="customer_id" value="{{$customer->id}}">
-                <input type="text" name="topup_type" id="topup_type" value="manual">
-                <input type="text" name="fee_topup_type" id="fee_topup_type" value="{{client()->fee_topup_manual_type}}">
-                <input type="text" name="fee_topup_percent" id="fee_topup_percent" value="{{client()->fee_topup_manual_percent}}">
-                <input type="text" name="fee_topup_value" id="fee_topup_value" value="{{client()->fee_topup_manual_value}}">
+                <input type="hidden" name="topup_type" id="topup_type" value="manual">
+                <input type="hidden" name="fee_topup_type" id="fee_topup_type" value="{{client()->fee_topup_manual_type}}">
+                <input type="hidden" name="fee_topup_percent" id="fee_topup_percent" value="{{client()->fee_topup_manual_percent}}">
+                <input type="hidden" name="fee_topup_value" id="fee_topup_value" value="{{client()->fee_topup_manual_value}}">
 
                 <div class="form-group mt-20" id="">
                     <label class="control-label mb-10">Nominal yang akan di topup</label>
