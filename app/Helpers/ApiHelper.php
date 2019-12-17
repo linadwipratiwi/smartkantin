@@ -424,7 +424,7 @@ class ApiHelper
         if ($transaction->profit_platform_type == 'percent') {
             $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
         }
-        $transaction->selling_price_vending_machine = ($vending_machine_slot->food->selling_price_vending_machine)*1.1;
+        $transaction->selling_price_vending_machine = (int)(($vending_machine_slot->food->selling_price_vending_machine)*1.1);
         $transaction->quantity = 1;
         $transaction->status_transaction = 2; // pending
 
