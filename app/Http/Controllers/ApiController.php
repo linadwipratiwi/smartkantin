@@ -243,7 +243,7 @@ class ApiController extends Controller
             if($vendingSlot){
                 $food= $vendingSlot->food;
                 $slotjson= json_decode($slot, true);
-                $slotjson['photo2']=$food->photo;
+                $slotjson['food_master']=$food;
                 $hasil[]=$slotjson;
             }
         }
