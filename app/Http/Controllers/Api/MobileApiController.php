@@ -578,7 +578,7 @@ class MobileApiController extends Controller
         //     }
         // }
 
-        if (!$hasil) {
+        if (!$transaction) {
             return response()->json([[
                 'status'=> 0,
                 'msg' => 'no transaction'
