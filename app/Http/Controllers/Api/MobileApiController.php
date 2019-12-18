@@ -564,28 +564,16 @@ class MobileApiController extends Controller
         /** Cek customer ada apa tidak */
         $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
         
-        $hasil=[];
-        if ($transaction) {
-            foreach ($transaction as $data) {
-                $text= json_decode($data, true);
-                $text['type_transaction']="buy";
-                $customer_id=$data->customer_id;
-                $customer=Customer::find($customer_id);
-                $text['customer_name']=$customer->name;
-                $text['customer_identity_number']=$customer->identity_number;
-                $text['msg']="success";
-                $hasil[]=($text);
-            }
-        }
-        // $topup_transaction= TransferSaldo::where('from_type_id',$stand_id)->get();
-        // if($topup_transaction){
-        //     foreach($topup_transaction as $data){
-        //         $text= json_decode($data,true);
-        //         $text['type_transaction']="topup";
-        //         $customer_id= $data->to_type_id;
+        // $hasil=[];
+        // if ($transaction) {
+        //     foreach ($transaction as $data) {
+        //         $text= json_decode($data, true);
+        //         $text['type_transaction']="buy";
+        //         $customer_id=$data->customer_id;
         //         $customer=Customer::find($customer_id);
         //         $text['customer_name']=$customer->name;
-        //         $text['customer_identity_number']=$customer->customer_identity_number;
+        //         $text['customer_identity_number']=$customer->identity_number;
+        //         $text['msg']="success";
         //         $hasil[]=($text);
         //     }
         // }
@@ -597,7 +585,7 @@ class MobileApiController extends Controller
             ]]);
         }
         return response()->json(
-            $hasil
+            $transaction
         );
     }
 }

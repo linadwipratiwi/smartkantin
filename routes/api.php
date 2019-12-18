@@ -18,7 +18,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('topup', 'MobileApiController@topup');
     Route::post('transaction', 'MobileApiController@transaction');
     Route::get('customer/{id}', 'MobileApiController@findCustomer');
-    Route::get('stand/transaction/{stand_id}', 'MobileApiController@history');
+    Route::get('stand/transaction/{stand_alias}', 'MobileApiController@history');
     Route::post('login','MobileApiController@login');
     Route::post('stand/transaction/customer','MobileApiController@billcheck');
     // Route::get('stand/transaction/customer/{id}','MobileApiController@billcheck');
