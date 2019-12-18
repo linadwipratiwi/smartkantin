@@ -564,28 +564,28 @@ class MobileApiController extends Controller
         /** Cek customer ada apa tidak */
         $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
         
-        // $hasil=[];
-        // if ($transaction) {
-        //     foreach ($transaction as $data) {
-        //         $text= json_decode($data, true);
-        //         $text['type_transaction']="buy";
-        //         $customer_id=$data->customer_id;
-        //         $customer=Customer::find($customer_id);
-        //         $text['customer_name']=$customer->name;
-        //         $text['customer_identity_number']=$customer->identity_number;
-        //         $text['msg']="success";
-        //         $hasil[]=($text);
-        //     }
-        // }
+        $hasil=[];
+        if ($transaction) {
+            foreach ($transaction as $data) {
+                $text= json_decode($data, true);
+                $text['type_transaction']="buy";
+                $customer_id=$data->customer_id;
+                $customer=Customer::find($customer_id);
+                $text['customer_name']=$customer->name;
+                $text['customer_identity_number']=$customer->identity_number;
+                $text['msg']="success";
+                $hasil[]=($text);
+            }
+        }
 
-        if (!$transaction) {
+        if (!$hasil) {
             return response()->json([[
                 'status'=> 0,
                 'msg' => 'no transaction'
             ]]);
         }
         return response()->json(
-            $transaction
+            $hasil
         );
     }
 }
