@@ -339,7 +339,7 @@ class MobileApiController extends Controller
         $harga = $transaction->selling_price_vending_machine;
         $quantity = $transaction->quantity;
         $hargaTotal = $harga* $quantity;
-        $customer_id = $transaction-> customer_id;
+        $customer_id = $transaction->customer_id;
         $customer = Customer::findOrFail($customer_id);
         $saldo = $customer->saldo;
         
@@ -599,5 +599,34 @@ class MobileApiController extends Controller
         return response()->json(
             $hasil
         );
+    }
+
+    /** History customer transaction */
+    public function customerHistoryTransaction($customer_id)
+    {
+        $status = \Input::get('status');
+        $list_transaction = VendingMachineTransaction::where('customer_id', $customer_id)
+            ->where(function ($q) use ($status) {
+                if ($status) {
+                    $q->where('status_transaction', $status);
+                }
+            })
+            ->get();
+        $respon = [];
+        foreach ($list_transaction as $transaction) {
+            $data = [
+                'id' => $transaction->id,
+                'quantity' => $transaction->quantity,
+                'food_id' => $transaction->food_id,
+                'food_name' => $transaction->food ? $transaction->food->name : $transaction->food_name,
+                'transaction_number' => $transaction->transaction_number,
+                'status_transaction' => $transaction->status('excel'),
+                'selling_price_vm' => $transaction->selling_price_vending_machine 
+            ];
+            array_push($respon, $data);
+        }
+
+        return response()->json($respon);
+
     }
 }
