@@ -495,9 +495,10 @@ class ApiHelper
             'payment_type' => 'gopay',
             'transaction_details' => $transaction_details,
             'item_details' => $items,
-            'customer_details' => $customer_details
+            'customer_details' => $customer_details,
+            'environment' => \App::environment()
         );
-    
+
         try {
             $snap_token = $midtrans->gopayCharge($transaction_data);
             return $snap_token;
