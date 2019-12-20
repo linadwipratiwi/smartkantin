@@ -32,7 +32,7 @@ class ApiController extends Controller
             ->skip($offset)
             ->take($resultCount)
             ->get(['id', \DB::raw('name AS text')]);
-        
+        info($client);
         $count = Client::get()->count();
         $endCount = $offset + $resultCount;
         $morePages = $endCount > $count;
