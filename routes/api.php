@@ -20,11 +20,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('customer/history-transaction/{id}', 'MobileApiController@customerHistoryTransaction');
     Route::get('customer/{id}', 'MobileApiController@findCustomer');
     Route::get('stand/transaction/{stand_alias}', 'MobileApiController@history');
+    Route::post('login-client','MobileApiController@loginClient');
     Route::post('login','MobileApiController@login');
+    Route::post('login-stand','MobileApiController@loginStand');
     Route::post('stand/transaction/customer','MobileApiController@billcheck');
-    // Route::get('stand/transaction/customer/{id}','MobileApiController@billcheck');
     Route::post('stand/billpayment','MobileApiController@billpayment');
-    // Route::get('stand/billpayment/customer/{id}','MobileApiController@billpayment');
+    Route::get('client/list-stand/{client_id}','MobileApiController@listStand');
     
   });
 });

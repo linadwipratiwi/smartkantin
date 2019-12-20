@@ -272,8 +272,93 @@ class MobileApiController extends Controller
         );
     }
 
-    /**Login */
-    public static function login(Request $request)
+    /**Login  untuk stand*/
+    public static function loginStand(Request $request)
+    {
+        // user dan password client sebagai masukan
+        $username= $request->input('username');
+        $password=$request->input('password');
+        
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            // Success
+            // get stand
+            $stand=VendingMachine::where('user_id', $user->id)->first();
+            $client=Client::where('id',$stand->client_id);
+            return response()->json([
+                 'status' => 1,
+                 'alias'=>$stand->alias,
+                 'name'=> $stand->name,
+                 'client_location'=>$client->address,
+                 'client_name'=> $client->name,
+                 'msg' => 'access granted'
+                 
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+    }
+
+     /**Login  sementara huft*/
+     public static function login(Request $request)
+     {
+         // user dan password client sebagai masukan
+         $username= $request->input('username');
+         $password=$request->input('password');
+         
+
+         $user = User::where('username', $username)->first();
+         if (!$user) {
+             return response()->json([
+                 'status' => 0,
+                 'msg' => 'acces denied'
+             ]);
+         }
+         $hasher = app('hash');
+         if ($hasher->check($password, $user->password)) {
+             // Success
+             // get stand
+             echo $user->id;
+             $client=Client::where('user_id',$user->id);
+
+            if(!$client){
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'no client'
+                ]); 
+            }
+             //  $stand=VendingMachine::where(['client_id'=>($client->id),'type'=>2])->first();
+            //  return response()->json([
+            //       'status' => 1,
+            //       'alias'=>$stand->alias,
+            //       'name'=> $stand->name,
+            //       'client_location'=>$client->address,
+            //       'client_name'=> $client->name,
+            //       'msg' => 'access granted'
+                  
+            //  ]);
+
+            return response()->json($client);
+         } else {
+             return response()->json([
+                 'status' => 0,
+                 'msg' => 'acces denied'
+             ]);
+         }
+     }
+    /**login untuk client
+     */
+    public static function loginClient(Request $request)
     {
         // user dan password client sebagai masukan
         $username= $request->input('username');
@@ -292,15 +377,11 @@ class MobileApiController extends Controller
             // get client
             $client=Client::where('user_id', $user->id)->first();
             // get vending
-            $vending=VendingMachine::where(['client_id'=>$client->id,
-                                            'type'=>2])->first();
             
             return response()->json([
-                'status' => 1,
-                 'alias'=>$vending->alias,
-                 'name'=> $vending->name,
-                 'client_location'=>$client->address,
-                 'client_name'=> $client->name,
+                 'status' => 1,
+                 'id'=>$client->id,
+                 'name'=> $client->name,
                  'msg' => 'access granted'
                  
             ]);
@@ -545,7 +626,19 @@ class MobileApiController extends Controller
         );
     }
 
-   
+    public static function listStand($request){
+
+        $id_client=$request;
+        $stands=VendingMachine::where('client_id',$id_client)->get();
+        if(!$stands){
+            return response()->json([
+                'status'=> 0,
+                'msg'=> 'no stand found'
+            ]);
+        }
+
+        return response()->json($stands);
+    }
     /**History */
     public static function history($request)
     {
@@ -571,10 +664,12 @@ class MobileApiController extends Controller
                 $text['type_transaction']="buy";
                 $customer_id=$data->customer_id;
                 $customer=Customer::find($customer_id);
-                $text['customer_name']=$customer->name;
-                $text['customer_identity_number']=$customer->identity_number;
-                $text['msg']="success";
-                $hasil[]=($text);
+                if($customer){
+                    $text['customer_name']=$customer->name;
+                    $text['customer_identity_number']=$customer->identity_number;
+                    $text['msg']="success";
+                    $hasil[]=($text);
+                }
             }
         }
 
