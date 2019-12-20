@@ -67,6 +67,7 @@
                                             <th>Customer</th>
                                             <th>Status</th>
                                             <th>Status Gopay</th>
+                                            <th>Tanggal Dibuat</th>
                                             <th>Tanggal Pembayaran</th>
                                         </tr>
                                     </thead>
@@ -79,6 +80,9 @@
                                             <td>{{$transaction->getCustomer()}}</td>
                                             <td>{{$transaction->getStatus()}}</td>
                                             <td>{{$transaction->gopay_transaction_status}}</td>
+                                            <td>
+                                                {{ $transaction->created_at ? \App\Helpers\DateHelper::formatView($transaction->created_at, true) : '-'}}
+                                            </td>
                                             <td>
                                                 {{ $transaction->gopay_transaction_time ? \App\Helpers\DateHelper::formatView($transaction->gopay_transaction_time, true) : '-'}}
                                             </td>

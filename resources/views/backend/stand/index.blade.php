@@ -54,7 +54,7 @@
                                             <td>{{$row + 1}}</td>
                                             <td>{{$vending_machine->name}}</td>
                                             <td>{{$vending_machine->alias}}</td>
-                                            <td>{{$vending_machine->client->name}}</td>
+                                            <td>{{$vending_machine->client ? $vending_machine->client->name: '-'}}</td>
                                             <td>{{$vending_machine->production_year}}</td>
                                             <td>{{$vending_machine->location}}</td>
                                             <td>{{$vending_machine->ip}}</td>

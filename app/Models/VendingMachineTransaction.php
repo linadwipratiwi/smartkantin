@@ -41,6 +41,11 @@ class VendingMachineTransaction extends Model
         $q->where('status_transaction', 1);
     }
 
+    public function scopePending($q)
+    {
+        $q->where('status_transaction', 2);
+    }
+
     public function scopeFailed($q)
     {
         $q->where('status_transaction', 0);
