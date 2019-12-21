@@ -645,8 +645,8 @@ class MobileApiController extends Controller
             $text= json_decode($data, true);
             $text['status']=1;
             $text['msg']="success";
-            $text['transaksi_sukses']=$transactions_success;
-            $text['transaksi_total']=$transactions_total;
+            $text['transaction_success']=$transactions_success;
+            $text['transaction_total']=$transactions_total;
             $hasil[]=($text);
         }
         return response()->json($hasil);
