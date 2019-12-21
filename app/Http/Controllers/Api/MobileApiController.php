@@ -632,7 +632,6 @@ class MobileApiController extends Controller
         $hasil=[];
         $today_date= date("Y-m-d");        
 
-        echo $today_date;
         foreach ($stands as $data) {
             //get Transaction today
             $transactions_total= VendingMachineTransaction::where('vending_machine_id',$data->id)
