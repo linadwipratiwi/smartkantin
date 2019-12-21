@@ -630,10 +630,23 @@ class MobileApiController extends Controller
             ]]);
         }
         $hasil=[];
+        $today_date= date("Y-m-d");        
+
+        echo $today_date;
         foreach ($stands as $data) {
+            //get Transaction today
+            $transactions_total= VendingMachineTransaction::where('vending_machine_id',$data->id)
+                            ->whereDate('created_at',$today_date)->count();
+
+            $transactions_success= VendingMachineTransaction::where('vending_machine_id',$data->id)
+                            ->where('status_transaction',1)
+                            ->whereDate('created_at',$today_date)->count();
+
             $text= json_decode($data, true);
             $text['status']=1;
             $text['msg']="success";
+            $text['transaksi_sukses']=$transactions_success;
+            $text['transaksi_total']=$transactions_total;
             $hasil[]=($text);
         }
         return response()->json($hasil);
@@ -642,7 +655,6 @@ class MobileApiController extends Controller
     public static function history($request)
     {
         $stand_alias=$request;
-        
         /* cek alias */
         $stand = VendingMachine::where('alias', $stand_alias)->first();
         if (!$stand) {
