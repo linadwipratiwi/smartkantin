@@ -292,7 +292,7 @@ class MobileApiController extends Controller
             // Success
             // get stand
             $stand=VendingMachine::where('user_id', $user->id)->first();
-            $client=Client::where('id',$stand->client_id);
+            $client=Client::where('id', $stand->client_id);
             return response()->json([
                  'status' => 1,
                  'alias'=>$stand->alias,
@@ -331,28 +331,25 @@ class MobileApiController extends Controller
             // mencari type user
             $type="client";
             $client=Client::where('user_id', $user->id)->first();
-            if(!$client){
+            if (!$client) {
                 $type="customer";
-                $customer=Customer::where('user_id',$user->id)->first(); 
-                if(!$customer){
+                $customer=Customer::where('user_id', $user->id)->first();
+                if (!$customer) {
                     $type="vending/stand";
-                    $vending_id=UserVendingMachine::where('user_id',$user->id)->first()->vending_machine_id;
+                    $vending_id=UserVendingMachine::where('user_id', $user->id)->first()->vending_machine_id;
                     $vending=VendingMachine::find($vending_id);
-                    if(!$vending){
+                    if (!$vending) {
                         return response()->json([
                             'status' => 0,
                             'msg' => 'type user not found'
                         ]);
-                    }
-                    else{
+                    } else {
                         $data=$vending;
                     }
-                }
-                else{
+                } else {
                     $data=$customer;
                 }
-            }
-            else{
+            } else {
                 $data=$client;
             }
 
@@ -643,27 +640,27 @@ class MobileApiController extends Controller
         );
     }
 
-    public static function listStand($request){
-
+    public static function listStand($request)
+    {
         $id_client=$request;
-        $stands=VendingMachine::where('client_id',$id_client)->get();
-        if(!$stands){
+        $stands=VendingMachine::where('client_id', $id_client)->get();
+        if (!$stands) {
             return response()->json([[
                 'status'=> 0,
                 'msg'=> 'no stand found'
             ]]);
         }
         $hasil=[];
-        $today_date= date("Y-m-d");        
+        $today_date= date("Y-m-d");
 
         foreach ($stands as $data) {
             //get Transaction today
-            $transactions_total= VendingMachineTransaction::where('vending_machine_id',$data->id)
-                            ->whereDate('created_at',$today_date)->count();
+            $transactions_total= VendingMachineTransaction::where('vending_machine_id', $data->id)
+                            ->whereDate('created_at', $today_date)->count();
 
-            $transactions_success= VendingMachineTransaction::where('vending_machine_id',$data->id)
-                            ->where('status_transaction',1)
-                            ->whereDate('created_at',$today_date)->count();
+            $transactions_success= VendingMachineTransaction::where('vending_machine_id', $data->id)
+                            ->where('status_transaction', 1)
+                            ->whereDate('created_at', $today_date)->count();
 
             $text= json_decode($data, true);
             $text['status']=1;
@@ -681,10 +678,11 @@ class MobileApiController extends Controller
         $id=$request->input('id');
 
         /* cek alias */
-        if($stand_alias)
+        if ($stand_alias) {
             $stand = VendingMachine::where('alias', $stand_alias)->first();
-        else if($id)
+        } elseif ($id) {
             $stand = VendingMachine::find($id);
+        }
         
         if (!$stand) {
             return json_encode([
@@ -704,7 +702,7 @@ class MobileApiController extends Controller
                 $text['type_transaction']="buy";
                 $customer_id=$data->customer_id;
                 $customer=Customer::find($customer_id);
-                if($customer){
+                if ($customer) {
                     $text['customer_name']=$customer->name;
                     $text['customer_identity_number']=$customer->identity_number;
                     $text['msg']="success";
@@ -744,12 +742,11 @@ class MobileApiController extends Controller
                 'food_name' => $transaction->food ? $transaction->food->name : $transaction->food_name,
                 'transaction_number' => $transaction->transaction_number,
                 'status_transaction' => $transaction->status('excel'),
-                'selling_price_vm' => $transaction->selling_price_vending_machine 
+                'selling_price_vm' => $transaction->selling_price_vending_machine
             ];
             array_push($respon, $data);
         }
 
         return response()->json($respon);
-
     }
 }

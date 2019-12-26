@@ -22,7 +22,13 @@
 			</div>
 			<div id="mobile_only_nav" class="mobile-only-nav pull-right">
 				<ul class="nav navbar-right top-nav pull-right">
-					
+					@role('customer')
+					<li class="dropdown" style="padding-top:25px">
+						<span class="text-info">
+								Rp. {{format_quantity(customer()->saldo)}}
+						</span>
+					</li>
+					@endrole
 					<li class="dropdown auth-drp">
 						<a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown" aria-expanded="true"><img src="{{auth()->user()->photo ? asset(auth()->user()->photo) : asset('dist/img/user1.png')}}" alt="user_auth" class="user-auth-img img-circle"><span class="user-online-status"></span></a>
 						<ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
