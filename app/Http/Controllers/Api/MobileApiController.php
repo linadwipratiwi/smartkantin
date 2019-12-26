@@ -325,19 +325,41 @@ class MobileApiController extends Controller
         }
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
-            // Success
-            // get client
+            // login Success
+
+            // mencari type user
+            $type="client";
             $client=Client::where('user_id', $user->id)->first();
-            // get vending
-            $vending=VendingMachine::where(['client_id'=>$client->id,
-                                            'type'=>2])->first();
+            if(!$client){
+                $type="vending/stand";
+                $vending=VendingMachine::where('user_id',$user->id)->first();     
+                if(!$vending){
+                    $type="customer";
+                    $customer=Customer::where('user_id',$user->id)->first(); 
+                    if(!$customer){
+                        return response()->json([
+                            'status' => 0,
+                            'msg' => 'type user not found'
+                        ]);
+                    }
+                    else{
+                        $data=$customer;
+                    }
+                }
+                else{
+                    $data=$vending;
+                }
+            }
+            else{
+                $data=$client;
+            }
+
             
             return response()->json([
                 'status' => 1,
-                 'alias'=>$vending->alias,
-                 'name'=> $vending->name,
-                 'client_location'=>$client->address,
-                 'client_name'=> $client->name,
+                 'id'=>$data->id,
+                 'type'=>$type,
+                 'name'=> $data->name,
                  'msg' => 'access granted'
                  
             ]);
@@ -651,11 +673,17 @@ class MobileApiController extends Controller
         return response()->json($hasil);
     }
     /**History */
-    public static function history($request)
+    public static function history(Request $request)
     {
-        $stand_alias=$request;
+        $stand_alias=$request->input('alias');
+        $id=$request->input('id');
+
         /* cek alias */
-        $stand = VendingMachine::where('alias', $stand_alias)->first();
+        if($stand_alias)
+            $stand = VendingMachine::where('alias', $stand_alias)->first();
+        else if($id)
+            $stand = VendingMachine::find($id);
+        
         if (!$stand) {
             return json_encode([
                 'status' => 0,
