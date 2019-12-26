@@ -85,6 +85,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     Route::resource('multipayment', 'MultipaymentController');
     Route::resource('food', 'FoodController');
     Route::resource('customer', 'CustomerController');
+    Route::resource('user', 'UserController', ['except' => ['show']]);
 
     Route::resource('vending-machine', 'VendingMachine\VendingMachineController');
     Route::group(['prefix' => 'vending-machine', 'namespace' => 'VendingMachine'], function () {

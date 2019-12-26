@@ -86,6 +86,10 @@
 						</li>
 					</ul>
 				</li>
+				<li>
+					<a @if(\Request::segment(2) == 'user') class="active" @endif href="{{url('front/user')}}"><div class="pull-left"><i class="fa fa-user  mr-20"></i><span class="right-nav-text">User </span></div><div class="clearfix"></div></a>
+				</li>
+				
 			@endrole
 			
 			@role('customer')
