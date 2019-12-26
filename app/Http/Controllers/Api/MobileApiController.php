@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
@@ -14,15 +15,17 @@ use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
 use App\Exceptions\AppException;
+use App\Models\UserVendingMachine;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\UserVendingMachine;
+use App\Traits\AuthApiControllerTrait;
 use App\Models\VendingMachineTransaction;
-use App\User;
 
 class MobileApiController extends Controller
 {
+    use AuthApiControllerTrait;
+
     /** Find customer by ID */
     public function findCustomer($identity_number)
     {

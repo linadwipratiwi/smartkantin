@@ -33,7 +33,10 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
+        'jwt' => [
+            'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+            'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        ],
         'api' => [
             'throttle:60,1',
             'bindings',

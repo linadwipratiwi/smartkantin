@@ -14,6 +14,13 @@ use Illuminate\Http\Request;
 */
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['prefix' => 'mobile', 'namespace' => 'Api'], function () {
+    /** JWT Login */
+    Route::group(['middleware' => ['jwt']], function() {
+      Route::get('user-login', 'MobileApiController@getUser');
+    });
+    
+    Route::post('post-login', 'MobileApiController@postLogin');
+
     Route::post('multipayment', 'MobileApiController@multipayment');
     Route::post('topup', 'MobileApiController@topup');
     Route::post('transaction', 'MobileApiController@transaction');
@@ -49,7 +56,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('topup/status/{transaction_id}','ApiController@statusTopup');   
   });
 });
-// API
 
 
 /** API stand */
