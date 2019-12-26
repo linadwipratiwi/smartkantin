@@ -14,7 +14,8 @@
     <hr style="border-style:dotted" />
     <!-- /Title -->
     <button data-toggle="modal" data-target=".bs-example-modal-sm" style="position:fixed; bottom:25px; z-index:1031" class="btn btn-primary btn-square shadow-2dp">
-        <i class="zmdi zmdi-shopping-basket"></i>
+        {{-- <i class="zmdi zmdi-shop"></i> --}}
+        <img src="{{asset('dist/img/shop.png')}}" style="margin-top:4px" width="20px" height="20px" alt="">
     </button>
     <div id="setting_panel_btn" onclick="gotoCart()">
         @if ($cart['total_item'] > 0)
