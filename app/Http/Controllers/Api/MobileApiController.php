@@ -17,6 +17,7 @@ use App\Exceptions\AppException;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\UserVendingMachine;
 use App\Models\VendingMachineTransaction;
 use App\User;
 
@@ -331,23 +332,24 @@ class MobileApiController extends Controller
             $type="client";
             $client=Client::where('user_id', $user->id)->first();
             if(!$client){
-                $type="vending/stand";
-                $vending=VendingMachine::where('user_id',$user->id)->first();     
-                if(!$vending){
-                    $type="customer";
-                    $customer=Customer::where('user_id',$user->id)->first(); 
-                    if(!$customer){
+                $type="customer";
+                $customer=Customer::where('user_id',$user->id)->first(); 
+                if(!$customer){
+                    $type="vending/stand";
+                    $vending_id=UserVendingMachine::where('user_id',$user->id)->first()->vending_machine_id;
+                    $vending=VendingMachine::find($vending_id);
+                    if(!$vending){
                         return response()->json([
                             'status' => 0,
                             'msg' => 'type user not found'
                         ]);
                     }
                     else{
-                        $data=$customer;
+                        $data=$vending;
                     }
                 }
                 else{
-                    $data=$vending;
+                    $data=$customer;
                 }
             }
             else{
