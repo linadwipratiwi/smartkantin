@@ -40,9 +40,11 @@ trait AuthApiControllerTrait
     /** Test JWT Request */
     public function getUser()
     {
+        $role = Auth::user()->roleUser;
         $response = [
             "success" => true,
-            "data" => Auth::user()
+            "data" => Auth::user(),
+            "role" => $role
         ];
     
         return response()
