@@ -589,6 +589,130 @@ class MobileApiController extends Controller
         );
     }
 
+      /**preorder check */
+      public static function preorderCheck(Request $request)
+      {
+          $customer_identity_number= $request->input('customer_identity_number');
+          $vending_machine_alias= $request->input('vending_machine_alias');
+         
+          /*cek vending machine*/
+          $vending_machine=VendingMachine::Where('alias', $vending_machine_alias)->first();
+          if (!$vending_machine) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'vending machine not found'
+              ]]);
+          }
+          $vending_machine_id=$vending_machine->id;
+          $vending_machine_client_id=$vending_machine->client_id;
+          
+          //    cek customer
+          $customer= Customer::where(['identity_number' => $customer_identity_number,
+                                      'register_at_client_id'=>$vending_machine_client_id])->first();
+          if (!$customer) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'customer identity not found'
+              ]]);
+          }
+          $customer_id=$customer->id;
+  
+          $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
+                                      'vending_machine_id'=>$vending_machine_id,
+                                      'status_transaction'=>'3'])->get();
+  
+          $hasil=[];
+          foreach ($transactions as $data) {
+              $text= json_decode($data, true);
+              $text['customer_name']=$customer->name;
+              $text['customer_identity_number']=$customer->identity_number;
+              $text['msg']="success";
+              $hasil[]=$text;
+          }
+          if (!$hasil) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'no preorder found'
+              ]]);
+          }
+          return response()->json(
+              $hasil
+          );
+      }
+
+
+      
+      /**preoder take*/
+      public static function preorderTake(Request $request)
+      {
+          $customer_identity_number = $request->input('customer_identity_number');
+          $vending_machine_alias = $request->input('vending_machine_alias');
+        
+          /*cek vending machine*/
+          $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+          if (!$vending_machine) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'vending machine not found'
+              ]]);
+          }
+          $vending_machine_id = $vending_machine->id;
+          $vending_machine_client_id = $vending_machine->client_id;
+        
+          $customer = Customer::where(['identity_number'=> $customer_identity_number,
+                                       'register_at_client_id'=> $vending_machine_client_id
+          ])->first();
+          if (!$customer) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'customer identity not found'
+              ]]);
+          }
+  
+          $customer_id = $customer->id;
+        
+          $where = [
+              'customer_id' => $customer_id,
+              'vending_machine_id' => $vending_machine_id,
+              'status_transaction' => '3'
+          ];
+          $transactions = VendingMachineTransaction::where($where)->get();
+   
+          $hasil=[];
+          $hargaTotal=0;
+          foreach ($transactions as $transaction) {
+              $status_transaction = $transaction->status_transaction;
+              $harga = $transaction->selling_price_vending_machine;
+              $quantity = $transaction->quantity;
+              $hargaTotal = $hargaTotal+($harga* $quantity);
+              $hasil[] = $transaction;
+          }
+  
+          if (!$hasil) {
+              return response()->json([
+                  "status"=>0,
+                  "msg"=>"no preorder found"
+              ]);
+          }
+  
+      
+          DB::commit();
+          foreach ($transactions as $transaction) {
+              $transaction->status_transaction=1;
+              $transaction->save();
+              DB::commit();
+          }
+          
+          $customer_= json_decode($customer, true);
+          $customer_['msg']="success";
+          $customer_['status']=1;
+  
+          return response()->json(
+              $customer_
+          );
+      }
+  
+
     /**All history */
     public static function allHistory($request)
     {
