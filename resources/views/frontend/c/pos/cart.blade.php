@@ -104,12 +104,19 @@
             <div class="panel" style="border:none">
                 <div class="panel-wrapper" style="color: black">
                     <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Pesan Sekarang</a>
+                    <?php 
+                        $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
+                        $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
+                        $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
+                    ?>
+
+                    @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
                     <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-    <?php $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));?>
     <!-- /Row -->
 
     {{-- modal --}}
