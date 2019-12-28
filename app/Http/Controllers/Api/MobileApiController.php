@@ -590,13 +590,18 @@ class MobileApiController extends Controller
     }
 
       /**preorder check */
-      public static function preorderCheck(Request $request)
+      public static function orderCheck(Request $request)
       {
           $customer_identity_number= $request->input('customer_identity_number');
           $vending_machine_alias= $request->input('vending_machine_alias');
-         
+          $vending_machine_id=$request->input('vending_machine_id');
+          $isPreorder=$request->input('is_preorder');
           /*cek vending machine*/
-          $vending_machine=VendingMachine::Where('alias', $vending_machine_alias)->first();
+          if ($vending_machine_alias)
+                $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+          else if($vending_machine_id){
+                    $vending_machine=VendingMachine::find($vending_machine_id);    
+            }
           if (!$vending_machine) {
               return response()->json([[
                   'status' => 0,
@@ -616,10 +621,13 @@ class MobileApiController extends Controller
               ]]);
           }
           $customer_id=$customer->id;
-  
-          $transactions=VendingMachineTransaction::Where(['customer_id'=>$customer_id,
-                                      'vending_machine_id'=>$vending_machine_id,
-                                      'status_transaction'=>'3'])->get();
+          $where=[
+            'customer_id'=>$customer_id,
+            'vending_machine_id'=>$vending_machine_id,
+            'status_transaction'=>'3',
+            'is_preorder'=>$isPreorder
+          ];
+          $transactions=VendingMachineTransaction::Where($where)->get();
   
           $hasil=[];
           foreach ($transactions as $data) {
@@ -643,18 +651,23 @@ class MobileApiController extends Controller
 
       
       /**preoder take*/
-      public static function preorderTake(Request $request)
+      public static function orderTake(Request $request)
       {
           $customer_identity_number = $request->input('customer_identity_number');
           $vending_machine_alias = $request->input('vending_machine_alias');
-        
+          $vending_machine_id=$request->input('vending_machine_id');
+          $isPreorder=$request->input('is_preorder');
           /*cek vending machine*/
-          $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
-          if (!$vending_machine) {
-              return response()->json([[
+          if ($vending_machine_alias)
+                  $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+          else if($vending_machine_id){
+                $vending_machine=VendingMachine::find($vending_machine_id);    
+          }
+        if (!$vending_machine) {
+              return response()->json([
                   'status' => 0,
                   'msg' => 'vending machine not found'
-              ]]);
+              ]);
           }
           $vending_machine_id = $vending_machine->id;
           $vending_machine_client_id = $vending_machine->client_id;
@@ -674,7 +687,8 @@ class MobileApiController extends Controller
           $where = [
               'customer_id' => $customer_id,
               'vending_machine_id' => $vending_machine_id,
-              'status_transaction' => '3'
+              'status_transaction' => '3',
+              'is_preorder'=> $isPreorder
           ];
           $transactions = VendingMachineTransaction::where($where)->get();
    
@@ -803,6 +817,8 @@ class MobileApiController extends Controller
     {
         $stand_alias=$request->input('alias');
         $id=$request->input('id');
+        $isPreorder=$request->input('is_preorder')?:0;
+        $statusTransaction=$request->input('status_transaction');
 
         /* cek alias */
         if ($stand_alias) {
@@ -820,7 +836,20 @@ class MobileApiController extends Controller
         /*id stand*/
         $stand_id= $stand->id;
         /** Cek customer ada apa tidak */
-        $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
+        if($statusTransaction){
+            $where=[
+                'vending_machine_id'=> $stand->id,
+                'status_transaction'=>$statusTransaction,
+                'is_preorder'=>$isPreorder
+            ];
+        }
+        else{
+            $where=[
+                'vending_machine_id'=> $stand->id,
+                'is_preorder'=>$isPreorder
+            ];
+        }
+        $transaction = VendingMachineTransaction::where($where)->get();
         
         $hasil=[];
         if ($transaction) {
