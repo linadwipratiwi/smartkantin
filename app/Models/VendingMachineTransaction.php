@@ -107,6 +107,12 @@ class VendingMachineTransaction extends Model
         return $q;
     }
 
+    public function isPreorder()
+    {
+        if ($this->is_preorder) {
+            return '<span class="label label-info">Preorder</span>';
+        }
+    }
     public function status($type=null)
     {
         if ($this->status_transaction == 0) {

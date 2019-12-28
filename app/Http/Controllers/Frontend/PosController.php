@@ -162,9 +162,11 @@ class PosController extends Controller
     /** proses checkout */
     public function checkout()
     {
+        $is_preorder = 0;
         $preorder_date = \Input::get('preorder_date');
         if ($preorder_date) {
             $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
+            $is_preorder = 1;
         } else {
             $preorder_date = Carbon::now();
         }
@@ -213,6 +215,7 @@ class PosController extends Controller
             $client = $vending_machine_slot->vendingMachine->client;
             $transaction = new VendingMachineTransaction;
             $transaction->preorder_date = $preorder_date;
+            $transaction->is_preorder = $is_preorder;
             $transaction->transaction_number = $transaction_number;
             $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
             $transaction->vending_machine_slot_id = $vending_machine_slot->id;

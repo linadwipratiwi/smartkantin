@@ -15,6 +15,7 @@ class AddColumnDatePreorderVendingMachineTransactionTable extends Migration
     {
         Schema::table('vending_machine_transactions', function ($table) {
             $table->dateTime('preorder_date')->useCurrent(); // tanggal preorder. default hari ini
+            $table->boolean('is_preorder')->default(false);
         });
     }
 
@@ -27,7 +28,7 @@ class AddColumnDatePreorderVendingMachineTransactionTable extends Migration
     {
         Schema::table('vending_machine_transactions', function ($table) {
             $table->dropColumn([
-                'preorder_date'
+                'preorder_date', 'is_preorder'
             ]);
         });
     }
