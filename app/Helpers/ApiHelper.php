@@ -113,7 +113,6 @@ class ApiHelper
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
         $vending_machine->flaging_transaction = Str::random(10);
-        ;
         $vending_machine->save();
 
         
@@ -191,7 +190,7 @@ class ApiHelper
         $stock_mutation = new StockMutation;
         $stock_mutation->vending_machine_id = $transaction->vending_machine_id;
         $stock_mutation->vending_machine_slot_id = $transaction->vending_machine_slot_id;
-        $stock_mutation->stock = 1; // stok dikurang 1
+        $stock_mutation->stock = $transaction->quantity; // stok dikurang 1
         $stock_mutation->type = 'transaction_fail';
         $stock_mutation->food_name = $transaction->food_name;
         $stock_mutation->hpp = $transaction->hpp;
@@ -201,7 +200,7 @@ class ApiHelper
 
         /** update stock di vending machine */
         $vending_machine_slot = VendingMachineSlot::find($transaction->vending_machine_slot_id);
-        $vending_machine_slot->stock = $vending_machine_slot->stock + 1; // stok di vending machine ditambah 1
+        $vending_machine_slot->stock = $vending_machine_slot->stock + $transaction->quantity; // stok di vending machine ditambah 1
         $vending_machine_slot->save();
 
         $customer = $transaction->customer;
@@ -227,7 +226,7 @@ class ApiHelper
         $stock_mutation = new StockMutation;
         $stock_mutation->vending_machine_id = $transaction->vending_machine_id;
         $stock_mutation->vending_machine_slot_id = $transaction->vending_machine_slot_id;
-        $stock_mutation->stock = -1; // stok dikurang 1
+        $stock_mutation->stock = $transaction->quantity * -1; // stok dikurang 1
         $stock_mutation->type = 'transaction';
         $stock_mutation->food_name = $transaction->food_name;
         $stock_mutation->hpp = $transaction->hpp;
@@ -237,7 +236,7 @@ class ApiHelper
 
         // update stock di vending machine
         $vending_machine_slot = VendingMachineSlot::find($transaction->vending_machine_slot_id);
-        $vending_machine_slot->stock = $vending_machine_slot->stock - 1; // stok di vending machine dikurang 1
+        $vending_machine_slot->stock = $vending_machine_slot->stock - $transaction->quantity; // stok di vending machine dikurang 1
         $vending_machine_slot->save();
     }
 

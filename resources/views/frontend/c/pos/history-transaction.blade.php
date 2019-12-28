@@ -65,7 +65,7 @@
 
                                         ?>
                                         <tr>
-                                            <td colspan="7">{{$transaction->transaction_number}}</td>
+                                            <td colspan="7">{{$transaction->transaction_number}} {!! $transaction->isPreorder() !!}</td>
                                         </tr>
                                         @foreach ($transaction_detail as  $row => $detail)
                                         

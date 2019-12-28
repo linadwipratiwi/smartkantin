@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Helpers\DateHelper;
+use App\Models\VendingMachineTransaction;
 
 class VendingMachineTransaction extends Model
 {
@@ -36,19 +37,40 @@ class VendingMachineTransaction extends Model
         return $this->belongsTo('App\Models\Food', 'food_id');
     }
 
+    /**
+     * Failed
+     * Gagal
+     */
+    public function scopeFailed($q)
+    {
+        $q->where('status_transaction', 0);
+    }
+
+    /** 
+     * Sukses
+     * Stok sudah diambil dan saldo sudah terpotong
+     */
     public function scopeSuccess($q)
     {
         $q->where('status_transaction', 1);
     }
 
+    /**
+     * Pending
+     * Stok belum diambil dan saldo belum terpotong
+     */
     public function scopePending($q)
     {
         $q->where('status_transaction', 2);
     }
 
-    public function scopeFailed($q)
+    /**
+     * Success not delivered
+     * Stok belum diambil dan saldo sudah terpotong
+     */
+    public function scopeSuccessNotDelivered($q)
     {
-        $q->where('status_transaction', 0);
+        $q->where('status_transaction', 3);
     }
 
     public function scopeSearch($q)
@@ -85,15 +107,14 @@ class VendingMachineTransaction extends Model
         return $q;
     }
 
+    public function isPreorder()
+    {
+        if ($this->is_preorder) {
+            return '<span class="label label-info">Preorder</span>';
+        }
+    }
     public function status($type=null)
     {
-        if ($this->status_transaction == 1) {
-            if ($type == 'excel') {
-                return 'Success';
-            }
-            return '<span class="label label-success capitalize-font inline-block ml-10">Success</span>';
-        }
-
         if ($this->status_transaction == 0) {
             if ($type == 'excel') {
                 return 'Failed';
@@ -101,11 +122,25 @@ class VendingMachineTransaction extends Model
             return '<span class="label label-info capitalize-font inline-block ml-10">Failed</span>';
         }
 
+        if ($this->status_transaction == 1) {
+            if ($type == 'excel') {
+                return 'Success with delivered';
+            }
+            return '<span class="label label-success capitalize-font inline-block ml-10">Success with delivered</span>';
+        }
+
         if ($this->status_transaction == 2) {
             if ($type == 'excel') {
                 return 'Payment Pending';
             }
             return '<span class="label label-warning capitalize-font inline-block ml-10">Payment Pending</span>';
+        }
+
+        if ($this->status_transaction == 3) {
+            if ($type == 'excel') {
+                return 'Success with not delivered';
+            }
+            return '<span class="label label-success capitalize-font inline-block ml-10">Success with not delivered</span>';
         }
     }
 
