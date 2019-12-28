@@ -88,15 +88,6 @@
 			</div>
 		</div>
 
-		<!-- Modal Camera -->
-		<div class="row">
-			<input type="hidden" id="img-target">
-			<input type="hidden" id="input-link">
-			<div class="modal fade camera-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-				aria-hidden="true" style="display: none;">
-				<div class="modal-dialog modal-lg" id="modal-camera"></div>
-			</div>
-		</div>
     </div>
     <!-- /#wrapper -->
 	<script>

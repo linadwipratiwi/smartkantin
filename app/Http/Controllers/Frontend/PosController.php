@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Carbon\Carbon;
 use App\Models\Temp;
 use App\Models\Category;
 use App\Models\Customer;
+use App\Helpers\ApiHelper;
 use App\Helpers\PosHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -160,6 +162,13 @@ class PosController extends Controller
     /** proses checkout */
     public function checkout()
     {
+        $preorder_date = \Input::get('preorder_date');
+        if ($preorder_date) {
+            $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
+        } else {
+            $preorder_date = Carbon::now();
+        }
+        
         $temp_key = PosHelper::getTempKey();
         $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
         DB::beginTransaction();
@@ -203,6 +212,7 @@ class PosController extends Controller
 
             $client = $vending_machine_slot->vendingMachine->client;
             $transaction = new VendingMachineTransaction;
+            $transaction->preorder_date = $preorder_date;
             $transaction->transaction_number = $transaction_number;
             $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
             $transaction->vending_machine_slot_id = $vending_machine_slot->id;
@@ -225,14 +235,30 @@ class PosController extends Controller
             $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
             $transaction->quantity = $cart['quantity'];
             $transaction->total = $cart['quantity'] * $vending_machine_slot->food->selling_price_vending_machine;
-            $transaction->status_transaction = 2; // set pending payment
+            $transaction->status_transaction = 3; // success with not delivered
             $transaction->save();
 
             /** Update flaging transaksi. Digunakan untuk Smansa */
             $vending_machine = $transaction->vendingMachine;
             $vending_machine->flaging_transaction = Str::random(10);
-            ;
             $vending_machine->save();
+
+            /** Kurangi saldo customer */
+            $customer = $transaction->customer;
+            $saldo_pens_akhir = $saldo_pens - $transaction->selling_price_vending_machine;
+            if ($saldo_pens_akhir < 0) {
+                /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
+                $customer->saldo_pens = 0;
+                $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
+                $customer->saldo = $saldo - $biaya_kekurangan;
+            } else {
+                /** saldo pens masih sisa */
+                $customer->saldo_pens = $saldo_pens_akhir;
+            }
+
+            $customer->save();
+
+            ApiHelper::updateStockTransaction($transaction);
         }
 
         /** clear temp */

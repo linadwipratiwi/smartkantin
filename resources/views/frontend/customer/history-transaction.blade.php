@@ -42,6 +42,7 @@
                                             <th>Slot</th>
                                             <th>Food Nama</th>
                                             <th>Vending Machine</th>
+                                            <th>Quantity</th>
                                             <th>Client</th>
                                             <th>Customer</th>
                                             <th>Selling Price VM</th>
@@ -57,6 +58,7 @@
                                             <td>{{$transaction->vendingMachineSlot->convertToAsci()}}</td>
                                             <td>{{$transaction->food_name}}</td>
                                             <td>{{$transaction->vendingMachine->name}}</td>
+                                            <td>{{$transaction->quantity}}</td>
                                             <td>{{$transaction->client->name}}</td>
                                             <td>{{$transaction->customer->name}}</td>
                                             <td>{{format_price($transaction->selling_price_vending_machine)}}</td>

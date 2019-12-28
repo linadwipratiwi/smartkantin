@@ -103,17 +103,71 @@
             <br><br>
             <div class="panel" style="border:none">
                 <div class="panel-wrapper" style="color: black">
-                    <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan</a>
+                    <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Pesan Sekarang</a>
+                    <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
                 </div>
             </div>
         </div>
     </div>
+    <?php $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));?>
     <!-- /Row -->
+
+    {{-- modal --}}
+    <div class="row">
+        <div class="modal fade preorder-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg" style="width:90% !important" id="modal-preorder">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >Masukkan tanggal ingin diambil</h4>
+                        </div>
+                        <div class="col-lg-12 mt-10" id="form-item">
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type='text' placeholder="pilih tanggal diambil" id="preorder-date" value="{{date('m-d-Y a', strtotime($carbon->addDays(1)))}}"  class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="button-list">
+                                <button type="button" class="btn btn-success bt-store pull-right" onclick="preorder()">Pesan nanti</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('scripts')
 <script>
+var next_date = moment().add(1, 'day').format('YYYY-MM-DD');;
+console.log(next_date);
+// initDatetime('.date');
+$('.date').datetimepicker({
+    useCurrent: false,
+    icons: {
+        time: "fa fa-clock-o",
+        date: "fa fa-calendar",
+        up: "fa fa-arrow-up",
+        down: "fa fa-arrow-down"
+    },
+    minDate: next_date,
+}).on('dp.show', function () {
+    if ($(this).data("DateTimePicker").date() === null)
+        $(this).data("DateTimePicker").date(moment());
+});
 
+function preorder() {
+    var preorder_date = $('#preorder-date').val();
+    location.href='{{url("c/checkout?preorder_date=")}}'+preorder_date;
+}
+
+/** add to cart **/
 function addToCart(id, is_remove) {
     $.ajax({
         url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
