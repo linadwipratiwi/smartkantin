@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
+use App\Models\Food;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
 use App\Exceptions\AppException;
@@ -812,6 +813,8 @@ class MobileApiController extends Controller
         }
         return response()->json($hasil);
     }
+
+
     /**History */
     public static function history(Request $request)
     {
@@ -905,5 +908,41 @@ class MobileApiController extends Controller
         }
 
         return response()->json($respon);
+    }
+
+    public function getFood($stand_id){
+        // $stand=VendingMachine::find($stand_id);
+        // if(!$stand){
+        //     return response()->json(["msg"=>"not found stand"]);
+        // }
+
+        $slots=VendingMachineSlot::where('vending_machine_id',$stand_id)->get();
+        $hasil=[];
+        if ($slots) {
+            foreach ($slots as $data) {
+                
+                $food_id=$data->food_id;
+                $food=Food::find($food_id);
+                if ($food) {
+                    $text= json_decode($food, true);
+                    $text["msg"]="success";
+                    $text["status"]=1;
+                    $hasil[]=($text);
+                }
+            }
+
+        }
+
+        if(!$hasil){
+            return response()->json([[
+                'status'=>1,
+                'msg'=>'not found slot'
+                ]]);
+        }
+        else{
+            return response()->json($hasil);
+
+        }
+
     }
 }

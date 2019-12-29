@@ -35,6 +35,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('client/list-stand/{client_id}','MobileApiController@listStand');
     Route::post('stand/transaction/order-check','MobileApiController@orderCheck');
     Route::post('stand/transaction/order-take','MobileApiController@orderTake');
+    Route::get('stand/food/{stand_id}','MobileApiController@getFood');
     
   });
 });
