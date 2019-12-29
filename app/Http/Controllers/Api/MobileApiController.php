@@ -910,12 +910,12 @@ class MobileApiController extends Controller
         return response()->json($respon);
     }
 
-    public function getFood($stand_id){
+    public function getFood(Request $request){
         // $stand=VendingMachine::find($stand_id);
         // if(!$stand){
         //     return response()->json(["msg"=>"not found stand"]);
         // }
-
+        $stand_id=$request->stand_id;
         $slots=VendingMachineSlot::where('vending_machine_id',$stand_id)->get();
         $hasil=[];
         if ($slots) {
