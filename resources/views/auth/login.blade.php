@@ -60,7 +60,6 @@
 									<div class="col-sm-12 col-xs-12">
 										<div class="mb-30 text-center">
 											<img class="brand-img mr-10" style="height:auto; width: 200px" src="{{asset('dist/img/logo-beepartner.png')}}" alt="brand"/>
-											<h3 class="text-left txt-dark mb-10">Sign in <br></h3>
 										</div>	
 										<div class="form-wrap">
                                             <form role="form" method="POST" action="{{ url('/login') }}">
