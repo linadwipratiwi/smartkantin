@@ -62,18 +62,17 @@
                                         <?php
                                         $transaction_detail = \App\Models\VendingMachineTransaction::where('transaction_number', $transaction->transaction_number)->get();
                                         $total_detail_group = 0;
-
+                                        dd($transaction_detail);
                                         ?>
                                         <tr>
                                             <td colspan="7">{{$transaction->transaction_number}} {!! $transaction->isPreorder() !!}</td>
                                         </tr>
                                         @foreach ($transaction_detail as  $row => $detail)
-                                        
                                         <?php $total_detail_group += $detail->total;?>
                                         <tr>
                                             <td>{{$row + 1}}</td>
                                             <td>{!!$detail->food->photo ? '<img width="50px" height="50px" src="'.asset($detail->food->photo).'">' : '-'!!}</td>
-                                            <td>{{$detail->food->name}} <br> <i style="font-size:10px" class="text-warning">{{$detail->vendingMachine->name}}</i></td>
+                                            <td>{{$detail->food->id}} {{$detail->food_name}} <br> <i style="font-size:10px" class="text-warning">{{$detail->vendingMachine->name}}</i></td>
                                             <td>{{$detail->quantity}}</td>
                                             <td>{{format_price($detail->selling_price_vending_machine)}}</td>
                                             <td>{{format_price($detail->total)}}</td>

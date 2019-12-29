@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="alert alert-success">
-                Silahkan bayar dan ambil pesanan Anda di Warung yang ditempat Anda beli.
+                Silahkan ambil pesanan Anda di Warung yang ditempat Anda beli.
             </div>
             <div class="panel panel-default card-view">
                 <div class="panel-heading">
