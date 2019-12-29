@@ -59,7 +59,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xs-12">
 										<div class="mb-30 text-center">
-											<img class="brand-img mr-10" style="height:80px; width: auto" src="{{asset('dist/img/login-2.png')}}" alt="brand"/>
+											<img class="brand-img mr-10" style="height:auto; width: 200px" src="{{asset('dist/img/logo-beepartner.png')}}" alt="brand"/>
 											<h3 class="text-left txt-dark mb-10">Sign in <br></h3>
 										</div>	
 										<div class="form-wrap">
@@ -67,21 +67,14 @@
                                                 {{ csrf_field() }}
 												<div class="form-group">
 													<label class="control-label mb-10" for="username">Username</label>
-													<input type="text" class="form-control" name="username" required value="{{old('username')}}" id="username">
+													<input type="text" class="form-control" name="username" required value="{{old('username')}}" placeholder="username" id="username">
 												</div>
 												<div class="form-group">
 													<label class="pull-left control-label mb-10" for="password">Password</label>
 													<div class="clearfix"></div>
-													<input type="password" class="form-control" name="password" required="" id="password" placeholder="Enter pwd">
+													<input type="password" class="form-control" name="password" required="" id="password" placeholder="password">
 												</div>
 												
-												<div class="form-group">
-													<div class="checkbox checkbox-primary pr-10 pull-left">
-														<input id="remember" name="remember" type="checkbox">
-														<label for="remember"> Keep me logged in</label>
-													</div>
-													<div class="clearfix"></div>
-												</div>
 												<div class="form-group text-center">
 													<button type="submit" class="btn btn-info btn-rounded">sign in</button>
 												</div>
