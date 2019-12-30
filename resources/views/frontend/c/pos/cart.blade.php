@@ -101,20 +101,25 @@
                 </div>
             </div>
             <br><br>
-            <div class="panel" style="border:none">
-                <div class="panel-wrapper" style="color: black">
-                    <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Pesan Sekarang</a>
-                    <?php 
-                        $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
-                        $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
-                        $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
-                    ?>
+            {{-- <div class="panel" style="border:none"> --}}
+            <div class="panel-wrapper" style="color: black">
+                <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Pesan Sekarang</a>
+                <?php 
+                    $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
+                    $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
+                    $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
+                ?>
 
-                    @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
-                    <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
-                    @endif
-                </div>
+                @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
+                <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
+                @else
+                <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button>
+                @endif
             </div>
+            {{-- </div> --}}
+            @if (!($carbon <= $carbon_max && $carbon>= $carbon_limit))
+            <p class="text-info">Pesan nanti / preorder hanya tersedia pada jam 08:00 - 16:00.</p>
+            @endif
         </div>
     </div>
     <!-- /Row -->
