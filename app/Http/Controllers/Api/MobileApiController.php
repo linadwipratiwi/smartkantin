@@ -628,6 +628,7 @@ class MobileApiController extends Controller
             'status_transaction'=>'3',
             'is_preorder'=>$isPreorder
           ];
+
           $transactions=VendingMachineTransaction::Where($where)->get();
   
           $hasil=[];
@@ -864,7 +865,7 @@ class MobileApiController extends Controller
                     $text['customer_name']=$customer->name;
                     $text['customer_identity_number']=$customer->identity_number;
                     $text['msg']="success";
-                    $text['food_id']= VendingMachineSlot::find($text['vending_machine_slot_id'])->food_id;
+                    // $text['food_id']= VendingMachineSlot::find($text['vending_machine_slot_id'])->food_id;
                     $hasil[]=($text);
                 }
             }
