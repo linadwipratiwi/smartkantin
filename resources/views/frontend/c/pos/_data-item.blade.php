@@ -16,7 +16,7 @@
                         <div class="panel-body pa-5">
                             <article class="col-item">
                                 <div class="photo">
-                                    <a href="javascript:void(0);"> <img src="{{asset($item->food->photo)}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:150px; height:150px" alt="Product Image" /> </a>
+                                    <a href="javascript:void(0);"> <img src="{{$item->food->photo ? asset($item->food->photo) : 'https://www.oatey.com//ASSETS/IMAGES/ITEMS/DETAIL_PAGE/NoImage.png'}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:150px; height:150px" alt="Product Image" /> </a>
                                 </div>
                                 <div class="pt-5">
                                     <div class="product-rating inline-block" style="font-size:12px">
