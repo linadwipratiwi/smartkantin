@@ -221,7 +221,7 @@ class PosController extends Controller
             $transaction->vending_machine_slot_id = $vending_machine_slot->id;
             $transaction->client_id = $vending_machine_slot->vendingMachine->client_id;
             $transaction->customer_id = $customer->id;
-            $transaction->food_id = $vending_machine_slot->food->client_id;
+            $transaction->food_id = $vending_machine_slot->food->id;
             $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
             $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
             $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
