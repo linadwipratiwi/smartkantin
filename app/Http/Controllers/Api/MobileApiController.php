@@ -848,8 +848,7 @@ class MobileApiController extends Controller
         }
         else{
             $where=[
-                'vending_machine_id'=> $stand->id,
-                'is_preorder'=>$isPreorder
+                'vending_machine_id'=> $stand->id
             ];
         }
         $transaction = VendingMachineTransaction::where($where)->get();
