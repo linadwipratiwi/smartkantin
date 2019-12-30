@@ -21,7 +21,7 @@
                                     if ($item->food) {
                                         $img = $item->food->photo ? asset($item->food->photo) : $img;
                                     }?>
-                                    <a href="javascript:void(0);"> @if($item->food)<img src="{{$img}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:150px; height:150px" alt="Product Image" /> </a>
+                                    <a href="javascript:void(0);"><img src="{{$img}}" id="food-photo-{{$item->id}}" class="img-responsive" style="width:150px; height:150px" alt="Product Image" /> </a>
                                 </div>
                                 <div class="pt-5">
                                     <div class="product-rating inline-block" style="font-size:12px">
