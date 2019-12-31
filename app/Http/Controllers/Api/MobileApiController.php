@@ -852,8 +852,8 @@ class MobileApiController extends Controller
                 'vending_machine_id'=> $stand->id
             ];
         }
-        $transaction = VendingMachineTransaction::where($where)->get();
-        
+        $transaction = VendingMachineTransaction::where($where)
+                ->orderBy('preorder_date', 'ASC')->get();
         $hasil=[];
         if ($transaction) {
             foreach ($transaction as $data) {
