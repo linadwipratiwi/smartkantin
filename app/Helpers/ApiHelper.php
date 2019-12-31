@@ -62,7 +62,7 @@ class ApiHelper
         $saldo_pens = $customer->saldo_pens;
         $saldo_total = $saldo + $saldo_pens;
 
-        $selling_price_vending_machine = $vending_machine_slot->selling_price_vending_machine;
+        $selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
         if ($payment_type == 'saldo') {
             /** jika saldo total kurang dari harga jual */
             if ($saldo_total < $selling_price_vending_machine) {
@@ -103,10 +103,10 @@ class ApiHelper
         // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
         $transaction->profit_platform = $client->profit_platform_value;
         if ($transaction->profit_platform_type == 'percent') {
-            $transaction->profit_platform = $vending_machine_slot->selling_price_vending_machine * $vending_machine_slot->profit_platform_percent / 100;
+            $transaction->profit_platform = $selling_price_vending_machine * $vending_machine_slot->food->profit_platform_percent / 100;
         }
 
-        $transaction->selling_price_vending_machine = $vending_machine_slot->food->selling_price_vending_machine;
+        $transaction->selling_price_vending_machine = $selling_price_vending_machine;
         $transaction->quantity = 1;
         $transaction->status_transaction = 1;
 
@@ -169,7 +169,7 @@ class ApiHelper
          * 1. Ubah status vending machine
          * 2. kembalikan stok dengan proses stock opname
          * 3. Update stok di vending mesin
-         * 4. Kembalikan saldo pelanggan
+         * 4. Kembalikan saldo pelanggan + keuntungan platform
          */
         $transaction = VendingMachineTransaction::find($transaction_id);
         if (!$transaction) {
