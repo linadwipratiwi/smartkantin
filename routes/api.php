@@ -21,6 +21,7 @@ Route::group(['prefix' => 'v1'], function () {
     
     Route::post('post-login', 'MobileApiController@postLogin');
 
+    Route::post('firebase-token-store', 'MobileApiController@firebaseTokenStore');
     Route::post('multipayment', 'MobileApiController@multipayment');
     Route::post('topup', 'MobileApiController@topup');
     Route::post('transaction', 'MobileApiController@transaction');

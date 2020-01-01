@@ -11,6 +11,7 @@ use App\Helpers\ApiHelper;
 use Illuminate\Support\Str;
 use App\Models\Multipayment;
 use Illuminate\Http\Request;
+use App\Models\FirebaseToken;
 use App\Models\TransferSaldo;
 use App\Models\Food;
 use App\Models\VendingMachine;
@@ -943,6 +944,22 @@ class MobileApiController extends Controller
             return response()->json($hasil);
 
         }
+    }
 
+    /** Firebase Token Store */
+    public function firebaseTokenStore(Request $request)
+    {
+        $token = $request->token;
+        $user_id = $request->user_id;
+
+        $firebase_token = FirebaseToken::where('token', $token)->first();
+        
+        /** Store */
+        $firebase_token = $firebase_token ? : new FirebaseToken;
+        $firebase_token->token = $token;
+        $firebase_token->user_id = $user_id;
+        $firebase_token->save();
+
+        return response()->json(['status' => 'success']);
     }
 }

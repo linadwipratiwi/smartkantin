@@ -35,6 +35,11 @@ class VendingMachine extends Model
         return $this->hasMany('App\Models\StockMutation', 'vending_machine_id')->orderBy('created_at', 'desc');
     }
 
+    public function userVendingMachine()
+    {
+        return $this->hasMany('App\Models\UserVendingMachine', 'vending_machine_id');
+    }
+
     public function scopeClientId($q, $client_id)
     {
         $q->where('client_id', $client_id);
