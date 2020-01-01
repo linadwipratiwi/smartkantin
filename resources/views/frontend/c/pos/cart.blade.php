@@ -112,7 +112,7 @@
 
                 @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
                 <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
-                @else
+                {{-- @else --}}
                 <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button>
                 @endif
             </div>
