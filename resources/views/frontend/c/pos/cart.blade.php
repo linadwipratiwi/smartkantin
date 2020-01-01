@@ -110,10 +110,10 @@
                     $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
                 ?>
 
-                @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
                 <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
-                {{-- @else --}}
-                <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button>
+                @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
+                @else
+                {{-- <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button> --}}
                 @endif
             </div>
             {{-- </div> --}}
