@@ -294,20 +294,33 @@ class MobileApiController extends Controller
         }
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
-            // Success
-            // get stand
-            $stand=VendingMachine::where('user_id', $user->id)->first();
-            $client=Client::where('id', $stand->client_id);
+            // login Success
+
+            // mencari type user
+            $type="vending/stand";
+            $vending_id=UserVendingMachine::where('user_id', $user->id)->first()->vending_machine_id;
+            $vending=VendingMachine::find($vending_id);
+            if (!$vending) {
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'type user not found'
+                ]);
+            } else {
+                $data=$vending;
+            }
+
+            
             return response()->json([
-                 'status' => 1,
-                 'alias'=>$stand->alias,
-                 'name'=> $stand->name,
-                 'client_location'=>$client->address,
-                 'client_name'=> $client->name,
+                'status' => 1,
+                'user_id'=>$user->id,
+                 'id'=>$data->id,
+                 'type'=>$type,
+                 'name'=> $data->name,
                  'msg' => 'access granted'
                  
             ]);
-        } else {
+        } 
+        else {
             return response()->json([
                 'status' => 0,
                 'msg' => 'acces denied'
@@ -952,6 +965,10 @@ class MobileApiController extends Controller
         $token = $request->token;
         $user_id = $request->user_id;
 
+        $user=User::find($user_id);
+        if(!$user){
+            return response()->json(['status' =>0, "msg"=> 'not found user']);
+        }
         $firebase_token = FirebaseToken::where('token', $token)->first();
         
         /** Store */
@@ -960,6 +977,6 @@ class MobileApiController extends Controller
         $firebase_token->user_id = $user_id;
         $firebase_token->save();
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' =>1, "msg"=> 'success']);
     }
 }
