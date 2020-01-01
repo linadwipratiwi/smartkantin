@@ -11,6 +11,7 @@ use App\Helpers\PosHelper;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\VendingMachine;
+use App\Helpers\FirebaseHelper;
 use App\Helpers\TempDataHelper;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
@@ -269,6 +270,8 @@ class PosController extends Controller
         TempDataHelper::clear($temp_key, auth()->user()->id);
 
         DB::commit();
+        FirebaseHelper::pushFirebaseNotification($transaction);
+
         toaster_success('Pesanan Anda berhasil ditempatkan.');
         return redirect('c/success-order/'.$transaction_number);
     }
