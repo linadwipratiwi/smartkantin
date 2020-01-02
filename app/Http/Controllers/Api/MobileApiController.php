@@ -947,6 +947,7 @@ class MobileApiController extends Controller
                     $text= json_decode($food, true);
                     $text["msg"]="success";
                     $text["stock"]= $data->stock;
+                    $text["slot_id"]= $data->id;
                     $text["status"]=1;
                     $hasil[]=($text);
                 }
@@ -965,6 +966,7 @@ class MobileApiController extends Controller
 
         }
     }
+
 
     /** Firebase Token Store */
     public function firebaseTokenStore(Request $request)
@@ -985,5 +987,27 @@ class MobileApiController extends Controller
         $firebase_token->save();
 
         return response()->json(['status' =>1, "msg"=> 'success']);
+    }
+    
+    public function setFoodStock(Request $request){
+        $slot_id=$request->input('slot_id');
+        $stock= $request->input('stock');
+
+        $slot= VendingMachineSlot::find($slot_id);
+        if($slot){
+            $slot->stock=$stock;
+            $slot->save();
+            return response()->json([
+                "status"=>1,
+                "msg" => "success"
+            ]);            
+        }
+        else{
+            return response()->json([
+                "status"=>0,
+                "msg" => "not found slot"
+            ]);
+        }
+
     }
 }

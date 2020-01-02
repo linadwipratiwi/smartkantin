@@ -37,6 +37,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('stand/transaction/order-check','MobileApiController@orderCheck');
     Route::post('stand/transaction/order-take','MobileApiController@orderTake');
     Route::post('stand/food','MobileApiController@getFood');
+    Route::post('stand/updatestock','MobileApiController@setFoodStock');
     
   });
 });
