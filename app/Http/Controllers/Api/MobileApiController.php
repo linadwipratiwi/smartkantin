@@ -946,6 +946,7 @@ class MobileApiController extends Controller
                 if ($food) {
                     $text= json_decode($food, true);
                     $text["msg"]="success";
+                    $text["stock"]= $data->stock;
                     $text["status"]=1;
                     $hasil[]=($text);
                 }
