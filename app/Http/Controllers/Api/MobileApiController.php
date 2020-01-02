@@ -13,6 +13,7 @@ use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\FirebaseToken;
 use App\Models\TransferSaldo;
+use App\Models\Food;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
 use App\Exceptions\AppException;
@@ -293,20 +294,39 @@ class MobileApiController extends Controller
         }
         $hasher = app('hash');
         if ($hasher->check($password, $user->password)) {
-            // Success
-            // get stand
-            $stand=VendingMachine::where('user_id', $user->id)->first();
-            $client=Client::where('id', $stand->client_id);
+            // login Success
+
+            // mencari type user
+            $type="vending/stand";
+            $vending_id=UserVendingMachine::where('user_id', $user->id)->first()->vending_machine_id;
+            $vending=VendingMachine::find($vending_id);
+            if (!$vending) {
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'type user not found'
+                ]);
+            } else {
+                $data=$vending;
+            }
+            $client=Client::find($vending->client_id);
+            $client_name="";
+            if($client){
+                $client_name=$client->name;
+            }
+
+            
             return response()->json([
-                 'status' => 1,
-                 'alias'=>$stand->alias,
-                 'name'=> $stand->name,
-                 'client_location'=>$client->address,
-                 'client_name'=> $client->name,
+                'status' => 1,
+                'user_id'=>$user->id,
+                 'id'=>$data->id,
+                 'type'=>$type,
+                 'name'=> $data->name,
+                 'client_name' =>$client_name,
                  'msg' => 'access granted'
                  
             ]);
-        } else {
+        } 
+        else {
             return response()->json([
                 'status' => 0,
                 'msg' => 'acces denied'
@@ -590,6 +610,145 @@ class MobileApiController extends Controller
         );
     }
 
+      /**preorder check */
+      public static function orderCheck(Request $request)
+      {
+          $customer_identity_number= $request->input('customer_identity_number');
+          $vending_machine_alias= $request->input('vending_machine_alias');
+          $vending_machine_id=$request->input('vending_machine_id');
+          $isPreorder=$request->input('is_preorder');
+          /*cek vending machine*/
+          if ($vending_machine_alias)
+                $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+          else if($vending_machine_id){
+                    $vending_machine=VendingMachine::find($vending_machine_id);    
+            }
+          if (!$vending_machine) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'vending machine not found'
+              ]]);
+          }
+          $vending_machine_id=$vending_machine->id;
+          $vending_machine_client_id=$vending_machine->client_id;
+          
+          //    cek customer
+          $customer= Customer::where(['identity_number' => $customer_identity_number,
+                                      'register_at_client_id'=>$vending_machine_client_id])->first();
+          if (!$customer) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'customer identity not found'
+              ]]);
+          }
+          $customer_id=$customer->id;
+          $where=[
+            'customer_id'=>$customer_id,
+            'vending_machine_id'=>$vending_machine_id,
+            'status_transaction'=>'3',
+            'is_preorder'=>$isPreorder
+          ];
+
+          $transactions=VendingMachineTransaction::Where($where)->get();
+  
+          $hasil=[];
+          foreach ($transactions as $data) {
+              $text= json_decode($data, true);
+              $text['customer_name']=$customer->name;
+              $text['customer_identity_number']=$customer->identity_number;
+              $text['msg']="success";
+              $hasil[]=$text;
+          }
+          if (!$hasil) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'no preorder found'
+              ]]);
+          }
+          return response()->json(
+              $hasil
+          );
+      }
+
+
+      
+      /**preoder take*/
+      public static function orderTake(Request $request)
+      {
+          $customer_identity_number = $request->input('customer_identity_number');
+          $vending_machine_alias = $request->input('vending_machine_alias');
+          $vending_machine_id=$request->input('vending_machine_id');
+          $isPreorder=$request->input('is_preorder');
+          /*cek vending machine*/
+          if ($vending_machine_alias)
+                  $vending_machine = VendingMachine::Where('alias', $vending_machine_alias)->first();
+          else if($vending_machine_id){
+                $vending_machine=VendingMachine::find($vending_machine_id);    
+          }
+        if (!$vending_machine) {
+              return response()->json([
+                  'status' => 0,
+                  'msg' => 'vending machine not found'
+              ]);
+          }
+          $vending_machine_id = $vending_machine->id;
+          $vending_machine_client_id = $vending_machine->client_id;
+        
+          $customer = Customer::where(['identity_number'=> $customer_identity_number,
+                                       'register_at_client_id'=> $vending_machine_client_id
+          ])->first();
+          if (!$customer) {
+              return response()->json([[
+                  'status' => 0,
+                  'msg' => 'customer identity not found'
+              ]]);
+          }
+  
+          $customer_id = $customer->id;
+        
+          $where = [
+              'customer_id' => $customer_id,
+              'vending_machine_id' => $vending_machine_id,
+              'status_transaction' => '3',
+              'is_preorder'=> $isPreorder
+          ];
+          $transactions = VendingMachineTransaction::where($where)->get();
+   
+          $hasil=[];
+          $hargaTotal=0;
+          foreach ($transactions as $transaction) {
+              $status_transaction = $transaction->status_transaction;
+              $harga = $transaction->selling_price_vending_machine;
+              $quantity = $transaction->quantity;
+              $hargaTotal = $hargaTotal+($harga* $quantity);
+              $hasil[] = $transaction;
+          }
+  
+          if (!$hasil) {
+              return response()->json([
+                  "status"=>0,
+                  "msg"=>"no preorder found"
+              ]);
+          }
+  
+      
+          DB::commit();
+          foreach ($transactions as $transaction) {
+              $transaction->status_transaction=1;
+              $transaction->save();
+              DB::commit();
+          }
+          
+          $customer_= json_decode($customer, true);
+          $customer_['msg']="success";
+          $customer_['status']=1;
+  
+          return response()->json(
+              $customer_
+          );
+      }
+  
+
     /**All history */
     public static function allHistory($request)
     {
@@ -675,11 +834,15 @@ class MobileApiController extends Controller
         }
         return response()->json($hasil);
     }
+
+
     /**History */
     public static function history(Request $request)
     {
         $stand_alias=$request->input('alias');
         $id=$request->input('id');
+        $isPreorder=$request->input('is_preorder')?:0;
+        $statusTransaction=$request->input('status_transaction');
 
         /* cek alias */
         if ($stand_alias) {
@@ -697,8 +860,20 @@ class MobileApiController extends Controller
         /*id stand*/
         $stand_id= $stand->id;
         /** Cek customer ada apa tidak */
-        $transaction = VendingMachineTransaction::where('vending_machine_id', $stand->id)->get();
-        
+        if($statusTransaction){
+            $where=[
+                'vending_machine_id'=> $stand->id,
+                'status_transaction'=>$statusTransaction,
+                'is_preorder'=>$isPreorder
+            ];
+        }
+        else{
+            $where=[
+                'vending_machine_id'=> $stand->id
+            ];
+        }
+        $transaction = VendingMachineTransaction::where($where)
+                ->orderBy('preorder_date', 'ASC')->get();
         $hasil=[];
         if ($transaction) {
             foreach ($transaction as $data) {
@@ -710,6 +885,7 @@ class MobileApiController extends Controller
                     $text['customer_name']=$customer->name;
                     $text['customer_identity_number']=$customer->identity_number;
                     $text['msg']="success";
+                    // $text['food_id']= VendingMachineSlot::find($text['vending_machine_slot_id'])->food_id;
                     $hasil[]=($text);
                 }
             }
@@ -754,12 +930,54 @@ class MobileApiController extends Controller
         return response()->json($respon);
     }
 
+    public function getFood(Request $request){
+        // $stand=VendingMachine::find($stand_id);
+        // if(!$stand){
+        //     return response()->json(["msg"=>"not found stand"]);
+        // }
+        $stand_id=$request->stand_id;
+        $slots=VendingMachineSlot::where('vending_machine_id',$stand_id)->get();
+        $hasil=[];
+        if ($slots) {
+            foreach ($slots as $data) {
+                
+                $food_id=$data->food_id;
+                $food=Food::find($food_id);
+                if ($food) {
+                    $text= json_decode($food, true);
+                    $text["msg"]="success";
+                    $text["stock"]= $data->stock;
+                    $text["slot_id"]= $data->id;
+                    $text["status"]=1;
+                    $hasil[]=($text);
+                }
+            }
+
+        }
+
+        if(!$hasil){
+            return response()->json([[
+                'status'=>1,
+                'msg'=>'not found slot'
+                ]]);
+        }
+        else{
+            return response()->json($hasil);
+
+        }
+    }
+
+
     /** Firebase Token Store */
     public function firebaseTokenStore(Request $request)
     {
         $token = $request->token;
         $user_id = $request->user_id;
 
+        $user=User::find($user_id);
+        if(!$user){
+            return response()->json(['status' =>0, "msg"=> 'not found user']);
+        }
         $firebase_token = FirebaseToken::where('token', $token)->first();
         
         /** Store */
@@ -768,6 +986,28 @@ class MobileApiController extends Controller
         $firebase_token->user_id = $user_id;
         $firebase_token->save();
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' =>1, "msg"=> 'success']);
+    }
+    
+    public function setFoodStock(Request $request){
+        $slot_id=$request->input('slot_id');
+        $stock= $request->input('stock');
+
+        $slot= VendingMachineSlot::find($slot_id);
+        if($slot){
+            $slot->stock=$stock;
+            $slot->save();
+            return response()->json([
+                "status"=>1,
+                "msg" => "success"
+            ]);            
+        }
+        else{
+            return response()->json([
+                "status"=>0,
+                "msg" => "not found slot"
+            ]);
+        }
+
     }
 }
