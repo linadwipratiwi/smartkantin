@@ -592,9 +592,9 @@ class ApiHelper
         );
     
         try {
-            $respon_= $midtrans->gopayCharge($transaction_data);
-            $respon= json_decode($respon_, true);
-            $respon['id']=$transfer_saldo->id;
+            $respon_ = $midtrans->gopayCharge($transaction_data);
+            $respon = json_decode($respon_, true);
+            $respon['id'] = $transfer_saldo->id;
 
             return($respon);
         } catch (Exception $e) {

@@ -93,7 +93,7 @@
 			@endrole
 			
 			@role('customer')
-			<li class="navigation-header">
+				<li class="navigation-header">
 					<span>Main</span> 
 					<i class="zmdi zmdi-more"></i>
 				</li>
@@ -102,7 +102,10 @@
 				</li>
 				<li>
 						<a @if(\Request::segment(2) == 'history-transaction') class="active" @endif  href="{{url('c/history-transaction')}}"><div class="pull-left"><i class="zmdi zmdi-file mr-20"></i><span class="right-nav-text">Riwayat Transaksi</span></div><div class="clearfix"></div></a>
-					</li>
+				</li>
+				<li>
+					<a @if(\Request::segment(2) == 'topup') class="active" @endif  href="{{url('c/topup')}}"><div class="pull-left"><i class="fa fa-dollar mr-20"></i><span class="right-nav-text">Topup</span></div><div class="clearfix"></div></a>
+				</li>
 			@endrole
 				
 				<li><hr class="light-grey-hr mb-10"/></li>

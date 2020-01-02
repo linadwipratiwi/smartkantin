@@ -116,6 +116,9 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
 
 /** Customer */
 Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth', 'role:customer']], function () {
+    Route::get('topup/pending/{gopay_transaction_id}', 'Customer\TopupController@pending');
+    Route::resource('topup', 'Customer\TopupController');
+
     Route::get('history-transaction', 'PosController@historyTransaction');
     Route::get('success-order/{number}', 'PosController@successOrder');
     Route::get('add-to-cart/{id}', 'PosController@_addToCart');
