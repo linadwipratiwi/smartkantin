@@ -308,6 +308,11 @@ class MobileApiController extends Controller
             } else {
                 $data=$vending;
             }
+            $client=Client::find($vending->client_id);
+            $client_name="";
+            if($client){
+                $client_name=$client->name;
+            }
 
             
             return response()->json([
@@ -316,6 +321,7 @@ class MobileApiController extends Controller
                  'id'=>$data->id,
                  'type'=>$type,
                  'name'=> $data->name,
+                 'client_name' =>$client_name,
                  'msg' => 'access granted'
                  
             ]);
