@@ -11,14 +11,14 @@ class Midtrans
     * Your merchant's server key
     * @static
     */
-    // public static $serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0'; // Production
-    public static $serverKey = 'SB-Mid-server-aEwxEFGxMyGKhy5e3EdySMBl';
+    public static $serverKey = 'Mid-server-JB3rTclaX2JoBbV_2K4UACD0'; // Production
+    // public static $serverKey = 'SB-Mid-server-aEwxEFGxMyGKhy5e3EdySMBl';
     /**
       * true for production
       * false for sandbox mode
       * @static
       */
-    public static $isProduction = false;
+    public static $isProduction = true;
 
     /**
     * Default options for every request
