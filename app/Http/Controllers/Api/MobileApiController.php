@@ -658,8 +658,8 @@ class MobileApiController extends Controller
               ];
           }
          
-
-          $transactions=VendingMachineTransaction::Where($where)->get();
+          $todayDate=Date('Y-m-d');
+          $transactions = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
   
           $hasil=[];
           foreach ($transactions as $data) {
@@ -721,6 +721,7 @@ class MobileApiController extends Controller
                 'vending_machine_id' => $vending_machine_id,
                 'status_transaction' => '3',
                 'is_preorder'=> ($isPreorder%2)
+                
             ];
          }
          else{
@@ -731,7 +732,8 @@ class MobileApiController extends Controller
                
             ];
          }
-          $transactions = VendingMachineTransaction::where($where)->get();
+          $todayDate=Date('Y-m-d');
+          $transactions = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
    
           $hasil=[];
           $hargaTotal=0;
