@@ -35,17 +35,17 @@
                         <div class="panel-group accordion-struct" id="accordion_1" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default">
                                 <div class="panel-heading activestate" role="tab" id="heading_1">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_1" aria-expanded="true" class="">QR Code</a> 
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_1" aria-expanded="true" class="">1. Scan QR Code</a> 
                                 </div>
                                 <div id="collapse_1" class="panel-collapse collapse in" role="tabpanel" aria-expanded="true" style="">
                                     <div class="panel-body pa-15">
-                                        <iframe src="{{$gopay_transaction->url_qrcode}}" height="300" width="300"></iframe>    
+                                        <iframe src="{{$gopay_transaction->url_qrcode}}" height="800" width="800"></iframe>    
                                     </div>
                                 </div>
                             </div>
                             <div class="panel panel-default">
                                 <div class="panel-heading" role="tab" id="heading_2">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_2" aria-expanded="false">Aplikasi Gopay </a>
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_2" aria-expanded="false">2. Buka Aplikasi Gopay </a>
                                 </div>
                                 <div id="collapse_2" class="panel-collapse collapse" role="tabpanel" aria-expanded="false" style="height: 0px;">
                                     <div class="panel-body pa-15"> 
