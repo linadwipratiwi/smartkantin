@@ -38,7 +38,9 @@
                                     <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapse_1" aria-expanded="true" class="">QR Code</a> 
                                 </div>
                                 <div id="collapse_1" class="panel-collapse collapse in" role="tabpanel" aria-expanded="true" style="">
-                                    <div class="panel-body pa-15" id="qr-gopay"> </div>
+                                    <div class="panel-body pa-15">
+                                        <iframe src="{{$gopay_transaction->url_qrcode}}" height="300" width="300"></iframe>    
+                                    </div>
                                 </div>
                             </div>
                             <div class="panel panel-default">
