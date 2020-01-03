@@ -642,12 +642,22 @@ class MobileApiController extends Controller
               ]]);
           }
           $customer_id=$customer->id;
-          $where=[
-            'customer_id'=>$customer_id,
-            'vending_machine_id'=>$vending_machine_id,
-            'status_transaction'=>'3',
-            'is_preorder'=>$isPreorder
-          ];
+          if($isPreorder){
+            $where=[
+                'customer_id'=>$customer_id,
+                'vending_machine_id'=>$vending_machine_id,
+                'status_transaction'=>'3',
+                'is_preorder'=>($isPreorder%2)
+              ];
+          }
+          else{
+            $where=[
+                'customer_id'=>$customer_id,
+                'vending_machine_id'=>$vending_machine_id,
+                'status_transaction'=>'3'
+              ];
+          }
+         
 
           $transactions=VendingMachineTransaction::Where($where)->get();
   
@@ -705,13 +715,22 @@ class MobileApiController extends Controller
           }
   
           $customer_id = $customer->id;
-        
-          $where = [
-              'customer_id' => $customer_id,
-              'vending_machine_id' => $vending_machine_id,
-              'status_transaction' => '3',
-              'is_preorder'=> $isPreorder
-          ];
+          if($isPreorder){
+            $where = [
+                'customer_id' => $customer_id,
+                'vending_machine_id' => $vending_machine_id,
+                'status_transaction' => '3',
+                'is_preorder'=> ($isPreorder%2)
+            ];
+         }
+         else{
+            $where = [
+                'customer_id' => $customer_id,
+                'vending_machine_id' => $vending_machine_id,
+                'status_transaction' => '3',
+               
+            ];
+         }
           $transactions = VendingMachineTransaction::where($where)->get();
    
           $hasil=[];
