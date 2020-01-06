@@ -31,6 +31,11 @@ class TopupController extends Controller
         $request['saldo'] = format_db($request->saldo);
 
         $respon = ApiHelper::topupTransaction($request);
+        if ($respon['status_code'] != 201) {
+            toaster_error($respon['status_message']);
+            return redirect('c/topup/create');
+        }
+
         $gopay_transaction = GopayTransaction::where('refer_type', get_class(new TransferSaldo))->where('refer_type_id', $respon['id'])->first();
         $gopay_transaction->url_qrcode = $respon['actions'][0]['url'];
         $gopay_transaction->url_deeplink = $respon['actions'][1]['url'];
