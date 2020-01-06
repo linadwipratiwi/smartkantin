@@ -18,7 +18,6 @@ class FrontendController extends Controller
     {
         $view = view('frontend.dashboard.index');
         $view->total_transaction = VendingMachineTransaction::search()->where('client_id', client()->id)->count();
-        ;
         $view->total_customer = Customer::count();
         $view->year = date('Y');
         $view->month = date('m');

@@ -39,6 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Logo</th>
                                             <th>Nama</th>
                                             <th>Perusahaan</th>
                                             <th>Telepon</th>
@@ -57,6 +58,7 @@
                                         @foreach($clients as $row => $client)
                                         <tr id="tr-{{$client->id}}">
                                             <td>{{$row + 1}}</td>
+                                            <td>{{$client->logo ? '<img src="'.asset($client->logo).'"/>' : ''}}</td>
                                             <td>{{$client->name}}</td>
                                             <td>{{$client->company}}</td>
                                             <td>{{$client->phone}}</td>

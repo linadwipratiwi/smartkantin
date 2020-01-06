@@ -21,28 +21,47 @@
 				</form> --}}
 			</div>
 			<div id="mobile_only_nav" class="mobile-only-nav pull-right">
-				<ul class="nav navbar-right top-nav pull-right">
+				<ul class="nav navbar-right top-nav ">
 					@role('customer')
-					<li class="dropdown" style="padding-top:25px">
-						<span class="text-info">
-								Rp. {{format_quantity(customer()->saldo)}}
-						</span>
+					<li class="dropdown pull-left" style="padding-top:19px; margin-right:10px">
+						<button onclick="topup()" class="btn btn-sm btn-info ">Topup </button>
 					</li>
 					@endrole
-					<li class="dropdown auth-drp">
-						<a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown" aria-expanded="true"><img src="{{auth()->user()->photo ? asset(auth()->user()->photo) : asset('dist/img/user1.png')}}" alt="user_auth" class="user-auth-img img-circle"><span class="user-online-status"></span></a>
+					<li class="dropdown pull-right auth-drp">
+						<a href="#" class="dropdown-toggle pr-0" data-toggle="dropdown" aria-expanded="true"><img
+								src="{{auth()->user()->photo ? asset(auth()->user()->photo) : asset('dist/img/user1.png')}}" alt="user_auth"
+								class="user-auth-img img-circle"><span class="user-online-status"></span></a>
 						<ul class="dropdown-menu user-auth-dropdown" data-dropdown-in="flipInX" data-dropdown-out="flipOutX">
 							<li>
 								<a href="{{url('profile')}}"><i class="zmdi zmdi-account"></i><span>Profile</span></a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a href="{{url('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="zmdi zmdi-power"></i><span>Log Out</span></a>
-								<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+								<a href="{{url('/logout')}}"
+									onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+										class="zmdi zmdi-power"></i><span>Log Out</span></a>
+								<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">{{ csrf_field() }}
+								</form>
 							</li>
 						</ul>
 					</li>
+					@role('customer')
+					<li class="dropdown pull-right" style="padding-top:25px">
+						<span class="text-info">
+							Rp. {{format_quantity(customer()->saldo)}}
+						</span>
+					</li>
+					@endrole
+					
 
 				</ul>
 			</div>	
 		</nav>
+
+		@push('scripts')
+			<script>
+			function topup() {
+				location.href="{{url('c/topup/create')}}";
+			}
+			</script>
+		@endpush

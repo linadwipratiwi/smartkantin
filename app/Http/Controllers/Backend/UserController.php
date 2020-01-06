@@ -163,13 +163,19 @@ class UserController extends Controller
 
     public function profile()
     {
-        $view = view('backend.user.profile');
+        $view = view('backend.user.full-profile');
         $view->user = auth()->user();
         return $view;
     }
 
     public function updateProfile(Request $request)
     {
+        $check = User::where('username', $request->username)->where('id', '!=', auth()->user()->id)->first();
+        if ($check) {
+            toaster_error('Username telah digunakan user lain. Silahkan pilih username lain.');
+            return redirect('profile');
+        }
+
         $user = User::findOrFail(auth()->user()->id);
         $user->name = $request->name;
         $user->email = $request->email;
@@ -182,6 +188,17 @@ class UserController extends Controller
         if ($request->password) {
             $user->password = bcrypt($request->password);
         }
+
+        if (auth()->user()->isRole('client')) {
+            $file = $request->file('logo');
+
+            if (isset($file)) {
+                $client = client();
+                $client->logo = FileHelper::upload($file, 'uploads/client-logo/');
+                $client->save();
+            }
+        }
+
         try {
             $user->save();
         } catch (\Exception $e) {

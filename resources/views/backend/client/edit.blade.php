@@ -24,7 +24,7 @@
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="form-wrap">
-                            <form method="post" action="{{url('client/'.$client->id)}}">
+                            <form method="post" action="{{url('client/'.$client->id)}}" enctype="multipart/form-data">
                                 {!! csrf_field() !!}
                                 <input name="_method" type="hidden" value="PUT">
                                 <div class="form-group">
@@ -42,6 +42,11 @@
                                 <div class="form-group">
                                     <label class="control-label mb-10 text-left">{!! label('Alamat', 'Address') !!} </label>
                                     <textarea name="address" class="form-control" id="" cols="30" rows="10">{{$client->address}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label mb-10 text-left">{!! label('Logo', 'Logo') !!} </label>
+                                    <input type="file" name="file" class="form-control">
+                                    @if($client->logo) <img src="{{asset($client->logo)}}" style="width:50px; height:50px" alt=""> @endif
                                 </div>
                                 <div class="form-group ">
                                     <label class="control-label mb-10">{!! label('keuntungan platform', 'profit platform') !!}</label>

@@ -67,12 +67,15 @@ class AdminHelper
             $user = self::createUserFromClient($request);
         }
 
+        $file = $request->file('file');
         $client = $id ? Client::findOrFail($id) : new Client;
         $client->name = $request->input('name');
         $client->address = $request->input('address');
         $client->company = $request->input('company');
         $client->phone = $request->input('phone');
-
+        if (asset($file)) {
+            $client->logo = FileHelper::upload($file, 'uploads/client-logo/');
+        }
         /** Profit Platform */
         $client->profit_platform_type = $request->input('profit_platform_type');
         if ($client->profit_platform_type == 'value') {
