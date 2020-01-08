@@ -29,7 +29,18 @@ class ApiHelper
         $slot_alias = $request->input('slot_alias');
         $type = $request->input('type') ? : 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
-
+        
+        /**
+         * cek maintenance
+         */
+        if($customer_identity_number=="0B10050C000000"){
+            return response()->json(
+            [
+                'status'=>1,
+                'data'=>'maintenance'
+            ]             
+            );
+        }
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
         if (!$customer) {
