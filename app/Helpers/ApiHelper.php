@@ -36,7 +36,7 @@ class ApiHelper
         if($customer_identity_number=="0B10050C000000"){
             return response()->json(
             [
-                'status'=>1,
+                'status'=>2,
                 'data'=>'maintenance'
             ]             
             );
