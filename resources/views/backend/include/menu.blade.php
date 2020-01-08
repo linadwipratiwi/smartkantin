@@ -43,6 +43,9 @@
 				<li>
 					<a @if(\Request::segment(1) == 'setting') class="active" @endif href="{{url('setting')}}"><div class="pull-left"><i class="fa fa-cog  mr-20"></i><span class="right-nav-text">Setting </span></div><div class="clearfix"></div></a>
 				</li>
+				<li>
+					<a @if(\Request::segment(1) == 'kartu-sakti') class="active" @endif href="{{url('kartu-sakti')}}"><div class="pull-left"><i class="fa fa-wpforms mr-20"></i><span class="right-nav-text">Kartu Sakti </span></div><div class="clearfix"></div></a>
+				</li>
 				
 			@endrole
 

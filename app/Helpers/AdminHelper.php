@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Firmware;
+use App\Models\KartuSakti;
 use App\Helpers\FileHelper;
 use App\Helpers\AdminHelper;
 use Bican\Roles\Models\Role;
@@ -30,6 +31,21 @@ class AdminHelper
         } catch (\Exception $e) {
             throw new AppException("Woops, data can't be delete because is used by another form", 503);
         }
+    }
+
+    public static function createKartuSakti($request, $id='')
+    {
+        DB::beginTransaction();
+        $model = $id ? KartuSakti::findOrFail($id) : new KartuSakti;
+        $model->card_number = $request->input('card_number');
+        try {
+            $model->save();
+        } catch (\Exception $e) {
+            throw new AppException("Failed to save data", 503);
+        }
+        
+        DB::commit();
+        return $model;
     }
 
     public static function createFirmware($request, $id='')

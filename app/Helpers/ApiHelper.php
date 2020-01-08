@@ -6,6 +6,7 @@ use App\Helpers;
 use App\Models\Customer;
 use App\Helpers\ApiHelper;
 use App\Midtrans\Midtrans;
+use App\Models\KartuSakti;
 use Illuminate\Support\Str;
 use App\Models\StockMutation;
 use App\Models\TransferSaldo;
@@ -29,7 +30,16 @@ class ApiHelper
         $slot_alias = $request->input('slot_alias');
         $type = $request->input('type') ? : 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
-
+        
+        /** Cek apakah kartu sakti */
+        $kartu_sakti = KartuSakti::where('card_number', $customer_identity_number)->first();
+        if ($kartu_sakti) {
+            return json_encode([
+                'status' => 1,
+                'data' => 'success'
+            ]);
+        }
+        
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
         if (!$customer) {
@@ -307,6 +317,15 @@ class ApiHelper
         $slot_alias = $request->input('slot_alias');
         $type = $request->input('type') ? : 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
+        
+        /** Cek apakah kartu sakti */
+        $kartu_sakti = KartuSakti::where('card_number', $customer_identity_number)->first();
+        if ($kartu_sakti) {
+            return json_encode([
+                'status' => 1,
+                'data' => 'success'
+            ]);
+        }
 
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
