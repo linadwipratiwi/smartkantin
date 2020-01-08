@@ -36,7 +36,7 @@ class ApiHelper
         if ($kartu_sakti) {
             return json_encode([
                 'status' => 1,
-                'data' => 'success'
+                'data' => 'maintenance'
             ]);
         }
         

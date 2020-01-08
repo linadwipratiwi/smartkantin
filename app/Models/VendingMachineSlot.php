@@ -53,13 +53,17 @@ class VendingMachineSlot extends Model
 
     public function convertToAsci()
     {
-        $ascii = 0;
-        if ($this->name) {
-            $kode = substr($this->name, -2);
-            $slipt = str_split($kode, 1);
-            $ascii = chr($slipt[0]+65) . chr($slipt[1]+49);
+        if ($this->vendingMachine->type == 1) {
+            $ascii = 0;
+            if ($this->name) {
+                $kode = substr($this->name, -2);
+                $slipt = str_split($kode, 1);
+                $ascii = chr($slipt[0]+65) . chr($slipt[1]+49);
+            }
+    
+            return $ascii;
         }
 
-        return $ascii;
+        return '-';
     }
 }
