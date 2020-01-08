@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administrator']], function () {
     Route::get('/', 'BackendController@index');
 
+    Route::post('withdraw', 'WithdrawController@process');
+    Route::get('withdraw', 'WithdrawController@index');
     Route::resource('kartu-sakti', 'KartuSaktiController');
     Route::get('client/grid', 'ClientController@grid');
     Route::resource('client', 'ClientController');

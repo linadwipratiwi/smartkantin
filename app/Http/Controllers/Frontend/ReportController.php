@@ -27,7 +27,6 @@ class ReportController extends Controller
 
         $view->list_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->get();
         $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');
-        ;
         return $view;
     }
 

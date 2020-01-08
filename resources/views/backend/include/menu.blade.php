@@ -28,6 +28,9 @@
 				<li>
 					<a @if(\Request::segment(1) == 'gopay-transaction') class="active" @endif href="{{ url('gopay-transaction') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Gopay Transaction </span></div><div class="clearfix"></div></a>
 				</li>
+				<li>
+					<a @if(\Request::segment(1) == 'withdraw') class="active" @endif href="{{url('withdraw')}}"><div class="pull-left"><i class="fa fa-credit-card mr-20"></i><span class="right-nav-text">Withdraw </span></div><div class="clearfix"></div></a>
+				</li>
 				{{-- @endif --}}
 				<li><hr class="light-grey-hr mb-10"/></li>
 				<li class="navigation-header">
@@ -46,6 +49,7 @@
 				<li>
 					<a @if(\Request::segment(1) == 'kartu-sakti') class="active" @endif href="{{url('kartu-sakti')}}"><div class="pull-left"><i class="fa fa-wpforms mr-20"></i><span class="right-nav-text">Kartu Sakti </span></div><div class="clearfix"></div></a>
 				</li>
+				
 				
 			@endrole
 

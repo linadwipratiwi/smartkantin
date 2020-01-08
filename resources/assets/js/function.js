@@ -167,10 +167,10 @@ function initVendorSelect2(el, url) {
     });
 }
 
-function confirm(url) {
+function confirm(url, title, text) {
     swal({
-        title: "Anda yakin ingin menyetujui data?",
-        text: "Data yang sudah disetujui tidak bisa dibatalkan lagi",
+        title: title,
+        text: text,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#f2b701",

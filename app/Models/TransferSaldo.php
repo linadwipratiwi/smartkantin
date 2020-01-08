@@ -51,8 +51,10 @@ class TransferSaldo extends Model
     public function scopeSearch($q)
     {
         $type = \Input::get('type');
-        if ($type == 'today' || $type == null) {
-            $q->whereDate('created_at', Carbon::today());
+        if ($type != 'all') {
+            if ($type == 'today' || $type == null) {
+                $q->whereDate('created_at', Carbon::today());
+            }
         }
 
         if ($type == 'yesterday') {
