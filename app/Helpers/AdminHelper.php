@@ -18,6 +18,7 @@ use App\Models\StockMutation;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Exceptions\AppException;
+use App\Models\BreakTimeSetting;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 
@@ -38,6 +39,23 @@ class AdminHelper
         DB::beginTransaction();
         $model = $id ? KartuSakti::findOrFail($id) : new KartuSakti;
         $model->card_number = $request->input('card_number');
+        try {
+            $model->save();
+        } catch (\Exception $e) {
+            throw new AppException("Failed to save data", 503);
+        }
+        
+        DB::commit();
+        return $model;
+    }
+
+    public static function createBreakTimeSetting($request, $id='')
+    {
+        DB::beginTransaction();
+        $model = $id ? BreakTimeSetting::findOrFail($id) : new BreakTimeSetting;
+        $model->client_id = $request->input('client_id');
+        $model->name = $request->input('name');
+        $model->date_time = $request->input('date_time');
         try {
             $model->save();
         } catch (\Exception $e) {
