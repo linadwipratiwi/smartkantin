@@ -100,7 +100,7 @@
 					<a @if(\Request::segment(2) == 'user') class="active" @endif href="{{url('front/user')}}"><div class="pull-left"><i class="fa fa-user  mr-20"></i><span class="right-nav-text">User Vending </span></div><div class="clearfix"></div></a>
 				</li>
 				<li>
-					<a @if(\Request::segment(2)=='user' ) class="active" @endif href="{{url('front/break-time-setting')}}">
+					<a @if(\Request::segment(2)=='break-time-setting' ) class="active" @endif href="{{url('front/break-time-setting')}}">
 						<div class="pull-left"><i class="fa fa-cogs  mr-20"></i><span class="right-nav-text">Break Time Setting </span></div>
 						<div class="clearfix"></div>
 					</a>
