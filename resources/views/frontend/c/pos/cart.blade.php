@@ -131,7 +131,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" >Masukkan tanggal ingin diambil</h4>
+                            <h4 class="modal-title" >Masukkan tanggal ingin diambil dan Jam istirahat</h4>
                         </div>
                         <div class="col-lg-12 mt-10" id="form-item">
                             <div class="form-group">
@@ -141,6 +141,14 @@
                                         <span class="fa fa-calendar"></span>
                                     </span>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <select name="break_time_setting_id" id="" class="form-control">
+                                    <option value="">Pilih jam istirahat</option>
+                                    @foreach ($list_breaktime_setting as $setting)
+                                        <option value="{{$setting->id}}">{{$setting->name}} - {{$setting->date_time}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -14,6 +14,7 @@ use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\FirebaseHelper;
 use App\Helpers\TempDataHelper;
+use App\Models\BreakTimeSetting;
 use App\Models\VendingMachineSlot;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -136,6 +137,7 @@ class PosController extends Controller
 
         $view = view('frontend.c.pos.cart');
         $view->list_cart_group_by_stand = $data;
+        $view->list_breaktime_setting = BreakTimeSetting::where('client_id', customer()->register_at_client_id)->get();
         return $view;
     }
 
@@ -166,6 +168,7 @@ class PosController extends Controller
     {
         $is_preorder = 0;
         $preorder_date = \Input::get('preorder_date');
+        $breaktime = \Input::get('break_time_setting_id');
         if ($preorder_date) {
             $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
             $is_preorder = 1;
@@ -218,6 +221,7 @@ class PosController extends Controller
             $transaction = new VendingMachineTransaction;
             $transaction->preorder_date = $preorder_date;
             $transaction->is_preorder = $is_preorder;
+            $transaction->break_time_setting_id = $is_preorder ? $breaktime : null;
             $transaction->transaction_number = $transaction_number;
             $transaction->vending_machine_id = $vending_machine_slot->vendingMachine->id;
             $transaction->vending_machine_slot_id = $vending_machine_slot->id;
