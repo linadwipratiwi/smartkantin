@@ -119,6 +119,11 @@ class ApiController extends Controller
                 $gopay_transaction->gopay_status_code = $request->status_code;
                 $gopay_transaction->gopay_fraud_status = $request->fraud_status;
                 $gopay_transaction->save();
+
+                /** Update saldo vending machine */
+                $vending_machine = $refer->vendingMachine;
+                $vending_machine->saldo += $refer->food->selling_price_client;
+                $vending_machine->save();
             }
         }
 

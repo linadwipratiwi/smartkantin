@@ -52,6 +52,14 @@
 						</span>
 					</li>
 					@endrole
+
+					@role('client')
+					<li class="dropdown pull-right" style="padding-top:25px">
+						<span class="text-info">
+							Rp. {{format_quantity(client()->saldo())}}
+						</span>
+					</li>
+					@endrole
 					
 
 				</ul>

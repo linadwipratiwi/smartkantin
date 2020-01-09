@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\VendingMachine;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\VendingMachineTransaction;
 
@@ -69,5 +70,11 @@ class Client extends Model
                 }
             })
             ->count();
+    }
+
+    /** get saldo */
+    public function saldo()
+    {
+        return VendingMachine::where('client_id', client()->id)->sum('saldo');
     }
 }

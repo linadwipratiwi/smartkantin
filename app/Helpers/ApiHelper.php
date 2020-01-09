@@ -123,8 +123,8 @@ class ApiHelper
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
         $vending_machine->flaging_transaction = Str::random(10);
+        $vending_machine->saldo += $transaction->food->selling_price_client;
         $vending_machine->save();
-
         
         try {
             $transaction->save();
@@ -379,9 +379,10 @@ class ApiHelper
         $transaction->quantity = 1;
         $transaction->status_transaction = 2; // pending
 
-        /** Update flaging transaksi. Digunakan untuk Smansa */
+        /** Update flaging transaksi dan update saldo dari vending machine */
         $vending_machine = $transaction->vendingMachine;
         $vending_machine->flaging_transaction = Str::random(10);
+        $vending_machine->saldo += $transaction->food->selling_price_client;
         $vending_machine->save();
 
         try {
