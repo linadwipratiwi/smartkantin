@@ -43,6 +43,7 @@
                                             <th>Customer</th>
                                             <th>Amount</th>
                                             <th>Topup by</th>
+                                            <th>Withdraw</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -53,6 +54,7 @@
                                             <td>{{$topup->toType() ? $topup->toType()->name : '-'}}</td>
                                             <td>{{format_price($topup->saldo)}}</td>
                                             <td>{{$topup->createdBy ? $topup->createdBy->name : '-'}}</td>
+                                            <td>{{$topup->withdraw_at ? : '-'}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

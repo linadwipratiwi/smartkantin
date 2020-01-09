@@ -48,6 +48,16 @@ class TransferSaldo extends Model
         return $model;
     }
 
+    public function scopeWithdraw($q)
+    {
+        $q->whereNotNull('withdraw_at');
+    }
+
+    public function scopeNotWithdraw($q)
+    {
+        $q->whereNull('withdraw_at');
+    }
+
     public function scopeSearch($q)
     {
         $type = \Input::get('type');

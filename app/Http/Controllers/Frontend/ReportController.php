@@ -44,4 +44,14 @@ class ReportController extends Controller
         $header = 'LAPORAN PEGAWAI ';
         self::excel($file_name, $content, $header);
     }
+
+    public function withdraw()
+    {
+        $view = view('frontend.report.withdraw');
+
+        $view->total_sudah_diambil = TransferSaldo::fromClient(client()->id)->withdraw()->sum('saldo');
+        $view->total_belum_diambil = TransferSaldo::fromClient(client()->id)->notWithdraw()->sum('saldo');
+
+        return $view;
+    }
 }

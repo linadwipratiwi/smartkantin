@@ -91,6 +91,9 @@
 						<li>
 							<a href="{{url('front/report/topup')}}">Topup</a>
 						</li>
+						<li>
+							<a href="{{url('front/report/withdraw')}}">Saldo Topup</a>
+						</li>
 					</ul>
 				</li>
 				<li>

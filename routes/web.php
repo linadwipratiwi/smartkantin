@@ -115,6 +115,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     // Setting
     Route::get('report/transaction', 'ReportController@transaction');
     Route::get('report/topup', 'ReportController@topup');
+    Route::get('report/withdraw', 'ReportController@withdraw');
 });
 
 /** Customer */
