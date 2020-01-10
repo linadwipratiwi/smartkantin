@@ -681,7 +681,7 @@ class MobileApiController extends Controller
       }
 
 
-      
+    
       /**preoder take*/
       public static function orderTake(Request $request)
       {
@@ -1030,5 +1030,23 @@ class MobileApiController extends Controller
             ]);
         }
 
+    }
+
+    public function getSaldoStand($request){
+        $stand_id= $request;
+        $stand= VendingMachine::find($stand_id);
+        if($stand){
+            return response()->json([
+                'status'=>1,
+                'data'=>$stand->saldo,
+                'msg'=> 'success'
+            ]);
+        }
+        else{
+            return response()->json([
+                'status'=>0,
+                'msg'=> 'no stand found'
+            ]);
+        }
     }
 }
