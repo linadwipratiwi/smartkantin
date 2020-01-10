@@ -122,7 +122,7 @@ class ApiController extends Controller
 
                 /** Update saldo vending machine */
                 $vending_machine = $refer->vendingMachine;
-                $vending_machine->saldo += $refer->food->selling_price_client;
+                $vending_machine->saldo += $refer->vendingMachineSlot->food->selling_price_client;
                 $vending_machine->save();
             }
         }
