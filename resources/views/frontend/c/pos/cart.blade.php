@@ -44,6 +44,7 @@
                             $t = $cart['quantity'] * $cart['selling_price_item'];
                             $total += $t;
 
+
                         ?>
                         <div class="panel panel-default contact-card card-view" style="border:none">
                             <div class="panel-heading" style="color: black">
@@ -61,6 +62,9 @@
                                         <span class="block card-user-desn" style="color: black">
                                             Rp. {{format_price($cart['selling_price_item'])}}
                                         </span>
+                                        @if ($item->stock < $cart['quantity'])
+                                        <p class="text-danger">Stok habis.</p>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="pull-right bg-yellow pa-10" style="border-radius:5px" id="btn-action-add-to-cart-{{$item->id}}">
@@ -103,14 +107,14 @@
             <br><br>
             {{-- <div class="panel" style="border:none"> --}}
             <div class="panel-wrapper" style="color: black">
-                <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Pesan Sekarang</a>
+                <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Order</a>
                 <?php 
                     $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
                     $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
                     $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
                 ?>
 
-                <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Pesan Nanti</a>
+                <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Preorder</a>
                 @if ($carbon <= $carbon_max && $carbon >= $carbon_limit)
                 @else
                 {{-- <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button> --}}
@@ -153,7 +157,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="button-list">
-                                <button type="button" class="btn btn-success bt-store pull-right" onclick="preorder()">Pesan nanti</button>
+                                <button type="button" class="btn btn-success bt-store pull-right" onclick="preorder()">Preorder</button>
                             </div>
                         </div>
                     </div>
