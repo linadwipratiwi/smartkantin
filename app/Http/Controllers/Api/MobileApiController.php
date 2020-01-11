@@ -312,7 +312,7 @@ class MobileApiController extends Controller
             $client_name="";
             if($client){
                 $client_name=$client->name;
-            }
+            
 
             
             return response()->json([
@@ -322,9 +322,18 @@ class MobileApiController extends Controller
                  'type'=>$type,
                  'name'=> $data->name,
                  'client_name' =>$client_name,
+                 'client_logo'=>$client->logo,
                  'msg' => 'access granted'
                  
             ]);
+            }
+            else{
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'acces denied'
+                ]);
+      
+            }
         } 
         else {
             return response()->json([
