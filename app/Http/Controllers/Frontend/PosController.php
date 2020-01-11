@@ -250,6 +250,8 @@ class PosController extends Controller
             /** Update flaging transaksi. Digunakan untuk Smansa */
             $vending_machine = $transaction->vendingMachine;
             $vending_machine->flaging_transaction = Str::random(10);
+            $vending_machine->saldo += $vending_machine_slot->food->selling_price_client;
+
             $vending_machine->save();
 
             /** Kurangi saldo customer */
