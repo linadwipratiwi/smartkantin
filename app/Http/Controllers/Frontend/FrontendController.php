@@ -16,10 +16,10 @@ class FrontendController extends Controller
 {
     public function index(Request $request)
     {
-        $type = \Input::get('type') ? : 1;
+        $type = \Input::get('vending_type') ? : 1;
         $view = view('frontend.dashboard.index');
         $view->total_transaction = VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)
-            ->select('vending_machine_transactions.*')->search()->where('vending_machine_transactions.client_id', client()->id)->count();
+            ->search()->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->count();
         $view->total_customer = Customer::count();
         $view->year = date('Y');
         $view->month = date('m');
@@ -36,7 +36,7 @@ class FrontendController extends Controller
     {
         $year = \Input::get('year');
         $month = \Input::get('month');
-        $type = \Input::get('type') ? : 1;
+        $type = \Input::get('vending_type') ? : 1;
         $view = view('frontend.dashboard._chart-morris');
         $view->graph_transaction = GrafikHelper::grafikTransaction($year, $month, $type);
         $view->year = $year;

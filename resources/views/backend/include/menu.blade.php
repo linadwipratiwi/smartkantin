@@ -63,10 +63,10 @@
 				<a @if((\Request::segment(2) == '')  && (\Request::segment(1) != 'profile')) class="active" @endif href="javascript:void(0);" data-toggle="collapse" data-target="#app_dashboard"><div class="pull-left"><i class="zmdi zmdi-landscape mr-20"></i><span class="right-nav-text">Dashboard </span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
 				<ul id="app_dashboard" class="collapse @if((\Request::segment(2) == '')  && (\Request::segment(1) != 'profile')) in @endif  collapse-level-1">
 					<li>
-						<a href="{{url('front?type=1')}}">Vending Machine</a>
+						<a href="{{url('front?vending_type=1')}}">Vending Machine</a>
 					</li>
 					<li>
-						<a href="{{url('front?type=2')}}">Stand</a>
+						<a href="{{url('front?vending_type=2')}}">Stand</a>
 					</li>
 				</ul>
 			</li>
