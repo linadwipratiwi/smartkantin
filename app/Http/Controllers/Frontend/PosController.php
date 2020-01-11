@@ -211,7 +211,8 @@ class PosController extends Controller
             $vending_machine = $vending_machine_slot->vendingMachine;
             $customer = customer();
 
-            if ($vending_machine_slot->stock < $cart['quantity']) {
+            
+            if (($vending_machine_slot->stock < $cart['quantity']) && $is_preorder == 0) {
                 toaster_error('Stok tidak mencukupi / kosong. Hapus barang dari daftar belanja Anda');
                 return redirect('c/cart');
             }
@@ -250,6 +251,8 @@ class PosController extends Controller
             /** Update flaging transaksi. Digunakan untuk Smansa */
             $vending_machine = $transaction->vendingMachine;
             $vending_machine->flaging_transaction = Str::random(10);
+            $vending_machine->saldo += $vending_machine_slot->food->selling_price_client;
+
             $vending_machine->save();
 
             /** Kurangi saldo customer */
@@ -267,7 +270,10 @@ class PosController extends Controller
 
             $customer->save();
 
-            ApiHelper::updateStockTransaction($transaction);
+            /** jika preorder stok tidak direcord */
+            if ($is_preorder == 0) {
+                ApiHelper::updateStockTransaction($transaction);
+            }
         }
 
         /** clear temp */

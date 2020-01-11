@@ -37,13 +37,18 @@ class VendingMachineTransaction extends Model
         return $this->belongsTo('App\Models\Food', 'food_id');
     }
 
+    public function scopeJoinVendingMachine($q)
+    {
+        $q->join('vending_machines', 'vending_machines.id', '=', $this->table.'.vending_machine_id');
+    }
+
     /**
      * Failed
      * Gagal
      */
     public function scopeFailed($q)
     {
-        $q->where('status_transaction', 0);
+        $q->where('vending_machine_transactions.status_transaction', 0);
     }
 
     /** 
@@ -52,7 +57,7 @@ class VendingMachineTransaction extends Model
      */
     public function scopeSuccess($q)
     {
-        $q->where('status_transaction', 1);
+        $q->where('vending_machine_transactions.status_transaction', 1);
     }
 
     /**
@@ -61,7 +66,7 @@ class VendingMachineTransaction extends Model
      */
     public function scopePending($q)
     {
-        $q->where('status_transaction', 2);
+        $q->where('vending_machine_transactions.status_transaction', 2);
     }
 
     /**
@@ -70,30 +75,30 @@ class VendingMachineTransaction extends Model
      */
     public function scopeSuccessNotDelivered($q)
     {
-        $q->where('status_transaction', 3);
+        $q->where('vending_machine_transactions.status_transaction', 3);
     }
 
     public function scopeSearch($q)
     {
         $type = \Input::get('type');
         if ($type == 'today' || $type == null) {
-            $q->whereDate('created_at', Carbon::today());
+            $q->whereDate('vending_machine_transactions.created_at', Carbon::today());
         }
 
         if ($type == 'yesterday') {
-            $q->whereDate('created_at', Carbon::yesterday()->format('Y-m-d'));
+            $q->whereDate('vending_machine_transactions.created_at', Carbon::yesterday()->format('Y-m-d'));
         }
 
         if ($type == 'month') {
-            $q->whereMonth('created_at', date('m'));
-            $q->whereYear('created_at', date('Y'));
+            $q->whereMonth('vending_machine_transactions.created_at', date('m'));
+            $q->whereYear('vending_machine_transactions.created_at', date('Y'));
         }
 
         if ($type == 'select-month') {
             $month = \Input::get('month');
             
-            $q->whereMonth('created_at', $month);
-            $q->whereYear('created_at', date('Y'));
+            $q->whereMonth('vending_machine_transactions.created_at', $month);
+            $q->whereYear('vending_machine_transactions.created_at', date('Y'));
         }
 
         if ($type == 'custom') {
@@ -101,7 +106,7 @@ class VendingMachineTransaction extends Model
             $date_start = DateHelper::formatDB(trim($date[0]), 'start');
             $date_end = DateHelper::formatDB(trim($date[1]), 'end');
 
-            $q->whereBetween('created_at', [$date_start, $date_end]);
+            $q->whereBetween('vending_machine_transactions.created_at', [$date_start, $date_end]);
         }
 
         return $q;

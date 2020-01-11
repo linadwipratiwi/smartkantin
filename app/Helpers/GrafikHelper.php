@@ -12,7 +12,7 @@ class GrafikHelper
     /**
      * Grafik total transaction
      */
-    public static function grafikTransaction($year, $month)
+    public static function grafikTransaction($year, $month, $vending_type=null)
     {
         $array = [];
         $total_transaction = 0;
@@ -20,20 +20,38 @@ class GrafikHelper
         $total_transaction_success = 0;
         if (!$month) {
             for ($i=1; $i<=12; $i++) {
-                $transaction = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereMonth('created_at', $i)
-                    ->whereYear('created_at', $year)
+                $transaction = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereMonth('vending_machine_transactions.created_at', $i)
+                    ->whereYear('vending_machine_transactions.created_at', $year)
+                    ->select('vending_machine_transactions.*')
                     ->count();
                 
-                $transaction_failed = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereMonth('created_at', $i)
-                    ->whereYear('created_at', $year)
+                $transaction_failed = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereMonth('vending_machine_transactions.created_at', $i)
+                    ->whereYear('vending_machine_transactions.created_at', $year)
+                    ->select('vending_machine_transactions.*')
                     ->failed()
                     ->count();
                 
-                $transaction_success = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereMonth('created_at', $i)
-                    ->whereYear('created_at', $year)
+                $transaction_success = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereMonth('vending_machine_transactions.created_at', $i)
+                    ->whereYear('vending_machine_transactions.created_at', $year)
+                    ->select('vending_machine_transactions.*')
                     ->success()
                     ->count();
                 
@@ -55,17 +73,32 @@ class GrafikHelper
         } else {
             $list_days = DateHelper::getAllDaysByMonth($month, $year);
             for ($i=0; $i<count($list_days); $i++) {
-                $transaction = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereDate('created_at', $list_days[$i]['date'])
+                $transaction = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereDate('vending_machine_transactions.created_at', $list_days[$i]['date'])
                     ->count();
                 
-                $transaction_failed = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereDate('created_at', $list_days[$i]['date'])
+                $transaction_failed = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereDate('vending_machine_transactions.created_at', $list_days[$i]['date'])
                     ->failed()
                     ->count();
                 
-                $transaction_success = VendingMachineTransaction::where('client_id', client()->id)
-                    ->whereDate('created_at', $list_days[$i]['date'])
+                $transaction_success = VendingMachineTransaction::joinVendingMachine()->where('vending_machine_transactions.client_id', client()->id)
+                    ->where(function ($q) use ($vending_type) {
+                        if ($vending_type) {
+                            $q->where('vending_machines.type', $vending_type);
+                        }
+                    })
+                    ->whereDate('vending_machine_transactions.created_at', $list_days[$i]['date'])
                     ->success()
                     ->count();
                 

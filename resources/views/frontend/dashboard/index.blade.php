@@ -4,7 +4,7 @@
 		@include('frontend.dashboard._chart-morris')
 	</div>
 	@include('frontend.dashboard._count')
-	@include('frontend.dashboard._grafik')
+	{{-- @include('frontend.dashboard._grafik') --}}
 
 @stop
 

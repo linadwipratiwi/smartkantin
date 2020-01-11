@@ -12,12 +12,19 @@ class ReportController extends Controller
 {
     public function transaction()
     {
+        $type = \Input::get('vending_type');
+
         $view = view('frontend.report.transaction');
-        $view->list_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->orderBy('created_at', 'desc')->paginate(50);
-        $view->total_profit =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->sum('profit_client');
-        $view->total_transaction =  VendingMachineTransaction::search()->where('client_id', client()->id)->count();
-        $view->total_transaction_failed =  VendingMachineTransaction::search()->failed()->where('client_id', client()->id)->count();
-        $view->total_transaction_success =  VendingMachineTransaction::search()->success()->where('client_id', client()->id)->count();
+        $view->list_transaction =  VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)->search()
+            ->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->orderBy('created_at', 'desc')->paginate(50);
+        $view->total_profit =  VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)->search()
+            ->success()->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->sum('profit_client');
+        $view->total_transaction =  VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)->search()
+            ->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->count();
+        $view->total_transaction_failed =  VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)->search()
+            ->failed()->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->count();
+        $view->total_transaction_success =  VendingMachineTransaction::joinVendingMachine()->where('vending_machines.type', $type)->search()
+            ->success()->select('vending_machine_transactions.*')->where('vending_machine_transactions.client_id', client()->id)->count();
         return $view;
     }
 
@@ -29,22 +36,7 @@ class ReportController extends Controller
         $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');
         return $view;
     }
-
-    public function download(Request $request)
-    {
-        $employess = Employee::all();
-        $content = array(array('NAMA',  'NIP', 'KARTU', 'TGL. LAHIR', 'ALAMAT', 'TELEPON', 'EMAIL', 'POSISI/JABATAN', 'BAGIAN', 'BIDANG'));
-        foreach ($employess as $employes) {
-            $card = CardAccess::findOrFail($employes->card_access_id);
-            array_push($content, [$employes->name, $card->card_number,$employes->nip, $employes->date_of_birth, $employes->address, $employes->phone,
-            $employes->email, $employes->position_in_company, $employes->district->name, $employes->area->name ]);
-        }
-
-        $file_name = 'PEGAWAI ' .date('YmdHis');
-        $header = 'LAPORAN PEGAWAI ';
-        self::excel($file_name, $content, $header);
-    }
-
+    
     public function withdraw()
     {
         $view = view('frontend.report.withdraw');

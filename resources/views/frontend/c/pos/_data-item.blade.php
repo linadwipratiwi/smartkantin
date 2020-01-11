@@ -29,6 +29,7 @@
                                     </div>
                                     <h6 id="food-name-{{$item->id}}">{{$item->food->subName()}}</h6>
                                     <span class="head-font block text-warning font-16" id="food-price-{{$item->id}}">Rp. {{format_quantity($item->food->selling_price_vending_machine)}}</span>
+                                    <p class="@if($item->stock <= 0) text-danger @else text-success @endif">Stok {{format_quantity($item->stock)}}</p>
                                     <br>
                                     <div id="btn-action-{{$item->id}}">
                                         @if(!$search)

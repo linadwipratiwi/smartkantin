@@ -33,6 +33,7 @@
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
+                        @if($list_transaction->count() > 0)
                         <div class="table-wrap">
                             <div class="table-responsive">
                                 <table id="datatable" class="table table-hover display  pb-30" >
@@ -69,7 +70,10 @@
                                 </table>
                             </div>
                         </div>
-                        {{$list_transaction->appends(['type' => \Input::get('type'), 'date' => \Input::get('date'), 'month' => \Input::get('month')])->links()}}
+                        {{$list_transaction->appends(['vending_type' => \Input::get('vending_type'), 'type' => \Input::get('type'), 'date' => \Input::get('date'), 'month' => \Input::get('month')])->links()}}
+                        @else
+                        <div class="alert-info">Tidak ada data yang bisa ditampilkan.</div>
+                        @endif
                     </div>
                 </div>
             </div>	

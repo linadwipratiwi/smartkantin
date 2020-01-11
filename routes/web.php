@@ -69,8 +69,8 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
 /** Client */
 Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
     Route::get('load-grafik-transaction', 'FrontendController@loadGrafikTransaction');
-    Route::get('/', 'FrontendController@index');
     Route::get('topup', 'TopupController@index');
+    Route::get('/', 'FrontendController@index');
 
     Route::group(['prefix' => 'customer'], function () {
         Route::get('{id}/export', 'CustomerController@export');

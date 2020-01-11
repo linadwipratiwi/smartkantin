@@ -12,6 +12,7 @@
                         <br>
                         <div class="form-wrap">
                             <form class="form-inline" method="get" action="{{url('front/report/transaction')}}">
+                                <input type="hidden" name="vending_type" value="{{\Input::get('vending_type')}}">
                                 <div class="form-group mr-15">
                                     <label class="control-label mr-10" for="date">Date</label>
                                     <select name="type" class="form-control" id="type" onchange="selectDate(this.value)">
