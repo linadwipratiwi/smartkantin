@@ -63,7 +63,7 @@
                                             Rp. {{format_price($cart['selling_price_item'])}}
                                         </span>
                                         @if ($item->stock < $cart['quantity'])
-                                        <p class="text-danger">Stok habis.</p>
+                                        <p class="text-danger">Stok habis. Tapi bisa digunakan untuk transaksi <i>preorder</i></p>
                                         @endif
                                     </div>
                                 </div>

@@ -211,7 +211,8 @@ class PosController extends Controller
             $vending_machine = $vending_machine_slot->vendingMachine;
             $customer = customer();
 
-            if ($vending_machine_slot->stock < $cart['quantity']) {
+            
+            if (($vending_machine_slot->stock < $cart['quantity']) && $is_preorder == 0) {
                 toaster_error('Stok tidak mencukupi / kosong. Hapus barang dari daftar belanja Anda');
                 return redirect('c/cart');
             }
@@ -269,7 +270,10 @@ class PosController extends Controller
 
             $customer->save();
 
-            ApiHelper::updateStockTransaction($transaction);
+            /** jika preorder stok tidak direcord */
+            if ($is_preorder == 0) {
+                ApiHelper::updateStockTransaction($transaction);
+            }
         }
 
         /** clear temp */
