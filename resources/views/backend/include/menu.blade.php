@@ -93,8 +93,11 @@
 			<a @if(\Request::segment(2) == 'report') class="active" @endif href="javascript:void(0);" data-toggle="collapse" data-target="#app_report"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Report </span></div><div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div><div class="clearfix"></div></a>
 			<ul id="app_report" class="collapse @if(\Request::segment(2) == 'report') in @endif  collapse-level-1">
 				<li>
-					<a href="{{url('front/report/transaction')}}">Transaction</a>
+					<a href="{{url('front/report/transaction?vending_type=1')}}">Vending Machine</a>
 				</li>
+				<li>
+						<a href="{{url('front/report/transaction?vending_type=2')}}">Stand</a>
+					</li>
 				<li>
 					<a href="{{url('front/report/topup')}}">Topup</a>
 				</li>

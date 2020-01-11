@@ -69,7 +69,7 @@
                                 </table>
                             </div>
                         </div>
-                        {{$list_transaction->appends(['type' => \Input::get('type'), 'date' => \Input::get('date'), 'month' => \Input::get('month')])->links()}}
+                        {{$list_transaction->appends(['vending_type' => \Input::get('vending_type'), 'type' => \Input::get('type'), 'date' => \Input::get('date'), 'month' => \Input::get('month')])->links()}}
                     </div>
                 </div>
             </div>	
