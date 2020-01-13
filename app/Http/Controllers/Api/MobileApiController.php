@@ -361,7 +361,9 @@ class MobileApiController extends Controller
             $user->save();
              return response()->json([
                  'status'=>1,
-                 'msg'=>'success'
+                 'msg'=>'success',
+                 'username'=>$user->username,
+                 'name'=>$user->name
              ]);
             }
             catch(\Throwable $th){
@@ -390,7 +392,10 @@ class MobileApiController extends Controller
             $user->save();
              return response()->json([
                  'status'=>1,
-                 'msg'=>'success'
+                 'msg'=>'success',
+                 'username'=>$user->username,
+                 'name'=>$user->name
+
              ]);
             }
             catch(\Throwable $th){
