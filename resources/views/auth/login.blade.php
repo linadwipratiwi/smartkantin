@@ -59,7 +59,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xs-12">
 										<div class="mb-30 text-center">
-											<img class="brand-img mr-10" style="height:auto; width: 200px" src="{{asset('dist/img/logo-beepartner.png')}}" alt="brand"/>
+											{{-- <img class="brand-img mr-10" style="height:auto; width: 200px" src="{{asset('dist/img/logo-beepartner.png')}}" alt="brand"/> --}}
 										</div>	
 										<div class="form-wrap">
                                             <form role="form" method="POST" action="{{ url('/login') }}">
