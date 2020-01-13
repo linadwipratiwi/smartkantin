@@ -324,6 +324,7 @@ class MobileApiController extends Controller
                  'user_name'=>$user->name,
                  'client_name' =>$client_name,
                  'client_logo'=>$client->logo,
+                 'stand_saldo'=>$vending->saldo,
                  'msg' => 'access granted'
                  
             ]);
