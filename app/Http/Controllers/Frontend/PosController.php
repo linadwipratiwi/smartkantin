@@ -206,6 +206,7 @@ class PosController extends Controller
         }
 
 
+        $total_belanja = 0;
         foreach ($list_cart as $cart) {
             $vending_machine_slot = VendingMachineSlot::findOrFail($cart['item_id']);
             $vending_machine = $vending_machine_slot->vendingMachine;
@@ -256,20 +257,8 @@ class PosController extends Controller
             $vending_machine->save();
 
             /** Kurangi saldo customer */
-            $customer = $transaction->customer;
-            $saldo_pens_akhir = $saldo_pens - $transaction->selling_price_vending_machine;
-            if ($saldo_pens_akhir < 0) {
-                /** saldo pens kurang, maka saldo pens di set 0, dan diambilkan dari saldo utama */
-                $customer->saldo_pens = 0;
-                $biaya_kekurangan = $saldo_pens_akhir * -1; // untuk mepositifkan
-                $customer->saldo = $saldo - $biaya_kekurangan;
-            } else {
-                /** saldo pens masih sisa */
-                $customer->saldo_pens = $saldo_pens_akhir;
-            }
-
-            $customer->save();
-
+            $total_belanja += $transaction->total;
+            
             /** jika preorder stok tidak direcord */
             if ($is_preorder == 0) {
                 ApiHelper::updateStockTransaction($transaction);
@@ -279,6 +268,11 @@ class PosController extends Controller
         /** clear temp */
         $temp_key = PosHelper::getTempKey();
         TempDataHelper::clear($temp_key, auth()->user()->id);
+
+        /** Kurangi saldo customer */
+        $customer = customer();
+        $customer->saldo -= $total_belanja;
+        $customer->save();
 
         DB::commit();
         FirebaseHelper::pushFirebaseNotification($transaction);
