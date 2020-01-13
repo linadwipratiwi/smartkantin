@@ -312,7 +312,7 @@ class MobileApiController extends Controller
             $client_name="";
             if($client){
                 $client_name=$client->name;
-            }
+            
 
             
             return response()->json([
@@ -321,10 +321,21 @@ class MobileApiController extends Controller
                  'id'=>$data->id,
                  'type'=>$type,
                  'name'=> $data->name,
+                 'user_name'=>$user->name,
                  'client_name' =>$client_name,
+                 'client_logo'=>$client->logo,
+                 'stand_saldo'=>$vending->saldo,
                  'msg' => 'access granted'
                  
             ]);
+            }
+            else{
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'acces denied'
+                ]);
+      
+            }
         } 
         else {
             return response()->json([
@@ -332,6 +343,67 @@ class MobileApiController extends Controller
                 'msg' => 'acces denied'
             ]);
         }
+    }
+
+    public static function changeUsername(Request $request){
+        $username= $request->input('username');
+        $password= $request->input('password');
+        $newUsername= $request->input('new_username')?:"";
+        $newName= $request->input('new_name')?:"";
+
+        $user= User::where('username',$username)->first();
+        if($user){
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            if($newUsername)$user->username= ($newUsername);
+            if($newName)$user->name= ($newName);
+            try{
+            $user->save();
+             return response()->json([
+                 'status'=>1,
+                 'msg'=>'success'
+             ]);
+            }
+            catch(\Throwable $th){
+
+            }
+        }
+         }
+        return response()->json([
+            'status'=>0,
+            'msg'=>'permission denied'
+        ]
+        );
+ 
+    }
+    public static function changePassword(Request $request){
+        $username= $request->input('username');
+        $password= $request->input('password');
+        $newPassword= $request->input('new_password');
+
+        $user= User::where('username',$username)->first();
+
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            $user->password= $hasher->make($newPassword);
+            try{
+            $user->save();
+             return response()->json([
+                 'status'=>1,
+                 'msg'=>'success'
+             ]);
+            }
+            catch(\Throwable $th){
+
+            }
+        }
+
+        return response()->json([
+            'status'=>0,
+            'msg'=>'permission denied'
+        ]
+        );
+
     }
 
     /**Login */
