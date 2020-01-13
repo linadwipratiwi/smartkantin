@@ -51,7 +51,7 @@
                                             <td>{{$row++}}</td>
                                             <td>{{$user->user->name}}</td>
                                             <td>{{$user->user->username}}</td>
-                                            <td>{{$user->vendingMachine->name}}</td>
+                                            <td>{{$user->vendingMachine ? $user->vendingMachine->name : '-'}}</td>
                                             <td>
                                                 <a href="{{url('front/user/'.$user->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
