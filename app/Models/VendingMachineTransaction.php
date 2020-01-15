@@ -42,6 +42,11 @@ class VendingMachineTransaction extends Model
         $q->join('vending_machines', 'vending_machines.id', '=', $this->table.'.vending_machine_id');
     }
 
+    public function scopeJoinCustomer($q)
+    {
+        $q->join('customers', 'customers.id', '=', $this->table.'.customer_id');
+    }
+
     /**
      * Failed
      * Gagal
@@ -154,5 +159,20 @@ class VendingMachineTransaction extends Model
     {
         # format : TAHUN/BULAN/KODE Pelanggan/JAM:DETIK
         return 'POS-'.date('Y').'-'.date('m').'-'.customer()->id.'-'.date('his');
+    }
+
+    public function scopeSearchByCustomer($q, $stand_id)
+    {
+        $search = \Input::get('search');
+        $q->joinCustomer()
+            ->where(function ($que) use ($search) {
+                if ($search) {
+                    $que->where('customers.name', 'like', '%'.$search.'%');
+                }
+            })
+            ->where('vending_machine_transactions.vending_machine_id', $stand_id)
+            ->where('vending_machine_transactions.status_transaction', 3)
+            ->whereDate('vending_machine_transactions.created_at', Carbon::today());
+        
     }
 }

@@ -1126,4 +1126,22 @@ class MobileApiController extends Controller
             ]);
         }
     }
+
+    /** Search transaction by customer name */
+    public function searchTransactionByCustomer($stand_id)
+    {
+        $select = [
+            'vending_machine_transactions.id',
+            'vending_machine_transactions.food_name',
+            'vending_machine_transactions.quantity',
+            'vending_machine_transactions.status_transaction',
+            'vending_machine_transactions.created_at',
+            'vending_machine_transactions.total',
+            'customers.name',
+        ];
+        return VendingMachineTransaction::searchByCustomer($stand_id)
+            ->select($select)
+            ->get();
+
+    }
 }
