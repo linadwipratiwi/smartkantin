@@ -1139,9 +1139,31 @@ class MobileApiController extends Controller
             'vending_machine_transactions.total',
             'customers.name',
         ];
-        return VendingMachineTransaction::searchByCustomer($stand_id)
+        $result_search=VendingMachineTransaction::searchByCustomer($stand_id)
             ->select($select)
             ->get();
 
-    }
+            $hasil=[];
+            foreach ($result_search as $data) {
+                
+                    $text= json_decode($data, true);
+                    $text["msg"]="success";
+                    $text["status"]=1;
+                    $text["customer_name"]=$data->name;
+                    $hasil[]=($text);               
+            }
+
+            if($hasil){
+                return response()->json($hasil);
+            }
+            else{
+                return response()->json([
+                    'status'=>0,
+                    'msg'=> "no order found"
+                ]);
+            }
+
+
+        }
+    
 }
