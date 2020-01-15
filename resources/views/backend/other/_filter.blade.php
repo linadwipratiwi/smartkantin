@@ -4,14 +4,14 @@
             
             <div class="panel-wrapper collapse in">
                 <div class="panel-body">
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Filter what do you want</h6>
                         </div>
                         <div class="clearfix"></div>
                         <br>
                         <div class="form-wrap">
-                            <form class="form-inline" method="get" action="{{url('withdraw')}}">
+                            <form class="form-inline" method="get" action="{{url('other/withdraw')}}">
                                 <div class="form-group mr-15">
                                     <label class="control-label mr-10" for="date">Date</label>
                                     <select name="type" class="form-control" id="type" onchange="selectDate(this.value)">
@@ -59,7 +59,7 @@
                     </div>
 
                     @if ($list_topup)
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Total Topup</h6>
                         </div>
@@ -69,7 +69,7 @@
                         </span>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Total Transaction</h6>
                         </div>

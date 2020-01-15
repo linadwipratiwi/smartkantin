@@ -29,7 +29,20 @@
 			<a @if(\Request::segment(1) == 'gopay-transaction') class="active" @endif href="{{ url('gopay-transaction') }}"><div class="pull-left"><i class="fa fa-file mr-20"></i><span class="right-nav-text">Gopay Transaction </span></div><div class="clearfix"></div></a>
 		</li>
 		<li>
-			<a @if(\Request::segment(1) == 'withdraw') class="active" @endif href="{{url('withdraw')}}"><div class="pull-left"><i class="fa fa-credit-card mr-20"></i><span class="right-nav-text">Withdraw </span></div><div class="clearfix"></div></a>
+			<a @if(\Request::segment(2)=='other' ) class="active" @endif href="javascript:void(0);" data-toggle="collapse"
+				data-target="#app_other">
+				<div class="pull-left"><i class="zmdi zmdi-apps mr-20"></i><span class="right-nav-text">Other </span></div>
+				<div class="pull-right"><i class="zmdi zmdi-caret-down"></i></div>
+				<div class="clearfix"></div>
+			</a>
+			<ul id="app_other" class="collapse @if(\Request::segment(2) == 'other') in @endif  collapse-level-1">
+				<li>
+					<a href="{{url('other/withdraw')}}">Withdraw Mb. Kiki</a>
+				</li>
+				<li>
+					<a href="{{url('other/pak-mahfud')}}">Pak Mahfud</a>
+				</li>
+			</ul>
 		</li>
 		{{-- @endif --}}
 		<li><hr class="light-grey-hr mb-10"/></li>

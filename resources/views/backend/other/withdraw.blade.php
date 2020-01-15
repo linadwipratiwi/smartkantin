@@ -3,7 +3,7 @@
 @section('content')
 <!-- Title -->
 @include('backend._bread-crumb', [
-'title' => 'History Topup',
+'title' => 'Withdraw Mbk Kiki',
 'breadcrumbs' => [
 0 => [
 'link' => url('front'),
@@ -11,13 +11,13 @@
 ],
 1 => [
 'link' => '#',
-'label' => 'History Topup'
+'label' => 'Withdraw Mbk Kiki'
 ],
 ]
 ])
 
 <!-- /Title -->
-@include('backend.withdraw._filter')
+@include('backend.other._filter')
 
 @if($list_topup)
 <div class="row">
