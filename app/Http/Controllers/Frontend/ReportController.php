@@ -55,6 +55,20 @@ class ReportController extends Controller
         $view->total_topup = TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->sum('saldo');
         return $view;
     }
+
+    public function topupExport()
+    {
+        $list_topup =  TransferSaldo::search()->fromClient(client()->id)->orderBy('created_at', 'desc')->get();
+        $content = array(array('NO', 'TANGGAL', 'PELANGGAN', 'JML TOPUP', 'TOPUP OLEH'));
+        foreach ($list_topup as $row => $topup) {
+            array_push($content, [++$row, date_format_view($topup->created_at), $topup->toType() ? $topup->toType()->name : '-',
+            format_price($topup->saldo), $topup->createdBy ? $topup->createdBy->name : '-']);
+        }
+
+        $file_name = 'LAPORAN TOPUP ' .date('YmdHis');
+        $header = 'LAPORAN TOPUP';
+        ExcelHelper::excel($file_name, $content, $header);
+    }
     
     public function withdraw()
     {

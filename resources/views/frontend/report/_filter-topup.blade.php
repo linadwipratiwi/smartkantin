@@ -44,9 +44,16 @@
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">filter</span></button>
                                 </div>
-                                {{-- <a href="http://localhost/client/pjb/report/gate/download?date=&amp;pos=">
-                                    <button type="button" class="btn btn-info btn-anim"><i class="fa fa-file"></i><span class="btn-text">download pdf</span></button>
-                                </a> --}}
+                                <?php $url = \Request::fullUrl();
+                                $explode = explode('?', $url);
+                                $url_export = $url.'/export';
+                                if (count($explode) > 1) {
+                                    $url_export =$explode[0].'/export?'.$explode[1];
+                                }
+                                ?>
+                                <a href="{{$url_export}}">
+                                    <button type="button" class="btn btn-info btn-anim"><i class="fa fa-file"></i><span class="btn-text">download excel</span></button>
+                                </a>
                             </form>
                         </div>
                     </div>
