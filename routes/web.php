@@ -114,6 +114,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
     
     // Setting
     Route::resource('break-time-setting', 'BreakTimeSettingController');
+    Route::get('report/transaction/export', 'ReportController@transactionExport');
     Route::get('report/transaction', 'ReportController@transaction');
     Route::get('report/topup', 'ReportController@topup');
     Route::get('report/withdraw', 'ReportController@withdraw');

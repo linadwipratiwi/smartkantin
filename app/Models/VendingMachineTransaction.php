@@ -86,6 +86,7 @@ class VendingMachineTransaction extends Model
     public function scopeSearch($q)
     {
         $type = \Input::get('type');
+        $status = \Input::get('status_transaction');
         if ($type == 'today' || $type == null) {
             $q->whereDate('vending_machine_transactions.created_at', Carbon::today());
         }
@@ -112,6 +113,10 @@ class VendingMachineTransaction extends Model
             $date_end = DateHelper::formatDB(trim($date[1]), 'end');
 
             $q->whereBetween('vending_machine_transactions.created_at', [$date_start, $date_end]);
+        }
+
+        if (!($status == null || $status == 'all')) {
+            $q->where('vending_machine_transactions.status_transaction', $status);
         }
 
         return $q;

@@ -56,7 +56,7 @@
                                         <tr id="tr-{{$transaction->id}}">
                                             <td>{{$row + 1}}</td>
                                             <td>{{$transaction->vendingMachineSlot->convertToAsci()}}</td>
-                                            <td>{{$transaction->food_name}}</td>
+                                            <td>{{$transaction->food ? $transaction->food->name : $transaction->food_name}}</td>
                                             <td>{{$transaction->vendingMachine->name}}</td>
                                             <td>{{$transaction->client->name}}</td>
                                             <td>{{$transaction->customer->name}}</td>

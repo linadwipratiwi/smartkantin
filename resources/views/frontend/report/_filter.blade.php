@@ -4,7 +4,7 @@
             
             <div class="panel-wrapper collapse in">
                 <div class="panel-body">
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Filter what do you want</h6>
                         </div>
@@ -42,17 +42,31 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group mr-15">
+                                    <label class="control-label mr-10" for="status">Status</label>
+                                    <select name="status_transaction" class="form-control" id="status_transaction">
+                                        <option @if(\Input::get('status_transaction')=='all' ) selected @endif value="all">All</option>
+                                        <option @if(\Input::get('status_transaction')=='0' ) selected @endif value="0">Failed</option>
+                                        <option @if(\Input::get('status_transaction')=='1' ) selected @endif value="1">Success with delivered</option>
+                                        <option @if(\Input::get('status_transaction')=='2' ) selected @endif value="2">Payment Pending</option>
+                                        <option @if(\Input::get('status_transaction')=='3' ) selected @endif value="3">Success with not delivered</option>
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-success btn-anim"><i class="icon-rocket"></i><span class="btn-text">filter</span></button>
                                 </div>
-                                {{-- <a href="http://localhost/client/pjb/report/gate/download?date=&amp;pos=">
-                                    <button type="button" class="btn btn-info btn-anim"><i class="fa fa-file"></i><span class="btn-text">download pdf</span></button>
-                                </a> --}}
+                                <?php
+                                $param = '?vending_type='.\Input::get('vending_type').'&type='.\Input::get('type').'&date='.\Input::get('date').'
+                                    &month='.\Input::get('month').'&status_transaction='.\Input::get('status_transaction');
+                                ?>
+                                <a href="{{\Request::url()}}/export{{$param}}">
+                                    <button type="button" class="btn btn-info btn-anim"><i class="fa fa-file"></i><span class="btn-text">download excel</span></button>
+                                </a>
                             </form>
                         </div>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Total Income</h6>
                         </div>
@@ -62,7 +76,7 @@
                         </span>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="pull-left">
                             <h6 class="panel-title txt-dark">Total Transaction</h6>
                         </div>
