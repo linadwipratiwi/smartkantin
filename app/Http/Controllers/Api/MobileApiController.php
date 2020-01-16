@@ -1186,6 +1186,8 @@ class MobileApiController extends Controller
 
         $view = view('other.success-scan-qr-code');
         $view->list_transaction = VendingMachineTransaction::whereIn('id', $id)->get();
+        toaster_success('Makanan berhasil diambil');
+
         return $view;
     }
 }
