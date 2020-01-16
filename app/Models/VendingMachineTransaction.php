@@ -177,7 +177,7 @@ class VendingMachineTransaction extends Model
             })
             ->where('vending_machine_transactions.vending_machine_id', $stand_id)
             ->where('vending_machine_transactions.status_transaction', 3)
-            ->whereDate('vending_machine_transactions.created_at', Carbon::today());
+            ->whereDate('vending_machine_transactions.preorder_date', Carbon::today());
         
     }
 }
