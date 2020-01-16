@@ -1150,6 +1150,7 @@ class MobileApiController extends Controller
                     $text["msg"]="success";
                     $text["status"]=1;
                     $text["customer_name"]=$data->name;
+                    $text["quantity"]=VendingMachineTransaction::find($data->id)->quantity;
                     $hasil[]=($text);               
             }
 
