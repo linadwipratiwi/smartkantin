@@ -21,6 +21,7 @@ Route::group(['prefix' => 'v1'], function () {
     
     Route::post('post-login', 'MobileApiController@postLogin');
 
+    Route::get('generate-qr-code/{id}', 'MobileApiController@generateQRCode');
     Route::get('search-transaction-customer/{stand_id}', 'MobileApiController@searchTransactionByCustomer');
     Route::post('firebase-token-store', 'MobileApiController@firebaseTokenStore');
     Route::post('multipayment', 'MobileApiController@multipayment');

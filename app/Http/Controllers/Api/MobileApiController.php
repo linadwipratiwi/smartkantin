@@ -1167,4 +1167,10 @@ class MobileApiController extends Controller
 
         }
     
+    /** Generate qr code */
+    public function generateQRCode($id)
+    {
+        $url = url('api/v1/mobile/scan-qr-code/'.$id);
+        return view('other.generate-qr-code', [ 'url' => $url]);
+    }
 }
