@@ -1175,10 +1175,17 @@ class MobileApiController extends Controller
         return view('other.generate-qr-code', [ 'url' => $url]);
     }
 
+    /** Handler QRCode scan */
     public function scanQRCode()
     {
-        $id = \Input::get('id');
-        echo $id;
-        info('id scan qr = ' . $id);
+        $param = \Input::get('id');
+        $id = explode(";", $param);
+
+        $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $id)
+            ->update(['status_transaction' => 1]);
+
+        $view = view('other.success-scan-qr-code');
+        $view->list_transaction = VendingMachineTransaction::whereIn('id', $id)->get();
+        return $view;
     }
 }

@@ -96,4 +96,6 @@ class OtherController extends Controller
         $pdf = \PDF::loadView('backend.other.pak-mahfud-pdf', $data);
         return $pdf->stream();
     }
+
+    
 }
