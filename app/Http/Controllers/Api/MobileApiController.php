@@ -1171,8 +1171,8 @@ class MobileApiController extends Controller
     public function generateQRCode()
     {
         $id = \Input::get('id');
-        $url = url('api/v1/mobile/scan-qr-code?id='.$id);
-        return view('other.generate-qr-code', [ 'url' => $url]);
+        // $url = url('api/v1/mobile/scan-qr-code?id='.$id);
+        return view('other.generate-qr-code', [ 'url' => $id]);
     }
 
     /** Handler QRCode scan */
