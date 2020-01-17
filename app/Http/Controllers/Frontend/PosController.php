@@ -275,7 +275,7 @@ class PosController extends Controller
         $customer->save();
 
         DB::commit();
-        FirebaseHelper::pushFirebaseNotification($transaction);
+        FirebaseHelper::pushFirebaseNotification($transaction,"checkout");
 
         toaster_success('Pesanan Anda berhasil ditempatkan.');
         return redirect('c/success-order/'.$transaction_number);

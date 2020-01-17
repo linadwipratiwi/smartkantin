@@ -8,7 +8,7 @@ use App\Exceptions\AppException;
 class FirebaseHelper
 {
     /** push notification */
-    public static function pushFirebaseNotification($transaction)
+    public static function pushFirebaseNotification($transaction,$notif_code)
     {
         
         $list_user_vending = $transaction->vendingMachine->userVendingMachine;
@@ -20,7 +20,7 @@ class FirebaseHelper
             }
         }
 
-        self::pushFirebase($token, $transaction);
+        self::pushFirebase($token, $transaction, $notif_code);
     }
 
     public static function push($token, $transaction)
@@ -76,25 +76,26 @@ class FirebaseHelper
         info('success push');
     }
 
-    public static function pushFirebase($token, $transaction)
+    public static function pushFirebase($token, $transaction,$notif_code)
     {
         $ch = curl_init();
         $url = "https://fcm.googleapis.com/fcm/send";
         $api_key_access = 'AAAAAUcYlIE:APA91bEXv3zNxmHgtW35z7o_NXuHVNFS-WpJ-x2dKBYzkha3MwWLDOuMlGkEyTuzvTmXwCpEIHv1Ep81nNjKNjFE4uRKsqhuR3G78bAi-u76h_ZqxpptGEMc794DCZV65iuFBSydwhsO';
 
-        $label_order = 'order';
-        if ($transaction->is_preorder) {
-            $label_order = 'preorder';
-        }
+       
 
-        $body = array(
-            'standId' => $transaction->vendingMachine->id,
-            'typeOrder' => $label_order,
-        );
+        // $body = array(
+        //     'standId' => $transaction->vendingMachine->id,
+        //     'typeOrder' => $label_order,
+        // );
+
+        /** mengambil body berdasarkan notif code  */
+        $body=self::dataBodyOfNotifCode($transaction,$notif_code);
+
         $data = array(
             'registration_ids' => $token,
             'notification'=> array(
-                'title'     => 'seseorang telah '.$label_order.' barangmu',
+                'title'     => self::titleOfNotifCode($transaction,$notif_code),
                 'body'   => 'silahkan cek aplikasi mu',
             ),
             'data' => $body
@@ -117,5 +118,43 @@ class FirebaseHelper
         info('success push');
         
         info ($result);
+    }
+
+    public static function dataBodyOfNotifCode($transaction,$notif_code){
+
+        if( $notif_code=="take_food"){
+            $body = array(
+                'standId' => $transaction->vendingMachine->id,
+                'typeOrder' => "take"
+            );
+        }
+
+        else if($notif_code=="checkout"){
+            $label_order = 'order';
+            if ($transaction->is_preorder) {
+                $label_order = 'preorder';
+            }
+            $body = array(
+                'standId' => $transaction->vendingMachine->id,
+                'typeOrder' => $label_order
+            );
+        }
+
+        return ($body);
+    }
+
+    public static function titleOfNotifCode($transaction,$notif_code){
+        if($notif_code = "take_food"){
+            $tittle="Seseorang telah berhasil mengambil makanan";
+        }
+        else if($notif_code=="checkout"){
+            $label_order = 'order';
+            if ($transaction->is_preorder) {
+                $label_order = 'preorder';
+            }
+            $tittle="Seseorang telah berhasil ".$label_order." makanan";
+            
+        }
+        return($tittle);
     }
 }

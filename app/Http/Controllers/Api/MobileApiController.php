@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Traits\AuthApiControllerTrait;
 use App\Models\VendingMachineTransaction;
+use App\Helpers\FirebaseHelper;
+
 
 class MobileApiController extends Controller
 {
@@ -1188,6 +1190,11 @@ class MobileApiController extends Controller
         $view->list_transaction = VendingMachineTransaction::whereIn('id', $id)->get();
         toaster_success('Makanan berhasil diambil');
 
+        $transaction= VendingMachineTransaction::find($id[0]);
+        FirebaseHelper::pushFirebaseNotification($transaction,"take_food");
+
         return $view;
     }
+
+
 }
