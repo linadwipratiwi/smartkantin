@@ -129,7 +129,7 @@ class FirebaseHelper
             );
         }
 
-        else if($notif_code=="checkout"){
+        elseif($notif_code=="checkout"){
             $label_order = 'order';
             if ($transaction->is_preorder) {
                 $label_order = 'preorder';
@@ -144,10 +144,10 @@ class FirebaseHelper
     }
 
     public static function titleOfNotifCode($transaction,$notif_code){
-        if($notif_code = "take_food"){
+        if($notif_code =="take_food"){
             $tittle="Seseorang telah berhasil mengambil makanan";
         }
-        else if($notif_code=="checkout"){
+        elseif($notif_code=="checkout"){
             $label_order = 'order';
             if ($transaction->is_preorder) {
                 $label_order = 'preorder';
