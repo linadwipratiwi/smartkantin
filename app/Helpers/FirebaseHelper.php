@@ -145,14 +145,14 @@ class FirebaseHelper
 
     public static function titleOfNotifCode($transaction,$notif_code){
         if($notif_code =="take_food"){
-            $tittle="Seseorang telah berhasil mengambil makanan";
+            $tittle="Seseorang telah berhasil mengambil menu mu";
         }
         elseif($notif_code=="checkout"){
             $label_order = 'order';
             if ($transaction->is_preorder) {
                 $label_order = 'preorder';
             }
-            $tittle="Seseorang telah berhasil ".$label_order." makanan";
+            $tittle="Seseorang telah ".$label_order." menu mu";
             
         }
         return($tittle);
