@@ -13,6 +13,7 @@ use App\Models\Multipayment;
 use Illuminate\Http\Request;
 use App\Models\FirebaseToken;
 use App\Models\TransferSaldo;
+use App\Models\FoodSchedule;
 use App\Models\Food;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
@@ -1052,8 +1053,17 @@ class MobileApiController extends Controller
                 
                 $food_id=$data->food_id;
                 $food=Food::find($food_id);
+                $foodSchedule= FoodSchedule::where('food_id',$food_id)->first();
+
                 if ($food) {
                     $text= json_decode($food, true);
+                    $text["senin"]= ($foodSchedule)?$foodSchedule->senin:"";
+                    $text["selasa"]= ($foodSchedule)?$foodSchedule->selasa:"";
+                    $text["rabu"]= ($foodSchedule)?$foodSchedule->rabu:"";
+                    $text["kamis"]= ($foodSchedule)?$foodSchedule->kamis:"";
+                    $text["jumat"]= ($foodSchedule)?$foodSchedule->jumat:"";
+                    $text["sabtu"]= ($foodSchedule)?$foodSchedule->sabtu:"";
+                    $text["minggu"]= ($foodSchedule)?$foodSchedule->minggu:"";
                     $text["msg"]="success";
                     $text["stock"]= $data->stock;
                     $text["slot_id"]= $data->id;

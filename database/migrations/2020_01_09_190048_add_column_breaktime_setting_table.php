@@ -15,7 +15,7 @@ class AddColumnBreaktimeSettingTable extends Migration
     {
         Schema::table('vending_machine_transactions', function ($table) {
             $table->integer('break_time_setting_id')->unsigned()->index()->nullable();
-            $table->foreign('break_time_setting_id')->references('id')->on('break_time_settings')->onDelete('cascade');
+            // $table->foreign('break_time_setting_id')->references('id')->on('break_time_settings')->onDelete('cascade');
         });
     }
 
