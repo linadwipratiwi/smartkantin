@@ -355,23 +355,32 @@ class MobileApiController extends Controller
 
         $user= User::where('username',$username)->first();
         if($user){
-        $hasher = app('hash');
-        if ($hasher->check($password, $user->password)) {
-            if($newUsername)$user->username= ($newUsername);
-            if($newName)$user->name= ($newName);
-            try{
-            $user->save();
-             return response()->json([
-                 'status'=>1,
-                 'msg'=>'success',
-                 'username'=>$user->username,
-                 'name'=>$user->name
-             ]);
-            }
-            catch(\Throwable $th){
+            $hasher = app('hash');
+            if ($hasher->check($password, $user->password)) {
+                if($newUsername){
+                    $allUsers=User::all();
+                    foreach($allUsers as $allUser){
+                        if($newUsername== $allUser->username){
+                            return(self::returnMessageError("username already exist!"));
+                        }
+                    }
+                    $user->username= ($newUsername);
+                }
+                if($newName)$user->name= ($newName);
 
+                try{
+                $user->save();
+                return response()->json([
+                    'status'=>1,
+                    'msg'=>'success',
+                    'username'=>$user->username,
+                    'name'=>$user->name
+                ]);
+                }
+                catch(\Throwable $th){
+
+                }
             }
-        }
          }
         return response()->json([
             'status'=>0,
@@ -1194,6 +1203,12 @@ class MobileApiController extends Controller
         FirebaseHelper::pushFirebaseNotification($transaction,"take_food");
 
         return $view;
+    }
+    public static function returnMessageError($string){
+        return response()->json([
+            "status"=>0,
+            "msg"=>$string
+        ]);
     }
 
 
