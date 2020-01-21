@@ -1057,13 +1057,13 @@ class MobileApiController extends Controller
 
                 if ($food) {
                     $text= json_decode($food, true);
-                    $text["senin"]= ($foodSchedule)?$foodSchedule->senin:"";
-                    $text["selasa"]= ($foodSchedule)?$foodSchedule->selasa:"";
-                    $text["rabu"]= ($foodSchedule)?$foodSchedule->rabu:"";
-                    $text["kamis"]= ($foodSchedule)?$foodSchedule->kamis:"";
-                    $text["jumat"]= ($foodSchedule)?$foodSchedule->jumat:"";
-                    $text["sabtu"]= ($foodSchedule)?$foodSchedule->sabtu:"";
-                    $text["minggu"]= ($foodSchedule)?$foodSchedule->minggu:"";
+                    $text["senin"]= ($foodSchedule)?$foodSchedule->senin:1;
+                    $text["selasa"]= ($foodSchedule)?$foodSchedule->selasa:1;
+                    $text["rabu"]= ($foodSchedule)?$foodSchedule->rabu:1;
+                    $text["kamis"]= ($foodSchedule)?$foodSchedule->kamis:1;
+                    $text["jumat"]= ($foodSchedule)?$foodSchedule->jumat:1;
+                    $text["sabtu"]= ($foodSchedule)?$foodSchedule->sabtu:1;
+                    $text["minggu"]= ($foodSchedule)?$foodSchedule->minggu:1;
                     $text["msg"]="success";
                     $text["stock"]= $data->stock;
                     $text["slot_id"]= $data->id;
