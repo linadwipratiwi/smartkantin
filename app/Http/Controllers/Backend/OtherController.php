@@ -44,6 +44,7 @@ class OtherController extends Controller
         $date = explode('-', \Input::get('date'));
         $date_start = DateHelper::formatDB(trim($date[0]), 'start');
         $date_end = DateHelper::formatDB(trim($date[1]), 'end');
+        $date_range = [$date_start, $date_end];
         
         /** sisa saldo */
         $sisa_saldo = Customer::where('register_at_client_id', 3)->sum('saldo');
@@ -54,7 +55,7 @@ class OtherController extends Controller
         /** Total topup */
         $list_transfer_saldo = TransferSaldo::where('from_type', get_class(new Client))
             ->where('from_type_id', 3)
-            // ->whereDate('created_at', '>=', '2019-12-06 08:00:00')
+            ->whereBetween('created_at', $date_range)
             ->get();
         $total_topup = 0;
         foreach ($list_transfer_saldo as $transfer_saldo) {
@@ -67,7 +68,6 @@ class OtherController extends Controller
         $saldo_kantin = $total_topup - $sisa_saldo;
 
         /** Total Transaksi */
-        $date_range = [$date_start, $date_end];
         $total_transaksi = VendingMachineTransaction::where('vending_machine_id', 16)
             ->where('status_transaction', 1)
             ->whereBetween('created_at', $date_range)
