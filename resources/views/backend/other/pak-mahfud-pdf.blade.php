@@ -1,7 +1,13 @@
 @extends('layouts.pdf')
 
 @section('content')
-    <h3>Laporan Ke Pak Mahfud</h3>
+    <?php
+
+        $date = explode('-', \Input::get('date'));
+        $date_start = \App\Helpers\DateHelper::formatDB(trim($date[0]), 'start');
+        $date_end = \App\Helpers\DateHelper::formatDB(trim($date[1]), 'end');
+    ?>
+    <h3>Laporan Ke Pak Mahfud Tgl. {{$date_start}} s.d {{$date_end}}</h3>
 
     <table>
         <tr><td>sisa saldo</td> <td>:</td><td>{{$sisa_saldo}}</td></tr>
