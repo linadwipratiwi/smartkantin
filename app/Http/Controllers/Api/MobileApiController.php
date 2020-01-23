@@ -1046,8 +1046,8 @@ class MobileApiController extends Controller
         $hari= explode(';',$enable_hari);
         /**cek keberadaan food */
         $food=Food::find($food_id);
-        if($food){
-            self::returnMessageError("no food found");
+        if(!$food){
+           return self::returnMessageError("no food found");
         }
         $schedule= FoodSchedule::where('food_id',$food_id)->first();
         if(!$schedule){
@@ -1261,6 +1261,7 @@ class MobileApiController extends Controller
 
         return $view;
     }
+    
     public static function returnMessageError($string){
         return response()->json([
             "status"=>0,
