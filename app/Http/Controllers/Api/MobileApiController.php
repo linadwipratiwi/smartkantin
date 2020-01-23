@@ -1040,6 +1040,53 @@ class MobileApiController extends Controller
         return response()->json($respon);
     }
 
+    public function setJadwalFood(Request $request){
+        $food_id= $request->input('food_id');
+        $enable_hari=$request->input('enable_hari');
+        $hari= explode(';',$enable_hari);
+        /**cek keberadaan food */
+        $food=Food::find($food_id);
+        if($food){
+            self::returnMessageError("no food found");
+        }
+        $schedule= FoodSchedule::where('food_id',$food_id)->first();
+        if(!$schedule){
+            /**buat schedule baru */
+            $schedule = new FoodSchedule;
+            $schedule->food_id=$food_id;
+            $schedule->senin=$hari[0];
+            $schedule->selasa=$hari[1];
+            $schedule->rabu=$hari[2];
+            $schedule->kamis=$hari[3];
+            $schedule->jumat=$hari[4];
+            $schedule->sabtu=$hari[5];
+            $schedule->minggu=$hari[6];
+            try{
+                $schedule->save();
+            }
+            catch (\Throwable $th) {
+                self::returnMessageError("save failed");
+            }
+            \DB::commit();
+    
+        }
+        else{
+            $schedule->food_id=$food_id;
+            $schedule->senin=$hari[0];
+            $schedule->selasa=$hari[1];
+            $schedule->rabu=$hari[2];
+            $schedule->kamis=$hari[3];
+            $schedule->jumat=$hari[4];
+            $schedule->sabtu=$hari[5];
+            $schedule->minggu=$hari[6]; 
+            $schedule->save();
+        }
+        return response()->json([
+            'status'=>1,
+            'msg'=>'success'
+        ]);
+    }
+
     public function getFood(Request $request){
         // $stand=VendingMachine::find($stand_id);
         // if(!$stand){
