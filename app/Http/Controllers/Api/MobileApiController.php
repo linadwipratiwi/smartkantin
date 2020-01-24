@@ -1156,24 +1156,28 @@ class MobileApiController extends Controller
     }
     
     public function setFoodStock(Request $request){
-        $slot_id=$request->input('slot_id');
-        $stock= $request->input('stock');
-
-        $slot= VendingMachineSlot::find($slot_id);
-        if($slot){
-            $slot->stock=$stock;
-            $slot->save();
-            return response()->json([
-                "status"=>1,
-                "msg" => "success"
-            ]);            
+        $slot_ids=explode(';',$request->input('slot_id'));
+        $stocks= explode(';',$request->input('stock'));
+        $i=0;
+        foreach($slot_ids as $slot_id){
+                $slot= VendingMachineSlot::find($slot_id);
+                if($slot){
+                    $slot->stock=$stocks[$i];
+                    $slot->save();
+                               
+                }
+                else{
+                    return response()->json([
+                        "status"=>0,
+                        "msg" => "not found slot"
+                    ]);
+                }
+                $i++;
         }
-        else{
-            return response()->json([
-                "status"=>0,
-                "msg" => "not found slot"
-            ]);
-        }
+        return response()->json([
+            "status"=>1,
+            "msg" => "success"
+        ]); 
 
     }
 
