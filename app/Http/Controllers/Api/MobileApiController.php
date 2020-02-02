@@ -367,7 +367,12 @@ class MobileApiController extends Controller
                     }
                     $user->username= ($newUsername);
                 }
-                if($newName)$user->name= ($newName);
+                if($newName){
+                    $stand_id=UserVendingMachine::where('user_id',$user->id)->first()->vending_machine_id;
+                    $stand= VendingMachine::find($stand_id);
+                    $stand->name= $newName;
+                    $stand->save();
+                }
 
                 try{
                 $user->save();
@@ -375,7 +380,7 @@ class MobileApiController extends Controller
                     'status'=>1,
                     'msg'=>'success',
                     'username'=>$user->username,
-                    'name'=>$user->name
+                    'name'=>$stand->name
                 ]);
                 }
                 catch(\Throwable $th){
