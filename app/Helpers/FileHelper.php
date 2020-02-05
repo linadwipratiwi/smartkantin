@@ -46,7 +46,6 @@ class FileHelper
             // }
            
         }
-        return null;
         
         
         //SIMPAN DATA IMAGE YANG TELAH DI-UPLOAD
