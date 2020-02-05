@@ -27,7 +27,7 @@
                             <form method="post" action="{{url('front/food')}}" enctype="multipart/form-data">
                                 {!! csrf_field() !!}
                                 <div class="form-group">
-                                    <label class="control-label mb-10 text-left">{!! label('nama', 'name') !!} </label>
+                                    <label class="control-label mb-10 text-left">{!! label('nama makanan', 'name') !!} </label>
                                     <input type="text" class="form-control" value="" name="name" required>
                                 </div>
                                 <div class="form-group">

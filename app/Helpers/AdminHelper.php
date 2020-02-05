@@ -452,7 +452,7 @@ class AdminHelper
         $food->selling_price_vending_machine = $food->selling_price_client + $profit_vm;
 
         if ($file) {
-            $food->photo = FileHelper::upload($file, 'uploads/food/');
+            $food->photo = FileHelper::uploadImageResize($file, 'uploads/food/');
             ;
         }
         try {
