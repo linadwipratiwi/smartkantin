@@ -44,9 +44,9 @@ class FileHelper
             // if ($file->move($path, $filename)) {
             //     return $path.$filename;
             // }
-            return null;
+           
         }
-		
+        return null;
         
         
         //SIMPAN DATA IMAGE YANG TELAH DI-UPLOAD
