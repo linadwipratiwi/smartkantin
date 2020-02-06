@@ -348,6 +348,72 @@ class MobileApiController extends Controller
         }
     }
 
+
+    /**Login  untuk stand*/
+    public static function loginCustomer(Request $request)
+    {
+        // user dan password client sebagai masukan
+        $username= $request->input('username');
+        $password=$request->input('password');
+        
+        $user = User::where('username', $username)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+        $hasher = app('hash');
+        if ($hasher->check($password, $user->password)) {
+            // login Success
+
+            // mencari type user
+            $type="customer";
+            $customer=Customer::where('user_id', $user->id)->first();
+             if (!$customer) {
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'not found'
+                ]);
+            } else {
+                $data=$customer;
+            }
+            $client=Client::find($customer->register_at_client_id);
+            $client_name="";
+            if($client){
+                $client_name=$client->name;
+            
+
+            
+            return response()->json([
+                'status' => 1,
+                'user_id'=>$user->id,
+                 'id'=>$data->id,
+                 'type'=>$type,
+                 'name'=> $data->name,
+                 'user_name'=>$user->name,
+                 'client_name' =>$client_name,
+                 'client_logo'=>$client->logo,
+                 'stand_saldo'=>$data->saldo,
+                 'msg' => 'access granted'
+                 
+            ]);
+            }
+            else{
+                return response()->json([
+                    'status' => 0,
+                    'msg' => 'acces denied'
+                ]);
+      
+            }
+        } 
+        else {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'acces denied'
+            ]);
+        }
+    }
     public static function changeUsername(Request $request){
         $username= $request->input('username');
         $password= $request->input('password');

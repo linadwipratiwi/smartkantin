@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login-client','MobileApiController@loginClient');
     Route::post('login','MobileApiController@login');
     Route::post('login-stand','MobileApiController@loginStand');
+    Route::post('login-customer','MobileApiController@loginCustomer');
     Route::post('stand/transaction/bill-check','MobileApiController@billcheck');
     Route::post('stand/transaction/bill-pay','MobileApiController@billpayment');
     Route::get('client/list-stand/{client_id}','MobileApiController@listStand');

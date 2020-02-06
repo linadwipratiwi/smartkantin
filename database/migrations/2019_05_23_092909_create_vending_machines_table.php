@@ -20,7 +20,7 @@ class CreateVendingMachinesTable extends Migration
             $table->string('alias'); // untuk api : vm_client_xx_xx
             $table->string('production_year')->nullable();
             $table->integer('client_id')->unsigned()->index()->nullable();
-            $table->foreign('client_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->integer('version_firmware_id')->unsigned()->index()->nullable();
             $table->foreign('version_firmware_id')->references('id')->on('firmwares')->onDelete('cascade');
             $table->integer('version_ui_id')->unsigned()->index()->nullable();

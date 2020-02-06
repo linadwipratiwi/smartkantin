@@ -29,13 +29,17 @@ class FileHelper
         //LOOPING ARRAY DIMENSI YANG DI-INGINKAN
         //YANG TELAH DIDEFINISIKAN PADA CONSTRUCTOR
             //MEMBUAT CANVAS IMAGE SEBESAR DIMENSI YANG ADA DI DALAM ARRAY 
-            $canvas = Image::canvas(200, 200);
             //RESIZE IMAGE SESUAI DIMENSI YANG ADA DIDALAM ARRAY 
             //DENGAN MEMPERTAHANKAN RATIO
-            $resizeImage  = Image::make($file)->resize(200 ,200, function($constraint) {
+            $img=Image::make($file);
+            $resizeImage  = Image::make($file)->resize(200,200, function($constraint) {
                 $constraint->aspectRatio();
             });
-         
+            $size[0]=$resizeImage->height();
+            $size[1]=$resizeImage->width();
+            $ukuran=($size[0]>$size[1])?$size[1]:$size[0];
+            
+            $canvas = Image::canvas($ukuran, $ukuran);
             //MEMASUKAN IMAGE YANG TELAH DIRESIZE KE DALAM CANVAS
             $canvas->insert($resizeImage, 'center');
             //SIMPAN IMAGE KE DALAM MASING-MASING FOLDER (DIMENSI)
@@ -46,15 +50,8 @@ class FileHelper
             // }
            
         }
+        return null;
         
-        
-        //SIMPAN DATA IMAGE YANG TELAH DI-UPLOAD
-        // Image_uploaded::create([
-        //     'name' => $fileName,
-        //     'dimensions' => implode('|', $this->dimensions),
-        //     'path' => $this->path
-        // ]);
-        // return redirect()->back()->with(['success' => 'Gambar Telah Di-upload']);
     }
     
     public static function xlsValidate()
