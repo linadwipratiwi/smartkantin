@@ -4,18 +4,22 @@ namespace App\Helpers;
 
 use App\Models\FirebaseToken;
 use App\Exceptions\AppException;
+use Exception;
 
 class FirebaseHelper
 {
     /** push notification */
     public static function pushFirebaseNotification($transaction,$notif_code)
     {
-        
-        foreach($transaction as $tr){
-            $transaction_= $tr;
-            break;
-        }        
-        $list_user_vending = $transaction_->vendingMachine->userVendingMachine;
+       
+        try{
+
+            $list_user_vending = $transaction->vendingMachine->userVendingMachine;
+        }
+        catch(\Throwable $th){
+            $list_user_vending = $transaction->first()->vendingMachine->userVendingMachine;
+
+        }
         $token = [];
         foreach ($list_user_vending as $key => $user_vending) {
             $list_firebase_token = FirebaseToken::where('user_id', $user_vending->user_id)->select('token')->get();
