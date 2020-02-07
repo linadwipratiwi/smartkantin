@@ -11,7 +11,11 @@ class FirebaseHelper
     public static function pushFirebaseNotification($transaction,$notif_code)
     {
         
-        $list_user_vending = $transaction->vendingMachine->userVendingMachine;
+        foreach($transaction as $tr){
+            $transaction_= $tr;
+            break;
+        }        
+        $list_user_vending = $transaction_->vendingMachine->userVendingMachine;
         $token = [];
         foreach ($list_user_vending as $key => $user_vending) {
             $list_firebase_token = FirebaseToken::where('user_id', $user_vending->user_id)->select('token')->get();
@@ -23,58 +27,6 @@ class FirebaseHelper
         self::pushFirebase($token, $transaction, $notif_code);
     }
 
-    public static function push($token, $transaction)
-    {
-        $api_key_access = 'AAAAAUcYlIE:APA91bEXv3zNxmHgtW35z7o_NXuHVNFS-WpJ-x2dKBYzkha3MwWLDOuMlGkEyTuzvTmXwCpEIHv1Ep81nNjKNjFE4uRKsqhuR3G78bAi-u76h_ZqxpptGEMc794DCZV65iuFBSydwhsO';
-        $url = "https://fcm.googleapis.com/fcm/send";
-
-        $registration_ids = $token;
-
-        $label_order = 'order';
-        if ($transaction->is_preorder) {
-            $label_order = 'preorder';
-        }
-        // prep the bundle
-        $msg = array(
-            'title'     => 'seseorang telah '.$label_order.' barangmu',
-            'message'   => 'silahkan cek aplikasi mu',
-            'subtitle'  => 'pemberitahuan masuk',
-            'tickerText'    => '',
-            'vibrate'   => 1,
-            'sound'     => 1,
-            'largeIcon' => 'large_icon',
-            'smallIcon' => 'small_icon'
-        );
-
-        $data = array(
-            'standId' => $transaction->vendingMachine->id,
-            'typeOrder' => $label_order,
-        );
-
-        $fields = array(
-            'registration_ids'  => $registration_ids,
-            'notification' => $msg,
-            'data' => $data
-        );
-
-        $headers = array(
-            'Authorization: key='. $api_key_access,
-            'Content-Type: application/json'
-        );
-          
-        $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_POST, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
-        $result = curl_exec($ch );
-        $info = curl_getinfo($ch);
-        curl_close( $ch );
-        info($result);
-        info('success push');
-    }
 
     public static function pushFirebase($token, $transaction,$notif_code)
     {
@@ -123,8 +75,12 @@ class FirebaseHelper
     public static function dataBodyOfNotifCode($transaction,$notif_code){
 
         if( $notif_code=="take_food"){
+            $ids="";
+            foreach($transaction as $tr){
+                $ids= $ids.$tr->id.";";
+            }
             $body = array(
-                'data' => $transaction->customer->id,
+                'data' => $ids,
                 'typeOrder' => "take"
             );
         }
