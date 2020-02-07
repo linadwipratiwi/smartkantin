@@ -1350,23 +1350,23 @@ class MobileApiController extends Controller
           ];
           $todayDate=Date('Y-m-d');
           $transactions= VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
-          $ids=[];
+          $idstring="";
           foreach($transactions as $transaction){
-              $ids[]=$transaction->id;
+              $idstring= $idstring.$transaction->id.";";
           }   
           
 
-        //   $id = explode(";", $param);
+          $id = explode(";", $idstring);
   
-          $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $ids)
+          $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $id)
               ->update(['status_transaction' => 1]);
   
           $view = view('other.success-scan-qr-code');
-          $view->list_transaction = VendingMachineTransaction::whereIn('id', $ids)->get();
+          $view->list_transaction = VendingMachineTransaction::whereIn('id', $id)->get();
           toaster_success('Makanan berhasil diambil');
   
-          $transaction= VendingMachineTransaction::find($ids[0]);
-          FirebaseHelper::pushFirebaseNotification($transaction,"take_food");
+    
+          FirebaseHelper::pushFirebaseNotification($transactions[0],"take_food");
   
           return $view;
       }
