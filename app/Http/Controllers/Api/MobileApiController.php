@@ -1350,13 +1350,13 @@ class MobileApiController extends Controller
           ];
           $todayDate=Date('Y-m-d');
           $transactions= VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
+          $transactionSampling=VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->first();
           $idstring="";
           $i=0;
           foreach($transactions as $transaction){
               $idstring= $idstring.$transaction->id.";";
              if($i==0){
                  $i=$i+1;
-                 $transactionSampling=$transaction;
              }
           }   
           
