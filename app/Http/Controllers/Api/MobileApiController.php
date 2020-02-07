@@ -1371,7 +1371,7 @@ class MobileApiController extends Controller
           toaster_success('Makanan berhasil diambil');
   
     
-          FirebaseHelper::pushFirebaseNotification($transactionSampling,"take_food");
+        //   FirebaseHelper::pushFirebaseNotification($transactionSampling,"take_food");
   
           return $view;
       }
