@@ -1351,8 +1351,13 @@ class MobileApiController extends Controller
           $todayDate=Date('Y-m-d');
           $transactions= VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
           $idstring="";
+          $i=0;
           foreach($transactions as $transaction){
               $idstring= $idstring.$transaction->id.";";
+             if($i==0){
+                 $i=$i+1;
+                 $transactionSampling=$transaction;
+             }
           }   
           
 
@@ -1366,7 +1371,7 @@ class MobileApiController extends Controller
           toaster_success('Makanan berhasil diambil');
   
     
-          FirebaseHelper::pushFirebaseNotification($transactions[0],"take_food");
+          FirebaseHelper::pushFirebaseNotification($transactionSampling,"take_food");
   
           return $view;
       }
