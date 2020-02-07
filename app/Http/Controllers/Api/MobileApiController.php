@@ -1339,22 +1339,32 @@ class MobileApiController extends Controller
         $todayDate = Date('Y-m-d');
         $transactions = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
         $transactionSampling = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->first();
-        if (!$transactions) {
+        $hasil=[];
+        $idstring = "";
+        $i = 0;
+        foreach ($transactions as $transaction) {
+            $idstring = $idstring . $transaction->id . ";";
+            if ($i == 0) {
+                $i = $i + 1;
+            }
+            $hasil[]=$transaction;
+        }
+        if (!$hasil) {
             $view = view('other.success-scan-qr-code');
             toaster_success('Hari ini, kamu belum pesan makanan di stand ini');
-
+            return $view;
+            
         } else {
-            $idstring = "";
-            $i = 0;
-            foreach ($transactions as $transaction) {
-                $idstring = $idstring . $transaction->id . ";";
-                if ($i == 0) {
-                    $i = $i + 1;
+           
+
+
+            $ids = explode(";", $idstring);
+            $id=[];
+            foreach($ids as $data){
+                if($data){
+                    $id[]=$data;
                 }
             }
-
-
-            $id = explode(";", $idstring);
             $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $id)
                 ->update(['status_transaction' => 1]);
 
