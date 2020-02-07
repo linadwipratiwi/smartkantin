@@ -1348,6 +1348,7 @@ class MobileApiController extends Controller
             'vending_machine_id'=>$vendingId,
             'status_transaction'=>3
           ];
+          $todayDate=Date('Y-m-d');
           $transactions= VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
           $ids=[];
           foreach($transactions as $transaction){
