@@ -1350,7 +1350,7 @@ class MobileApiController extends Controller
             $hasil[]=$transaction;
         }
         if (!$hasil) {
-            $view = view('other.success-scan-qr-code');
+            $view = view('other.failed-scan-qr-code');
             toaster_success('Hari ini, kamu belum pesan makanan di stand ini');
             return $view;
             
