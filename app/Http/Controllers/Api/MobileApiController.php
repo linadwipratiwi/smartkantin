@@ -928,6 +928,30 @@ class MobileApiController extends Controller
     }
 
 
+    public static function getTransaction(Request $request){
+        $stand_id= $request->input('stand_id');
+        $transactions_id= explode(';',$request->input('transactions_id'));
+        $hasil=[];
+        foreach($transactions_id as $transaction_id){
+            if($transaction_id){
+            $transaction_=VendingMachineTransaction::find($transaction_id);
+            $transaction=json_decode($transaction_,true);
+            $transaction['msg']='success';
+            $transaction['status']='1';
+            $transaction['customer_name']=$transaction_->customer->name; 
+            $hasil[]=$transaction;
+            }
+        }
+        if(!$hasil){
+            return response()->json([[
+                'status'=>0,
+                'msg'=>'transaction not found'
+            ]
+            ]);
+        }
+        return response()->json($hasil);
+    }
+
     /**All history */
     public static function allHistory($request)
     {
@@ -1108,6 +1132,7 @@ class MobileApiController extends Controller
         return response()->json($respon);
     }
 
+    
     public function setJadwalFood(Request $request)
     {
         $food_id = $request->input('food_id');
@@ -1355,9 +1380,6 @@ class MobileApiController extends Controller
             return $view;
             
         } else {
-           
-
-
             $ids = explode(";", $idstring);
             $id=[];
             foreach($ids as $data){

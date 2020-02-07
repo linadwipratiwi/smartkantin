@@ -45,7 +45,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('stand/set-jadwal-food','MobileApiController@setJadwalFood');
     Route::post('stand/update-stock','MobileApiController@setFoodStock');
     Route::post('change-password','MobileApiController@changePassword');
-    Route::post('change-username','MobileApiController@changeUsername');    
+    Route::post('change-username','MobileApiController@changeUsername');   
+    Route::post('get-transaction','MobileApiController@getTransaction');
   });
 });
 

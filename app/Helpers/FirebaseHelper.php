@@ -124,7 +124,7 @@ class FirebaseHelper
 
         if( $notif_code=="take_food"){
             $body = array(
-                'standId' => $transaction->vendingMachine->id,
+                'data' => $transaction->customer->id,
                 'typeOrder' => "take"
             );
         }
@@ -135,7 +135,7 @@ class FirebaseHelper
                 $label_order = 'preorder';
             }
             $body = array(
-                'standId' => $transaction->vendingMachine->id,
+                'data' => $transaction->vendingMachine->id,
                 'typeOrder' => $label_order
             );
         }
