@@ -1319,7 +1319,7 @@ class MobileApiController extends Controller
     }
 
     /** Handler QRCode scan */
-    public function scanQRCode()
+    public function scanQRCode_lawas()
     {
         $param = \Input::get('id');
         $id = explode(";", $param);
@@ -1337,6 +1337,38 @@ class MobileApiController extends Controller
         return $view;
     }
     
+      /** Handler QRCode scan mode langsung */
+      public function scanQRCode()
+      {
+          $param = explode(";",\Input::get('id'));
+          $vendingId= $param[0];
+          $customerId=$param[1];
+          $where=[
+            'customer_id'=> $customerId,
+            'vending_machine_id'=>$vendingId,
+            'status_transaction'=>3
+          ];
+          $transactions= VendingMachineTransaction::where($where)->get();
+          $ids=[];
+          foreach($transactions as $transaction){
+              $ids[]=$transaction->id;
+          }   
+          
+
+        //   $id = explode(";", $param);
+  
+          $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $ids)
+              ->update(['status_transaction' => 1]);
+  
+          $view = view('other.success-scan-qr-code');
+          $view->list_transaction = VendingMachineTransaction::whereIn('id', $ids)->get();
+          toaster_success('Makanan berhasil diambil');
+  
+          $transaction= VendingMachineTransaction::find($ids[0]);
+          FirebaseHelper::pushFirebaseNotification($transaction,"take_food");
+  
+          return $view;
+      }
     public static function returnMessageError($string){
         return response()->json([
             "status"=>0,
