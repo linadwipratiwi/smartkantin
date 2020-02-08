@@ -167,8 +167,11 @@ class PosController extends Controller
     public function checkout()
     {
         $is_preorder = 0;
-        $preorder_date = \Input::get('preorder_date');
+        $data =explode(';', (\Input::get('preorder_date')));
         $breaktime = \Input::get('break_time_setting_id');
+        $note=$data[1];
+        $preorder_date=$data[0];
+           
         if ($preorder_date) {
             $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
             $is_preorder = 1;
@@ -247,6 +250,7 @@ class PosController extends Controller
             $transaction->quantity = $cart['quantity'];
             $transaction->total = $cart['quantity'] * $vending_machine_slot->food->selling_price_vending_machine;
             $transaction->status_transaction = 3; // success with not delivered
+            $transaction->note= $note;
             $transaction->save();
 
             /** Update flaging transaksi. Digunakan untuk Smansa */

@@ -90,7 +90,25 @@
                     </div>
                     
                 </div>
-            </div>	
+            </div>
+            <div class="panel panel-default card-view" style="border:none">
+                <div class="panel-wrapper pb-10" style="color: black">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <b>Tambahkan catatan untuk penjual</b>
+                        </div>
+                        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" id="total-price">
+                           <textarea name="content" placeholder="Tambahkan catatan"></textarea><br />	
+                        </div> -->
+                        <div  class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
+                        <input type='text' placeholder="ketik catatanmu" id="customer-note" value=""  class="form-control" />
+    
+                        <!-- <textarea style="width:100%;" placeholder="ketik catatanmu" id="customer-note" value=""></textarea> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
             <div class="panel panel-default card-view" style="border:none">
                 <div class="panel-wrapper pb-10" style="color: black">
                     <div class="row">
@@ -107,7 +125,8 @@
             <br><br>
             {{-- <div class="panel" style="border:none"> --}}
             <div class="panel-wrapper" style="color: black">
-                <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Order</a>
+                <a style="border-radius:10px" class="btn btn-primary btn-block" onclick="order()"> Order</a>
+                <!-- <a href="{{url('c/checkout')}}" style="border-radius:10px" class="btn btn-primary btn-block"> Order</a> -->
                 <?php 
                     $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
                     $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
@@ -188,7 +207,14 @@ $('.date').datetimepicker({
 
 function preorder() {
     var preorder_date = $('#preorder-date').val();
-    location.href='{{url("c/checkout?preorder_date=")}}'+preorder_date;
+    var note = $('#customer-note').val();
+    location.href='{{url("c/checkout?preorder_date=")}}'+preorder_date+';'+note;
+}
+
+
+function order() {
+    var note = $('#customer-note').val();
+    location.href='{{url("c/checkout?preorder_date=")}};'+note;
 }
 
 /** add to cart **/
