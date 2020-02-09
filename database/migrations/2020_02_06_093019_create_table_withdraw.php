@@ -21,7 +21,7 @@ class CreateTableWithdraw extends Migration
             $table->decimal('jumlah', 12, 2)->nullable();
             $table->string('no_rekening')->nullable();
             $table->string('bank')->nullable();
-            $table->integer('status')->unsigned()->nullable();
+            $table->integer('status_transaction')->unsigned()->nullable();
             $table->timestamps();
         });
     }

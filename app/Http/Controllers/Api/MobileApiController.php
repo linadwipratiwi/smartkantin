@@ -16,6 +16,7 @@ use App\Models\TransferSaldo;
 use App\Models\FoodSchedule;
 use App\Models\Food;
 use App\Models\VendingMachine;
+use App\Models\Withdraw;
 use App\Helpers\ApiStandHelper;
 use App\Exceptions\AppException;
 use App\Models\UserVendingMachine;
@@ -1400,6 +1401,60 @@ class MobileApiController extends Controller
             return $view;
         }
     }
+
+    public function getWithdrawTransaction($stand_id){
+        $withdrawTransactions= Withdraw::where('vending_machine_id',$stand_id)->get();
+        $hasil=[];
+        foreach($withdrawTransactions as $withdrawTransaction){
+            $w= json_decode($withdrawTransaction,true);
+            $w['stand_name']=$withdrawTransaction->vendingMachine->name;
+            $w['status']=1;
+            $w['msg']='success';
+            $hasil[]=$w;
+        }
+        if(!$hasil){
+            return response()->json([[
+                "status"=>0,
+                "msg"=> 'transaction not found'
+            ]]);
+        }
+        else{
+            return response()->json($hasil);
+        }
+    }
+
+    public function withdrawRequest(Request $request){
+        $stand_id = $request->input('stand_id');
+        $bank= $request->input('bank');
+        $jumlah= $request->input('jumlah');
+        $no_rekening= $request->input('no_rekening');
+        
+        DB::beginTransaction();
+        $withdrawTransaction= new Withdraw;
+        $withdrawTransaction->vending_machine_id=$stand_id;
+        $withdrawTransaction->jumlah=$jumlah;
+        $withdrawTransaction->no_rekening=$no_rekening;
+        $withdrawTransaction->bank=$bank;
+        $withdrawTransaction->status=0;
+
+        try{
+            $withdrawTransaction->save();        
+            \DB::commit();
+            $tr= json_decode($withdrawTransaction,true);
+            $tr['status']=1;
+            $tr['msg']='success';
+            return response()->json($tr);
+        
+        }
+        catch(\Throwable $th){
+            return response()->json([
+                "status"=>0,
+                "msg"=> 'failed'
+            ]);
+
+        }
+
+    }
     public static function returnMessageError($string)
     {
         return response()->json([
@@ -1407,4 +1462,6 @@ class MobileApiController extends Controller
             "msg" => $string
         ]);
     }
+
+    
 }
