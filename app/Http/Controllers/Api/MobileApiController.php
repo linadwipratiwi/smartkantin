@@ -1443,6 +1443,7 @@ class MobileApiController extends Controller
             $tr= json_decode($withdrawTransaction,true);
             $tr['status']=1;
             $tr['msg']='success';
+            $tr['stand_name']= $withdrawTransaction->vendingMachine->name;
             return response()->json($tr);
         
         }
