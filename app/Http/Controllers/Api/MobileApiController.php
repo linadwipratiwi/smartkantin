@@ -1435,7 +1435,7 @@ class MobileApiController extends Controller
         $withdrawTransaction->jumlah=$jumlah;
         $withdrawTransaction->no_rekening=$no_rekening;
         $withdrawTransaction->bank=$bank;
-        $withdrawTransaction->status=0;
+        $withdrawTransaction->status_transaction=0;
 
         try{
             $withdrawTransaction->save();        
