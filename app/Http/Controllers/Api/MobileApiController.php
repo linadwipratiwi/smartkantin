@@ -1076,7 +1076,7 @@ class MobileApiController extends Controller
             ];
         }
         $transaction = VendingMachineTransaction::where($where)
-            ->orderBy('preorder_date', 'ASC')->get();
+            ->orderBy('preorder_date', 'DESC')->get();
         $hasil = [];
         if ($transaction) {
             foreach ($transaction as $data) {
