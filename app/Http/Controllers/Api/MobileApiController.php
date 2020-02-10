@@ -1076,7 +1076,7 @@ class MobileApiController extends Controller
             ];
         }
         $transaction = VendingMachineTransaction::where($where)
-            ->orderBy('preorder_date', 'DESC')->get();
+        ->orderBy('preorder_date', 'DESC')->get();
         $hasil = [];
         if ($transaction) {
             foreach ($transaction as $data) {
@@ -1403,7 +1403,7 @@ class MobileApiController extends Controller
     }
 
     public function getWithdrawTransaction($stand_id){
-        $withdrawTransactions= Withdraw::where('vending_machine_id',$stand_id)->get();
+        $withdrawTransactions= Withdraw::where('vending_machine_id',$stand_id)->orderBy('created_at', 'DESC')->get();
         $hasil=[];
         foreach($withdrawTransactions as $withdrawTransaction){
             $w= json_decode($withdrawTransaction,true);
