@@ -137,5 +137,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth'
     Route::get('/', 'PosController@index');
 
 });
+
+Route::get('pengajuan', "GuestController@goPengajuan");
+Route::post('/GuestController', "GuestController@formSubmit");
 Auth::routes();
     

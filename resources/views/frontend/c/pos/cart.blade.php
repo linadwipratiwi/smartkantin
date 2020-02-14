@@ -109,6 +109,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="panel panel-default card-view" style="border:none">
                 <div class="panel-wrapper pb-10" style="color: black">
                     <div class="row">
@@ -122,6 +123,24 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="panel panel-default card-view" style="border:none">
+                <div class="panel-wrapper pb-10" style="color: black">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <b>Total Pembayaran</b>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right" id="total-price">
+                            <b>Rp. {{format_price($total)}}</b>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
             <br><br>
             {{-- <div class="panel" style="border:none"> --}}
             <div class="panel-wrapper" style="color: black">
