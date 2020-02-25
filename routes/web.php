@@ -137,5 +137,24 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth'
     Route::get('/', 'PosController@index');
 
 });
+
+/**User vending */
+
+Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth', 'role:user.vending']], function () {
+    Route::get('topup/pending/{gopay_transaction_id}', 'Customer\TopupController@pending');
+    Route::resource('topup', 'Customer\TopupController');
+
+    Route::get('history-transaction', 'PosVendingController@historyTransaction');
+    Route::get('success-order/{number}', 'PosVendingController@successOrder');
+    Route::get('add-to-cart/{id}', 'PosVendingController@_addToCart');
+    Route::get('checkout', 'PosVendingController@checkout');
+    Route::delete('cart/{number}', 'PosVendingController@_destroyItem');
+    Route::get('cart', 'PosVendingController@cart');
+    Route::get('/', 'PosVendingController@index');
+
+});
+/**coba coba */
+Route::get('coba/{role}','CobaController@index');
+
 Auth::routes();
     

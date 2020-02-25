@@ -16,6 +16,11 @@ class WelcomeController extends Controller
             return redirect('c');
         }
 
+        if (auth()->user()->isRole('user.vending')) {
+            return redirect('v');
+        }
         return redirect('front');
+
+        // return redirect('coba/'.auth()->user()->roles->first()->name);
     }
 }
