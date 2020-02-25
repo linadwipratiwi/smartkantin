@@ -81,7 +81,7 @@
 
     /** goto cart **/
     function gotoCart() {
-        location.href='{{url("c/cart")}}';
+        location.href='{{url("v/cart")}}';
     }
     
     /** switch stand **/
@@ -92,7 +92,7 @@
 
     function addToCart(id, is_remove) {
         $.ajax({
-            url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
+            url: '{{url("v/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
             success: function (res) {
                 
                 if (res.quantity > 0) {

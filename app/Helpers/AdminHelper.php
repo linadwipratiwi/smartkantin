@@ -415,7 +415,14 @@ class AdminHelper
         $stand->client_id = $client->id;
         $stand->alias = str_random(20);
 
+        $customer= new Customer;
+        $customer->name= 'bot '.$stand->name;
+        $customer->identity_type='KTP';
+        $customer->identity_number=$stand->alias;
+        $customer->register_at_client_id= $stand->client_id;
+
         try {
+            $customer->save();
             $stand->save();
         } catch (\Exception $e) {
             throw new AppException("Failed to save data", 503);

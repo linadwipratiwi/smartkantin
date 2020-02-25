@@ -2,8 +2,6 @@
 
 @section('content')
     <!-- Title -->
-    
-    
     <div class="row">
         <div class="col-lg-12">
             <form action="">

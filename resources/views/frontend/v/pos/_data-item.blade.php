@@ -1,21 +1,13 @@
 <!-- Row -->
 <div class="row">
-    <?php
-        echo $list_stand;
-        return $list_stand;
-
-    ?>
-    <!-- @$stand=$list_stand
+    @foreach ($list_stand as $stand)
         <div id="stand-{{$stand->id}}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h4>{{$stand->name}}</h4>
-        </div> -->
-
-<!--         
+        </div>
         @foreach ($stand->slots as $item)
             <?php
-                $temp_key = \App\Helpers\PosHelper::getTempKey();
+                $temp_key = 'customer.basket.3';
                 $search = \App\Helpers\TempDataHelper::searchKeyValue($temp_key, auth()->user()->id, ['item_id'], [$item->id]);
-
             ?>
             <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
                 <div class="panel panel-default card-view pa-5">
@@ -57,7 +49,8 @@
                     </div>	
                 </div>	
             </div>
-        @endforeach -->
+        @endforeach
 
+    @endforeach
 </div>
 <!-- /Row -->

@@ -59,6 +59,7 @@ class PosController extends Controller
             ->select(['vending_machine_slots.*'])
             ->get() : null;
         
+  
         return $view;
     }
 

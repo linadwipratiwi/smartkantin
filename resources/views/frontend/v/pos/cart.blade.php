@@ -34,7 +34,7 @@
                         <?php $total = 0; ?>
                         @foreach($list_cart_group_by_stand as $row => $cart_group)
                         <?php
-                            $temp_key = \App\Helpers\PosHelper::getTempKey();
+                            $temp_key = \App\Helpers\PosHelper::getTempAnonimKey();
                             $list_cart_by_stand = \App\Helpers\TempDataHelper::getAllRowHaveKeyValue($temp_key, auth()->user()->id, 'stand_id', $cart_group['stand_id']);
                         ?>
 
@@ -208,19 +208,19 @@ $('.date').datetimepicker({
 function preorder() {
     var preorder_date = $('#preorder-date').val();
     var note = $('#customer-note').val();
-    location.href='{{url("c/checkout?preorder_date=")}}'+preorder_date+';'+note;
+    location.href='{{url("v/checkout?preorder_date=")}}'+preorder_date+';'+note;
 }
 
 
 function order() {
     var note = $('#customer-note').val();
-    location.href='{{url("c/checkout?preorder_date=")}};'+note;
+    location.href='{{url("v/checkout?preorder_date=")}};'+note;
 }
 
 /** add to cart **/
 function addToCart(id, is_remove) {
     $.ajax({
-        url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
+        url: '{{url("v/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
         success: function (res) {
             
             if (res.quantity > 0) {

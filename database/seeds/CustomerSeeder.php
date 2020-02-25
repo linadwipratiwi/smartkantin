@@ -32,6 +32,7 @@ class CustomerSeeder extends Seeder
             [
                 'name' => 'Mugiwara No Luffy', 'identity_type' => 'KTP', 'identity_number' => '54321', 'register_at_client_id' => 1, 'register_at_vending_machine_id' => 1
             ]
+          
         );
         
         DB::beginTransaction();
