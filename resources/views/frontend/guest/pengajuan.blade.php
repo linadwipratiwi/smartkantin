@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
 
-                        Nama Sekolah <p></p><input class="form-control" type="text" name="Nama Sekolah" style="width:16%;">
+                        Nama Sekolah <p></p><input class="form-control" type="text" name="Nama Sekolah" style="width:200%;">
                         <br>
 
                     </div>
@@ -33,7 +33,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Nama Kepala Sekolah <p></p><input type="text" name="Nama Kepala Sekolah" style="width:16%;">
+                        Nama Kepala Sekolah <p></p><input type="text" name="Nama Kepala Sekolah" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Alamat <p></p><input type="text" name="Alamat" style="width:16%;">
+                        Alamat <p></p><input type="text" name="Alamat" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Alamat email <p></p><input type="text" name="Alamat Email" style="width:16%;">
+                        Alamat email <p></p><input type="text" name="Alamat Email" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Jumlah Peserta Didik <p></p><input type="text" name="Jumlah Peserta Didik" style="width:16%;">
+                        Jumlah Peserta Didik <p></p><input type="text" name="Jumlah Peserta Didik" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Jumlah Pedagang di Kantin Sekolah <p></p><input type="text" name="Jumlah Pedagang di Kantin Sekolah" style="width:16%;">
+                        Jumlah Pedagang di Kantin Sekolah <p></p><input type="text" name="Jumlah Pedagang di Kantin Sekolah" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Nama Koperasi <p></p><input type="text" name="Nama Koperasi" style="width:16%;">
+                        Nama Koperasi <p></p><input type="text" name="Nama Koperasi" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -130,6 +130,7 @@
                     autoclose: true,
                 };
                 date_input.datepicker(options);
+                
             })
         </script>
 
@@ -141,7 +142,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        Nama <p></p><input type="text" name="Nama" style="width:16%;">
+                        Nama <p></p><input type="text" name="Nama" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
@@ -153,7 +154,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        No Ponsel/WA<p></p><input type="text" name="No" style="width:16%;">
+                        No Ponsel/WA<p></p><input type="text" name="No" style="width:200%;">
                         <br><br>
                     </div>
                 </div>
