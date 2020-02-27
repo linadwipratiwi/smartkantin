@@ -208,23 +208,27 @@ class PosVendingController extends Controller
         }
         /** create transaction */
         $customer = PosHelper::getAnonimCustomer();
-        $transaction_number = VendingMachineTransaction::generateCustomNumber($customer->id);
+        $clientIP = \Request::ip();
+
+        $data=$customer->id.'-'.$clientIP;
+      
+        $transaction_number = VendingMachineTransaction::generateCustomNumber($data);
     
         $total_payment = 0;
         foreach ($list_cart as $cart) {
             $total_payment += $cart['total'];
         }
 
-        /** Cek saldo */
-        $saldo = $customer->saldo;
-        $saldo_pens = $customer->saldo_pens;
-        $saldo_total = $saldo + $saldo_pens;
+        // /** Cek saldo */
+        // $saldo = $customer->saldo;
+        // $saldo_pens = $customer->saldo_pens;
+        // $saldo_total = $saldo + $saldo_pens;
 
-        /** jika saldo total kurang dari harga jual */
-        if ($saldo_total < $total_payment) {
-            toaster_error('Saldo Anda tidak mencukupi');
-            return redirect('v/cart');
-        }
+        // /** jika saldo total kurang dari harga jual */
+        // if ($saldo_total < $total_payment) {
+        //     toaster_error('Saldo Anda tidak mencukupi');
+        //     return redirect('v/cart');
+        // }
 
 
         $total_belanja = 0;
@@ -290,10 +294,10 @@ class PosVendingController extends Controller
         $temp_key = PosHelper::getTempAnonimKey();
         TempDataHelper::clear($temp_key, auth()->user()->id);
 
-        /** Kurangi saldo customer */
-        $customer = PosHelper::getAnonimCustomer();
-        $customer->saldo -= $total_belanja;
-        $customer->save();
+        // /** Kurangi saldo customer */
+        // $customer = PosHelper::getAnonimCustomer();
+        // $customer->saldo -= $total_belanja;
+        // $customer->save();
 
         DB::commit();
         FirebaseHelper::pushFirebaseNotification($transaction,"checkout");

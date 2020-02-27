@@ -156,5 +156,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth'
 /**coba coba */
 Route::get('coba/{role}','CobaController@index');
 
+Route::get('pengajuan', "GuestController@goPengajuan");
+Route::post('/GuestController', "GuestController@formSubmit");
 Auth::routes();
     
