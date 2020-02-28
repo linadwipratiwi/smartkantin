@@ -125,14 +125,14 @@
         {{-- <div class="panel" style="border:none"> --}}
         <div class="panel-wrapper" style="color: black">
             <!-- <a style="border-radius:10px" data-target=".order-modal" class="btn btn-primary btn-block" onclick="order()"> Order</a> -->
-            <a data-toggle="modal" style="border-radius:10px" data-target=".order-modal" class="btn btn-primary btn-block"> Order</a>
+            <form action="/v/payment" method="GET">
+                <a data-toggle="modal" style="border-radius:10px" type="submit" data-target=".order-modal" class="btn btn-primary btn-block" onclick="order()"> Order</a>
+            </form>
             <?php
             $carbon = new \Carbon\Carbon(date('Y-m-d H:i:s'));
             $carbon_limit = new \Carbon\Carbon(date('Y-m-d 08:00:00'));
             $carbon_max = new \Carbon\Carbon(date('Y-m-d 16:00:00'));
             ?>
-
-            <a data-toggle="modal" data-target=".preorder-modal" style="border-radius:10px" class="btn btn-warning btn-block"> Preorder</a>
             @if ($carbon <= $carbon_max && $carbon>= $carbon_limit)
                 @else
                 {{-- <button style="border-radius:10px" class="btn btn-warning btn-block" disabled> Pesan Nanti</button> --}}
@@ -193,34 +193,34 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Masukkan Berapa Uang Customer</h4>
+                        <h4 class="modal-title">Tap kartu anda untuk menyelesaikan pembayaran</h4>
                     </div>
 
                     <div class="col-lg-12 mt-10" id="form-item">
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
-                            <input type='text' placeholder="uang customer" id="uang-customer" value="" class="form-control" />
-
-                            <!-- <textarea style="width:100%;" placeholder="ketik catatanmu" id="customer-note" value=""></textarea> -->
+                            <!-- <input type='text' placeholder="uang customer" id="uang-customer" value="" class="form-control" /> -->
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right"  >
-                            <li value="{{$total}}" id= "harga" ></li>
-                            <b>Rp. {{format_price($total)}}</b>
+                            <!-- <li value="{{$total}}" id= "harga" ></li>
+                            <b>Rp. {{format_price($total)}}</b> -->
+                            <img src= "/uploads/food/icon_launcher.png"></img>
                         </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
+                        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
                             <input type='text' placeholder="kembalian" id="kembalian" value="" class="form-control" />
-
-                            <!-- <textarea style="width:100%;" placeholder="ketik catatanmu" id="customer-note" value=""></textarea> -->
-                        </div>
-
-
+                        </div> -->
                     </div>
+                    
                     <div class="modal-footer">
-                        <div class="button-list">
-                            <button type="button" class="btn btn-success bt-store pull-right" onclick="order()">Checkout</button>
+                        <!-- <div>
+                            <label>TAP KARTU UNTUK MELAKUKAN PEMBAYARAN !! </label>
+                        </div> -->
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
+                            <button type="button" class="btn btn-success bt-store pull-right" width=1 onclick="order()">Batal</button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -267,16 +267,30 @@
     });
 
 
-    function preorder() {
-        var preorder_date = $('#preorder-date').val();
-        var note = $('#customer-note').val();
-        location.href = '{{url("v/checkout?preorder_date=")}}' + preorder_date + ';' + note;
-    }
+    // function preorder() {
+    //     var preorder_date = $('#preorder-date').val();
+    //     var note = $('#customer-note').val();
+    //     location.href = '{{url("v/checkout?preorder_date=")}}' + preorder_date + ';' + note;
+    // }
 
 
     function order() {
         var note = $('#customer-note').val();
-        location.href = '{{url("v/checkout?preorder_date=")}};' + note;
+        // var otherController = new PosVendingController();
+        // return otherController.payment($note);
+        // $.get("v/payment")
+        // location.href = '{{url("v/payment?preorder_date=")}};' + note;
+        $.ajax({
+            type: 'GET',
+            // url: '/Recipients/GetMlaDeliveryType',
+            // data: { id: mlaId },
+            // cache: false,
+            url: '{{url("v/payment?preorder_date=")}};' + note,
+            success: function(result) {
+
+            }
+        });
+        
     }
 
     /** add to cart **/

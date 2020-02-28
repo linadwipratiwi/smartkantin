@@ -929,25 +929,27 @@ class MobileApiController extends Controller
     }
 
 
-    public static function getTransaction(Request $request){
-        $stand_id= $request->input('stand_id');
-        $transactions_id= explode(';',$request->input('transactions_id'));
-        $hasil=[];
-        foreach($transactions_id as $transaction_id){
-            if($transaction_id){
-            $transaction_=VendingMachineTransaction::find($transaction_id);
-            $transaction=json_decode($transaction_,true);
-            $transaction['msg']='success';
-            $transaction['status']='1';
-            $transaction['customer_name']=$transaction_->customer->name; 
-            $hasil[]=$transaction;
+    public static function getTransaction(Request $request)
+    {
+        $stand_id = $request->input('stand_id');
+        $transactions_id = explode(';', $request->input('transactions_id'));
+        $hasil = [];
+        foreach ($transactions_id as $transaction_id) {
+            if ($transaction_id) {
+                $transaction_ = VendingMachineTransaction::find($transaction_id);
+                $transaction = json_decode($transaction_, true);
+                $transaction['msg'] = 'success';
+                $transaction['status'] = '1';
+                $transaction['customer_name'] = $transaction_->customer->name;
+                $hasil[] = $transaction;
             }
         }
-        if(!$hasil){
-            return response()->json([[
-                'status'=>0,
-                'msg'=>'transaction not found'
-            ]
+        if (!$hasil) {
+            return response()->json([
+                [
+                    'status' => 0,
+                    'msg' => 'transaction not found'
+                ]
             ]);
         }
         return response()->json($hasil);
@@ -1076,7 +1078,7 @@ class MobileApiController extends Controller
             ];
         }
         $transaction = VendingMachineTransaction::where($where)
-        ->orderBy('preorder_date', 'DESC')->get();
+            ->orderBy('preorder_date', 'DESC')->get();
         $hasil = [];
         if ($transaction) {
             foreach ($transaction as $data) {
@@ -1133,7 +1135,7 @@ class MobileApiController extends Controller
         return response()->json($respon);
     }
 
-    
+
     public function setJadwalFood(Request $request)
     {
         $food_id = $request->input('food_id');
@@ -1365,7 +1367,7 @@ class MobileApiController extends Controller
         $todayDate = Date('Y-m-d');
         $transactions = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->get();
         // $transactionSampling = VendingMachineTransaction::where($where)->whereDate('preorder_date', $todayDate)->first();
-        $hasil=[];
+        $hasil = [];
         $idstring = "";
         $i = 0;
         foreach ($transactions as $transaction) {
@@ -1373,19 +1375,18 @@ class MobileApiController extends Controller
             if ($i == 0) {
                 $i = $i + 1;
             }
-            $hasil[]=$transaction;
+            $hasil[] = $transaction;
         }
-        if (!$hasil) {
+        if (!$hasil) {                                                                               
             $view = view('other.failed-scan-qr-code');
             toaster_success('Hari ini, kamu belum pesan makanan di stand ini');
             return $view;
-            
         } else {
             $ids = explode(";", $idstring);
-            $id=[];
-            foreach($ids as $data){
-                if($data){
-                    $id[]=$data;
+            $id = [];
+            foreach ($ids as $data) {
+                if ($data) {
+                    $id[] = $data;
                 }
             }
             $vending_machine_transaction = VendingMachineTransaction::whereIn('id', $id)
@@ -1396,66 +1397,140 @@ class MobileApiController extends Controller
             toaster_success('Makanan berhasil diambil');
 
 
-            FirebaseHelper::pushFirebaseNotification($transactions,"take_food");
+            FirebaseHelper::pushFirebaseNotification($transactions, "take_food");
 
             return $view;
         }
     }
 
-    public function getWithdrawTransaction($stand_id){
-        $withdrawTransactions= Withdraw::where('vending_machine_id',$stand_id)->orderBy('created_at', 'DESC')->get();
-        $hasil=[];
-        foreach($withdrawTransactions as $withdrawTransaction){
-            $w= json_decode($withdrawTransaction,true);
-            $w['stand_name']=$withdrawTransaction->vendingMachine->name;
-            $w['status']=1;
-            $w['msg']='success';
-            $hasil[]=$w;
+    public function getWithdrawTransaction($stand_id)
+    {
+        $withdrawTransactions = Withdraw::where('vending_machine_id', $stand_id)->orderBy('created_at', 'DESC')->get();
+        $hasil = [];
+        foreach ($withdrawTransactions as $withdrawTransaction) {
+            $w = json_decode($withdrawTransaction, true);
+            $w['stand_name'] = $withdrawTransaction->vendingMachine->name;
+            $w['status'] = 1;
+            $w['msg'] = 'success';
+            $hasil[] = $w;
         }
-        if(!$hasil){
+        if (!$hasil) {
             return response()->json([[
-                "status"=>0,
-                "msg"=> 'transaction not found'
+                "status" => 0,
+                "msg" => 'transaction not found'
             ]]);
-        }
-        else{
+        } else {
             return response()->json($hasil);
         }
     }
 
-    public function withdrawRequest(Request $request){
+    public function withdrawRequest(Request $request)
+    {
         $stand_id = $request->input('stand_id');
-        $bank= $request->input('bank');
-        $jumlah= $request->input('jumlah');
-        $no_rekening= $request->input('no_rekening');
-        
+        $bank = $request->input('bank');
+        $jumlah = $request->input('jumlah');
+        $no_rekening = $request->input('no_rekening');
+
         DB::beginTransaction();
-        $withdrawTransaction= new Withdraw;
-        $withdrawTransaction->vending_machine_id=$stand_id;
-        $withdrawTransaction->jumlah=$jumlah;
-        $withdrawTransaction->no_rekening=$no_rekening;
-        $withdrawTransaction->bank=$bank;
-        $withdrawTransaction->status_transaction=0;
+        $withdrawTransaction = new Withdraw;
+        $withdrawTransaction->vending_machine_id = $stand_id;
+        $withdrawTransaction->jumlah = $jumlah;
+        $withdrawTransaction->no_rekening = $no_rekening;
+        $withdrawTransaction->bank = $bank;
+        $withdrawTransaction->status_transaction = 0;
+
+        try {
+            $withdrawTransaction->save();
+            \DB::commit();
+            $tr = json_decode($withdrawTransaction, true);
+            $tr['status'] = 1;
+            $tr['msg'] = 'success';
+            $tr['stand_name'] = $withdrawTransaction->vendingMachine->name;
+            return response()->json($tr);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 0,
+                "msg" => 'failed'
+            ]);
+        }
+    }
+    public function transactionByKodepos(Request $request){
+        $identity= $request->input('identity_number');
+        $kode= $request->input('kode_pos');
+        $customer= Customer::where('identity_number',$identity)->first();
+        $transaction= VendingMachineTransaction::where('transaction_number',$kode)->where('status_transaction','3')->get();
+        $total=0;
+        $hasil=[];
+        foreach($transaction as $tr){
+            $total+= $tr->selling_price_vending_machine;
+            $hasil[]=$tr;
+        }
+        if(!$hasil)
+            return self::returnMessageError("transaction not found");
+        if(!$customer){
+           return self::returnMessageError("customer not found");
+        }
+        if($customer->saldo<$total){
+            return self::returnMessageError("saldo customer kurang");
+        }
+        $customer->saldo-= $total;
+        DB::beginTransaction();
 
         try{
-            $withdrawTransaction->save();        
-            \DB::commit();
-            $tr= json_decode($withdrawTransaction,true);
-            $tr['status']=1;
-            $tr['msg']='success';
-            $tr['stand_name']= $withdrawTransaction->vendingMachine->name;
-            return response()->json($tr);
-        
+            $customer->save();
+            foreach($transaction as $tr){
+                $tr->status_transaction=1;
+                $tr->save();
+            }
+            DB::commit();
+
+            return response()->json([
+                'status'=>1,
+                'msg'=>'success'
+            ]);
         }
         catch(\Throwable $th){
-            return response()->json([
-                "status"=>0,
-                "msg"=> 'failed'
-            ]);
+            return self::returnMessageError("transaction failed");
 
         }
-
     }
+    public function findTransactionUpdatedOnIP($ip)
+    {
+        $transaction = VendingMachineTransaction::whereDate('created_at', date('Y-m-d'))->where('status_transaction', '3')->orderBy('created_at', 'DESC')->get();
+        $hasilKode=0;
+        foreach($transaction as $tr) {
+            $kodepos = $tr->transaction_number;
+            $dataPos = explode('-', $kodepos);
+            $tlgPos = $dataPos[1] . '-' . $dataPos[2] . '-' . $dataPos[3];
+            if ($dataPos[5]) {
+                if ($ip == $dataPos[5]) {
+                    $hasilKode=$kodepos;
+                break;
+                    
+                }
+            }
+        }
+        if($hasilKode){
+            return response()->json(
+                [
+                    'status'=>1,
+                    'kodepos'=> $hasilKode
+                ]
+            );
+            // $transaction= VendingMachineTransaction::where('transaction_number',$hasilKode)->get();
+            // $hasil = [];
+            // foreach($transaction as $tr){
+            //     $tr_=json_decode($tr,true);
+            //     $tr_['status']=1;
+            //     $tr_['msg']= 'success';
+            //     $hasil[]=$tr_;
+            // }
+            // return response()->json($hasil);
+        }
+        return self::returnListMessageError("transaction not found");
+    }
+
+
     public static function returnMessageError($string)
     {
         return response()->json([
@@ -1464,5 +1539,11 @@ class MobileApiController extends Controller
         ]);
     }
 
-    
+    public static function returnListMessageError($string)
+    {
+        return response()->json([[
+            "status" => 0,
+            "msg" => $string
+        ]]);
+    }
 }

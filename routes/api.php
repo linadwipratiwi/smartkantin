@@ -49,6 +49,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('change-password','MobileApiController@changePassword');
     Route::post('change-username','MobileApiController@changeUsername');   
     Route::post('get-transaction','MobileApiController@getTransaction');
+    Route::get('find-transaction-ip/{ip}','MobileApiController@findTransactionUpdatedOnIP');
+    Route::post('transaction-kodepos','MobileApiController@transactionByKodepos');
   });
 });
 

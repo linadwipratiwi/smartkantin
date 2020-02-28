@@ -132,6 +132,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth'
     Route::get('success-order/{number}', 'PosController@successOrder');
     Route::get('add-to-cart/{id}', 'PosController@_addToCart');
     Route::get('checkout', 'PosController@checkout');
+    
     Route::delete('cart/{number}', 'PosController@_destroyItem');
     Route::get('cart', 'PosController@cart');
     Route::get('/', 'PosController@index');
@@ -151,6 +152,8 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth'
     Route::delete('cart/{number}', 'PosVendingController@_destroyItem');
     Route::get('cart', 'PosVendingController@cart');
     Route::get('/', 'PosVendingController@index');
+    Route::get('payment', 'PosVendingController@payment');
+
 
 });
 /**coba coba */

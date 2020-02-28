@@ -78,6 +78,10 @@ class PosVendingController extends Controller
         return $view;
     }
 
+    public function coba(){
+        $view = view('frontend.v.pos.coba');
+        return $view;
+    }
     public function _addToCart($id)
     {
         $is_remove = \Input::get('is_remove');
@@ -182,20 +186,14 @@ class PosVendingController extends Controller
     }
 
     /** proses checkout */
-    public function checkout()
+    public function payment()
     {
         $is_preorder = 0;
-        $data =explode(';', (\Input::get('preorder_date')));
-        $breaktime = \Input::get('break_time_setting_id');
-        $note=$data[1];
-        $preorder_date=$data[0];
-           
-        if ($preorder_date) {
-            $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
-            $is_preorder = 1;
-        } else {
-            $preorder_date = Carbon::now();
-        }
+        // $data =explode(';', (\Input::get('preorder_date')));
+        //                 $breaktime = \Input::get('break_time_setting_id');
+        // $note=$data[1];
+        $note=" ";
+        $preorder_date = Carbon::now();
         
         $temp_key = PosHelper::getTempAnonimKey();
         $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
@@ -291,21 +289,34 @@ class PosVendingController extends Controller
         }
 
         /** clear temp */
-        $temp_key = PosHelper::getTempAnonimKey();
-        TempDataHelper::clear($temp_key, auth()->user()->id);
+        // $temp_key = PosHelper::getTempAnonimKey();
+        // TempDataHelper::clear($temp_key, auth()->user()->id);
 
         // /** Kurangi saldo customer */
         // $customer = PosHelper::getAnonimCustomer();
         // $customer->saldo -= $total_belanja;
-        // $customer->save();
+        // $customer->save();ƒ
 
         DB::commit();
         FirebaseHelper::pushFirebaseNotification($transaction,"checkout");
-
-        toaster_success('Pesanan Anda berhasil ditempatkan.');
-        return redirect('v/success-order/'.$transaction_number);
+        return $transaction;
+        // return redirect('v/cart');
     }
 
+    /**checkout */
+    public function checkout(){
+        $customer = PosHelper::getAnonimCustomer();
+        $clientIP = \Request::ip();
+
+        $data=$customer->id.'-'.$clientIP;
+      
+        $transaction_number = VendingMachineTransaction::generateCustomNumber($data);
+        $temp_key = PosHelper::getTempAnonimKey();
+        TempDataHelper::clear($temp_key, auth()->user()->id);
+        toaster_success('Pesanan Anda berhasil ditempatkan.');
+        return redirect('v/success-order/'.$transaction_number);
+
+    }
     /** success order */
     public function successOrder($transaction_number)
     {

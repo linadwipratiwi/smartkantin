@@ -1,8 +1,8 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\Customer;
 use Illuminate\Database\Seeder;
+use App\Models\Customer;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Output\ConsoleOutput as Output;
 
