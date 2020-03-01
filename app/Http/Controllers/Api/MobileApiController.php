@@ -1456,6 +1456,21 @@ class MobileApiController extends Controller
         }
 
     }
+
+    public function getListStand($clientID){
+        $vending= VendingMachine::where('client_id',$clientID)->where('type',2)->get();
+        return self::returnListMessageSuccess($vending);        
+    }
+
+    public static function returnListMessageSuccess($hasil){
+        $respon=[];
+        foreach($hasil as $h){
+            $h['status']=1;
+            $h['msg']='success';
+            $respon[]=$h;
+        }
+        return response()->json($respon);
+    }
     public static function returnMessageError($string)
     {
         return response()->json([

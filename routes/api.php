@@ -49,6 +49,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('change-password','MobileApiController@changePassword');
     Route::post('change-username','MobileApiController@changeUsername');   
     Route::post('get-transaction','MobileApiController@getTransaction');
+    Route::get('list-stand/{client_id}','MobileApiController@getListStand');
   });
 });
 
