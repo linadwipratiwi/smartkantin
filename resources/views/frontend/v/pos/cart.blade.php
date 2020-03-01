@@ -178,7 +178,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="button-list">
-                            <button type="button" class="btn btn-success bt-store pull-right" onclick="preorder()">Preorder</button>
+                            <button type="button" class="btn btn-success bt-store pull-right">Preorder</button>
                         </div>
                     </div>
                 </div>
@@ -199,27 +199,28 @@
                     <div class="col-lg-12 mt-10" id="form-item">
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
+                            <p id="countdown"> </p>
                             <!-- <input type='text' placeholder="uang customer" id="uang-customer" value="" class="form-control" /> -->
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right"  >
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-right">
                             <!-- <li value="{{$total}}" id= "harga" ></li>
                             <b>Rp. {{format_price($total)}}</b> -->
-                            <img src= "/uploads/food/icon_launcher.png"></img>
+                            <img src="/uploads/assets/tapicon.png" id='imgPay'></img>
                         </div>
 
-                        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
-                            <input type='text' placeholder="kembalian" id="kembalian" value="" class="form-control" />
-                        </div> -->
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <!-- <div>
-                            <label>TAP KARTU UNTUK MELAKUKAN PEMBAYARAN !! </label>
-                        </div> -->
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;width:100%;">
-                            <button type="button" class="btn btn-success bt-store pull-right" width=1 onclick="order()">Batal</button>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" margin-bottom="100px" style="float:left;width:100%;">
+                            <!-- <input type='text' placeholder="kembalian" id="kembalian" value="" class="form-control" /> -->
+                            <a style="border-radius:10px" class="btn btn-primary btn-block" id="batal"> Batal</a>
                         </div>
+
                     </div>
+                    <div class="modal-footer">
+                        <!-- <div class="button-list">
+                                <button type="button" class="btn btn-success bt-store pull-right" onclick="preorder()">Preorder</button>
+                            </div> -->
+
+                    </div>
+
 
                 </div>
             </div>
@@ -230,7 +231,10 @@
 
 @section('scripts')
 <script>
+    var transaction_number = "";
     var next_date = moment().add(1, 'day').format('YYYY-MM-DD');;
+    var cek_payment = 0;
+    var cek_state=0
     console.log(next_date);
     // initDatetime('.date');
     $('.date').datetimepicker({
@@ -249,9 +253,11 @@
 
     $(document).ready(function() {
         $('#uang-customer').trigger('change');
+        $('#batal').trigger('click');
     });
 
     $(document).on('change', '#uang-customer', function() {
+
         //   if($(this).val()=='Com 1'){
         //     $('#address').val("Address of Company 1");
         //   }
@@ -265,14 +271,54 @@
         $hasil = $('#uang-customer').val() - $('#harga').val();
         $('#kembalian').val($hasil);
     });
+    $(document).on('click', '#batal', function() {
+        rutinCek();
+        
+    });
 
 
-    // function preorder() {
-    //     var preorder_date = $('#preorder-date').val();
-    //     var note = $('#customer-note').val();
-    //     location.href = '{{url("v/checkout?preorder_date=")}}' + preorder_date + ';' + note;
-    // }
+   function rutinCek(){
+        var timer;
+        var end = new Date();
+        var _second = 120
 
+        function showRemaining() {
+            var now = new Date();
+            _second--;
+            if (_second % 1 == 0 && cek_state==0) {
+                cekStatus();
+                if (cek_payment == 1) {
+                    $('#imgPay').attr('src', '/uploads/assets/icon-check.png');
+                    _second =1;
+                    cek_state=1
+                }
+            }
+            if (_second < 0) {
+                if(cek_payment==1)
+                    location.href = '{{url("v/checkout/")}}/'+transaction_number;
+                clearInterval(timer);
+                return;
+            }
+            document.getElementById("countdown").innerHTML = 'Waktumu pembayaranmu tinggal ' + _second + ' detik';
+        }
+        timer = setInterval(showRemaining, 1000);
+
+   }
+
+    function cekStatus() {
+        $.ajax({
+            type: 'GET',
+            // url: '/Recipients/GetMlaDeliveryType',
+            // data: { id: mlaId },
+            // cache: false,
+
+            url: '{{url("v/check-payment/")}}/' + transaction_number,
+            success: function(result) {
+                console.log(result);
+                cek_payment = result.status;
+            }
+        });
+    }
 
     function order() {
         var note = $('#customer-note').val();
@@ -280,6 +326,8 @@
         // return otherController.payment($note);
         // $.get("v/payment")
         // location.href = '{{url("v/payment?preorder_date=")}};' + note;
+
+
         $.ajax({
             type: 'GET',
             // url: '/Recipients/GetMlaDeliveryType',
@@ -287,10 +335,18 @@
             // cache: false,
             url: '{{url("v/payment?preorder_date=")}};' + note,
             success: function(result) {
-
+                transaction_number = result.transaction_number
             }
         });
-        
+        cek_payment=0;
+        cek_state=0
+        rutinCek();
+
+    }
+    /** coba calcscofre */
+    function calcScore() {
+
+        return 50;
     }
 
     /** add to cart **/

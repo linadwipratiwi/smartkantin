@@ -148,11 +148,13 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth'
     Route::get('history-transaction', 'PosVendingController@historyTransaction');
     Route::get('success-order/{number}', 'PosVendingController@successOrder');
     Route::get('add-to-cart/{id}', 'PosVendingController@_addToCart');
-    Route::get('checkout', 'PosVendingController@checkout');
+    Route::get('checkout/{id}', 'PosVendingController@checkout');
     Route::delete('cart/{number}', 'PosVendingController@_destroyItem');
     Route::get('cart', 'PosVendingController@cart');
     Route::get('/', 'PosVendingController@index');
     Route::get('payment', 'PosVendingController@payment');
+    Route::get('check-payment/{id}','PosVendingController@checkPayment');
+    
 
 
 });

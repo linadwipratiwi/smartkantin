@@ -1480,10 +1480,11 @@ class MobileApiController extends Controller
             $customer->save();
             foreach($transaction as $tr){
                 $tr->status_transaction=1;
+                $tr->customer_id= $customer->id;
                 $tr->save();
             }
             DB::commit();
-
+           // return redirect('v/checkout');
             return response()->json([
                 'status'=>1,
                 'msg'=>'success'
@@ -1506,7 +1507,6 @@ class MobileApiController extends Controller
                 if ($ip == $dataPos[5]) {
                     $hasilKode=$kodepos;
                 break;
-                    
                 }
             }
         }

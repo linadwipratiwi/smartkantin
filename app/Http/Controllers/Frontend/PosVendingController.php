@@ -303,14 +303,40 @@ class PosVendingController extends Controller
         // return redirect('v/cart');
     }
 
+    public function checkPayment($kodepos){
+        $tr= VendingMachineTransaction::where('transaction_number',$kodepos)->get();
+        $hasil=1;
+        $trs=[];
+        foreach($tr as $transaction){
+            if ($transaction->status_transaction==3){
+                $data=[
+                    'status'=>0,
+                    'msg' => 'not pay yet'
+                ];
+                return $data;
+            break;
+            }
+            $trs[]=$transaction;
+        }
+        if(!$trs){
+            $data=[
+                'status'=>0,
+                'msg' => 'not found'
+            ];
+        }
+        $data=[
+            'status'=>1,
+            'msg' => 'has paid'
+        ];
+        return $data;
+    }
     /**checkout */
-    public function checkout(){
+    public function checkout($transaction_number){
         $customer = PosHelper::getAnonimCustomer();
         $clientIP = \Request::ip();
 
         $data=$customer->id.'-'.$clientIP;
       
-        $transaction_number = VendingMachineTransaction::generateCustomNumber($data);
         $temp_key = PosHelper::getTempAnonimKey();
         TempDataHelper::clear($temp_key, auth()->user()->id);
         toaster_success('Pesanan Anda berhasil ditempatkan.');
