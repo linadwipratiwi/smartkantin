@@ -1,72 +1,92 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Temp;
-use App\Models\Category;
-use App\Models\Customer;
-use App\Helpers\ApiHelper;
-use App\Helpers\PosHelper;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\TransferSaldo;
-use App\Models\VendingMachine;
-use App\Helpers\FirebaseHelper;
-use App\Helpers\TempDataHelper;
-use App\Models\BreakTimeSetting;
-use App\Models\VendingMachineSlot;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use App\Models\VendingMachineTransaction;
+   //<?php
 
-class PosController extends Controller
+   namespace App\Http\Controllers\Frontend;
+
+   use Carbon\Carbon;
+   use App\Models\Temp;
+   use App\Models\Category;
+   use App\Models\Customer;
+   use App\Helpers\ApiHelper;
+   use App\Helpers\PosHelper;
+   use Illuminate\Support\Str;
+   use Illuminate\Http\Request;
+   use App\Models\TransferSaldo;
+   use App\Models\VendingMachine;
+   use App\Models\UserVendingMachine;
+   use App\Helpers\FirebaseHelper;
+   use App\Helpers\TempDataHelper;
+   use App\Models\BreakTimeSetting;
+   use App\Models\VendingMachineSlot;
+   use Illuminate\Support\Facades\DB;
+   use App\Http\Controllers\Controller;
+   use App\Models\VendingMachineTransaction;
+
+class PosVendingController extends Controller
 {
+ 
     public function index()
     {
         $search = \Input::get('search');
-        $temp_key = PosHelper::getTempKey();
+        $temp_key =PosHelper::getTempAnonimKey();
+      
+      
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
         $total_price = 0;
         $stand_active = null;
 
-        $cart = [];
-        $stand_id = [];
+       
+
+        // $cart = [];
+        // $stand_id = [];
         foreach ($data as $key => $value) {
             $quantity = $value['quantity'];
             $price = $quantity * $value['selling_price_item'];
             $total_price += $price;
-            $stand_active = VendingMachine::find($value['stand_id']);
-            if (!in_array($value['stand_id'], $stand_id)) {
-                array_push($stand_id, $value['stand_id']);
-            }
+            // $stand_active = VendingMachine::find($value['stand_id']);
+            // if (!in_array($value['stand_id'], $stand_id)) {
+            //     array_push($stand_id, $value['stand_id']);
+            // }
         }
+        
+        $cart = [];
+        $stand_id[] = UserVendingMachine::where('user_id',auth()->user()->id)->first()->vending_machine_id;
         $cart['stand_id'] = $stand_id;
         $cart['total_item'] = $total_item;
         $cart['total_price'] = format_price($total_price);
-        
-        $view = view('frontend.c.pos.index');
-        $view->list_stand = VendingMachine::clientId(customer()->client->id)->stand()->get();
-        // $view->stand = VendingMachine::clientId(customer()->client->id)->stand()->get();
+
+        $view = view('frontend.v.pos.index');
+        $view->list_stand = VendingMachine::find($stand_id);
+        $clientID=VendingMachine::find($stand_id[0])->client->id;
         $view->categories = Category::food()->get();
         $view->cart = $cart;
+        // return $data;
         $view->search_result = $search ? VendingMachineSlot::joinVendingMachine()
             ->joinFood()
-            ->where('vending_machines.client_id', customer()->client->id)
+            ->where('vending_machines.client_id', $clientID)
             ->where('vending_machines.type', 2)
             ->where('foods.name', 'like', '%'.$search.'%')
             ->select(['vending_machine_slots.*'])
-            ->get() : null;
+            ->get() : null;   
+    
         
-  
         return $view;
     }
 
+    public function coba(){
+        $view = view('frontend.v.pos.coba');
+        return $view;
+    }
     public function _addToCart($id)
     {
         $is_remove = \Input::get('is_remove');
-        $temp_key = PosHelper::getTempKey();
+        $temp_key = PosHelper::getTempAnonimKey();
+        $customer=PosHelper::getAnonimCustomer();
 
         $search = TempDataHelper::searchKeyValue($temp_key, auth()->user()->id, ['item_id'], [$id]);
         $item = VendingMachineSlot::findOrFail($id);
@@ -116,7 +136,6 @@ class PosController extends Controller
         }
         $stand_name = VendingMachine::whereIn('id', $stand_id)->select('name')->get()->pluck('name')->toArray();
         $str_stand_name = implode(', ', $stand_name);
-        
         $search['stand_name'] = $str_stand_name;
         $search['total_item'] = $total_item;
         $search['total_price'] = format_price($total_price);
@@ -126,19 +145,21 @@ class PosController extends Controller
     /** cart */
     public function cart()
     {
-        $temp_key = PosHelper::getTempKey();
+        $temp_key =PosHelper::getTempAnonimKey();
 
         // $data = TempDataHelper::get($temp_key, auth()->user()->id);
-        $data = TempDataHelper::getAllRowGroupByKey($temp_key, auth()->user()->id, 'stand_id');
+        $customer=PosHelper::getAnonimCustomer();
+        $data = TempDataHelper::getAllRowGroupByKey($temp_key,auth()->user()->id, 'stand_id');
 
         if (count($data) < 1) {
             toaster_error('Anda belum menambahkan barang belanja Anda di cart. Silahkan berbelanja dulu.');
-            return redirect('c');
+            return redirect('v');
         }
 
-        $view = view('frontend.c.pos.cart');
+        $view = view('frontend.v.pos.cart');
         $view->list_cart_group_by_stand = $data;
-        $view->list_breaktime_setting = BreakTimeSetting::where('client_id', customer()->register_at_client_id)->get();
+        $clientID=$customer->client_id;
+        $view->list_breaktime_setting = BreakTimeSetting::where('client_id',$clientID)->get();
         return $view;
     }
 
@@ -149,7 +170,7 @@ class PosController extends Controller
         TempDataHelper::remove($id);
 
         /** create respon */
-        $temp_key = PosHelper::getTempKey();
+        $temp_key = PosHelper::getTempAnonimKey();
 
         $data = TempDataHelper::get($temp_key, auth()->user()->id);
         $total_item = count($data);
@@ -165,61 +186,59 @@ class PosController extends Controller
     }
 
     /** proses checkout */
-    public function checkout()
+    public function payment()
     {
         $is_preorder = 0;
-        $data =explode(';', (\Input::get('preorder_date')));
-        $breaktime = \Input::get('break_time_setting_id');
-        $note=$data[1];
-        $preorder_date=$data[0];
-           
-        if ($preorder_date) {
-            $preorder_date = Carbon::createFromFormat('m/d/Y g:i A', $preorder_date);
-            $is_preorder = 1;
-        } else {
-            $preorder_date = Carbon::now();
-        }
+        // $data =explode(';', (\Input::get('preorder_date')));
+        //                 $breaktime = \Input::get('break_time_setting_id');
+        // $note=$data[1];
+        $note=" ";
+        $preorder_date = Carbon::now();
         
-        $temp_key = PosHelper::getTempKey();
+        $temp_key = PosHelper::getTempAnonimKey();
         $list_cart = TempDataHelper::get($temp_key, auth()->user()->id);
         DB::beginTransaction();
 
         /** cek jumalh */
         if (count($list_cart) < 1) {
             toaster_error('Anda belum menambahkan barang belanja Anda di cart. Silahkan berbelanja dulu.');
-            return redirect('c');
+            return redirect('v');
         }
         /** create transaction */
-        $customer = customer();
-        $transaction_number = VendingMachineTransaction::generateNumber();
+        $customer = PosHelper::getAnonimCustomer();
+        $clientIP = \Request::ip();
+
+        $data=$customer->id.'-'.$clientIP;
+      
+        $transaction_number = VendingMachineTransaction::generateCustomNumber($data);
     
         $total_payment = 0;
         foreach ($list_cart as $cart) {
             $total_payment += $cart['total'];
         }
 
-        /** Cek saldo */
-        $saldo = $customer->saldo;
-        $saldo_pens = $customer->saldo_pens;
-        $saldo_total = $saldo + $saldo_pens;
+        // /** Cek saldo */
+        // $saldo = $customer->saldo;
+        // $saldo_pens = $customer->saldo_pens;
+        // $saldo_total = $saldo + $saldo_pens;
 
-        /** jika saldo total kurang dari harga jual */
-        if ($saldo_total < $total_payment) {
-            toaster_error('Saldo Anda tidak mencukupi');
-            return redirect('c/cart');
-        }
+        // /** jika saldo total kurang dari harga jual */
+        // if ($saldo_total < $total_payment) {
+        //     toaster_error('Saldo Anda tidak mencukupi');
+        //     return redirect('v/cart');
+        // }
 
 
         $total_belanja = 0;
         foreach ($list_cart as $cart) {
             $vending_machine_slot = VendingMachineSlot::findOrFail($cart['item_id']);
             $vending_machine = $vending_machine_slot->vendingMachine;
-            $customer = customer();
+            $customer =PosHelper::getAnonimCustomer();
 
             
             if (($vending_machine_slot->stock < $cart['quantity']) && $is_preorder == 0) {
                 toaster_error('Stok tidak mencukupi / kosong. Hapus barang dari daftar belanja Anda');
-                return redirect('c/cart');
+                return redirect('v/cart');
             }
 
 
@@ -258,7 +277,6 @@ class PosController extends Controller
             $vending_machine = $transaction->vendingMachine;
             $vending_machine->flaging_transaction = Str::random(10);
             $vending_machine->saldo += $vending_machine_slot->food->selling_price_client;
-
             $vending_machine->save();
 
             /** Kurangi saldo customer */
@@ -271,25 +289,64 @@ class PosController extends Controller
         }
 
         /** clear temp */
-        $temp_key = PosHelper::getTempKey();
-        TempDataHelper::clear($temp_key, auth()->user()->id);
+        // $temp_key = PosHelper::getTempAnonimKey();
+        // TempDataHelper::clear($temp_key, auth()->user()->id);
 
-        /** Kurangi saldo customer */
-        $customer = customer();
-        $customer->saldo -= $total_belanja;
-        $customer->save();
+        // /** Kurangi saldo customer */
+        // $customer = PosHelper::getAnonimCustomer();
+        // $customer->saldo -= $total_belanja;
+        // $customer->save();ƒ
 
         DB::commit();
         FirebaseHelper::pushFirebaseNotification($transaction,"checkout");
-
-        toaster_success('Pesanan Anda berhasil ditempatkan.');
-        return redirect('c/success-order/'.$transaction_number);
+        return $transaction;
+        // return redirect('v/cart');
     }
 
+    public function checkPayment($kodepos){
+        $tr= VendingMachineTransaction::where('transaction_number',$kodepos)->get();
+        $hasil=1;
+        $trs=[];
+        foreach($tr as $transaction){
+            if ($transaction->status_transaction==3){
+                $data=[
+                    'status'=>0,
+                    'msg' => 'not pay yet'
+                ];
+                return $data;
+            break;
+            }
+            $trs[]=$transaction;
+        }
+        if(!$trs){
+            $data=[
+                'status'=>0,
+                'msg' => 'not found'
+            ];
+        }
+        $data=[
+            'status'=>1,
+            'msg' => 'has paid'
+        ];
+        return $data;
+    }
+    /**checkout */
+    public function checkout($transaction_number){
+        $customer = PosHelper::getAnonimCustomer();
+        $clientIP = \Request::ip();
+
+        $data=$customer->id.'-'.$clientIP;
+      
+        $temp_key = PosHelper::getTempAnonimKey();
+        TempDataHelper::clear($temp_key, auth()->user()->id);
+        toaster_success('Pesanan Anda berhasil ditempatkan.');
+        return redirect('v/success-order/'.$transaction_number);
+
+    }
     /** success order */
     public function successOrder($transaction_number)
     {
-        $view = view('frontend.c.pos.success-order');
+        $view = view('frontend.v.pos.success-order');
         $view->list_transaction = VendingMachineTransaction::where('transaction_number', $transaction_number)->groupBy('vending_machine_id')->get();
         return $view;
     }
@@ -298,8 +355,9 @@ class PosController extends Controller
     public function historyTransaction()
     {
         $status = \Input::get('status');
-        $view = view('frontend.c.pos.history-transaction');
-        $view->list_transaction = VendingMachineTransaction::where('customer_id', customer()->id)
+        $view = view('frontend.v.pos.history-transaction');
+        $customer= PosHelper::getAnonimCustomer();
+        $view->list_transaction = VendingMachineTransaction::where('customer_id', $customer->id)
             ->where(function ($q) use ($status) {
                 if ($status) {
                     $q->where('status_transaction', $status);
@@ -313,4 +371,6 @@ class PosController extends Controller
     }
 
     
+
+
 }

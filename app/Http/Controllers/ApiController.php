@@ -96,6 +96,16 @@ class ApiController extends Controller
         return VendingMachineTransaction::findOrFail($id);
     }
 
+   
+
+    public static function returnMessageError($string)
+    {
+        return response()->json([
+            "status" => 0,
+            "msg" => $string
+        ]);
+    }
+
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {

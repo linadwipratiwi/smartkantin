@@ -2,6 +2,8 @@
 
 @section('content')
     <!-- Title -->
+    
+    
     <div class="row">
         <div class="col-lg-12">
             <form action="">
@@ -32,9 +34,9 @@
     <div class="right-sidebar-backdrop"></div>
     <!-- /Right Sidebar Backdrop -->
     @if (\Input::get('search'))
-    @include('frontend.c.pos._data-item-search')        
+    @include('frontend.v.pos._data-item-search')        
     @else
-    @include('frontend.c.pos._data-item')
+    @include('frontend.v.pos._data-item')
     @endif
 
     <!-- sample modal content -->
@@ -79,7 +81,7 @@
 
     /** goto cart **/
     function gotoCart() {
-        location.href='{{url("c/cart")}}';
+        location.href='{{url("v/cart")}}';
     }
     
     /** switch stand **/
@@ -90,7 +92,7 @@
 
     function addToCart(id, is_remove) {
         $.ajax({
-            url: '{{url("c/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
+            url: '{{url("v/add-to-cart/")}}/'+id+'?is_remove='+is_remove,
             success: function (res) {
                 
                 if (res.quantity > 0) {

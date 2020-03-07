@@ -166,6 +166,13 @@ class VendingMachineTransaction extends Model
         return 'POS-'.date('Y').'-'.date('m').'-'.customer()->id.'-'.date('his');
     }
 
+       /** generate number transaction */
+       public static function generateCustomNumber($customerid)
+       {
+           # format : TAHUN/BULAN/HARI/KODE Pelanggan/JAM:DETIK
+           return 'POS-'.date('Y').'-'.date('m').'-'.date('d').'-'.$customerid.'-'.date('his');
+       }
+   
     public function scopeSearchByCustomer($q, $stand_id)
     {
         $search = \Input::get('search');
