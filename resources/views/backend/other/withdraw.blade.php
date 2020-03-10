@@ -33,7 +33,7 @@
             </div>
             <div class="panel-wrapper collapse in">
                 <div class="panel-body">
-                    <form action="{{url('withdraw')}}" method="POST" id="form-wd">
+                    <form action="{{url('other/withdraw')}}" method="POST" id="form-wd">
                         {{ csrf_field() }}
                         <button type="button" onclick="confirmation()" class="btn btn-sm btn-primary">Withdraw</button>
                         <div class="table-wrap">
