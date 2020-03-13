@@ -128,7 +128,7 @@ class ApiController extends Controller
         if (!$gopay_transaction) {
             return null;
         }
-
+        $gopay_transaction->gopay_transaction_status=1;
         $refer = $gopay_transaction->refer_type::find($gopay_transaction->refer_type_id);
         if (get_class($refer) == get_class(new VendingMachineTransaction)) {
             /** jika refer, adalah vm transaksi */
