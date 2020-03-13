@@ -134,7 +134,6 @@ class Midtrans
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
         // curl_close($ch);
-        return $info;
         return response()->json($result);
         if ($result === false) {
             throw new Exception('CURL Error: ' . curl_error($ch), curl_errno($ch));
