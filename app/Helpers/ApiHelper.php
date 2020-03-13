@@ -457,11 +457,11 @@ class ApiHelper
             
             $respon_= self::gopay($transaction->id);
             $respon= json_decode($respon_, true);
-            echo "coba coba";
+            // echo "coba coba";
             $gopayTr= GopayTransaction::find($respon['order_id']);
             if($gopayTr){
                 foreach($respon['actions'] as $result){
-                    echo $result['name']."=".$result['url']. "\xA";
+                    // echo $result['name']."=".$result['url']. "\xA";
                     if($result['name']=="generate-qr-code"){
                         $gopayTr->url_qrcode= $result['url'];
                     }
@@ -475,6 +475,8 @@ class ApiHelper
                         $gopayTr->url_cancel= $result['url'];
                     }
                 }
+                //status transaction pending
+                $gopayTr->gopay_transaction_status=3;
                 $gopayTr->save();
             }
             \DB::commit();
