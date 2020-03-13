@@ -476,7 +476,6 @@ class ApiHelper
                     }
                 }
                 $gopayTr->save();
-                return $gopayTr;
             }
             \DB::commit();
         
