@@ -454,7 +454,6 @@ class ApiHelper
         
         try {
             $transaction->save();
-            \DB::commit();
             
             $respon_= self::gopay($transaction->id);
             $respon= json_decode($respon_, true);
@@ -477,6 +476,9 @@ class ApiHelper
                     }
                 }
             }
+            $gopayTr->save();
+            \DB::commit();
+        
             $respon['id']=$transaction->id;
 
             return($respon);
