@@ -459,7 +459,7 @@ class ApiHelper
             $respon_= self::gopay($transaction->id);
             $respon= json_decode($respon_, true);
             echo "coba coba";
-            echo $respon['actions'];
+           
             $respon['id']=$transaction->id;
 
             return($respon);
