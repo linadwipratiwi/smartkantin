@@ -165,11 +165,21 @@ class Midtrans
     public static function gopayCharge($params)
     {
         $result = Midtrans::post(
-        Midtrans::getChargeBaseUrl(),
-        Midtrans::$serverKey,
-        $params
-    );
+                Midtrans::getChargeBaseUrl(),
+                Midtrans::$serverKey,
+                $params
+        );
 
+        return json_encode($result, true);
+    }
+
+    public static function gopayChargeCancel($url){
+        $params="";
+        $result = Midtrans::post(
+            $url,
+            Midtrans::$serverKey,
+            $params
+        );
         return json_encode($result, true);
     }
 }

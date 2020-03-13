@@ -59,6 +59,7 @@ Route::group(['prefix' => 'v1'], function () {
 Route::post('gopay/notification', 'ApiController@gopayRespon'); /** gopay respon */
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['prefix' => 'vending-machine'], function () {
+    Route::post('gopay_cancel','ApiController@gopayCancel');
     Route::post('topup', 'ApiController@topupTransaction');
     Route::post('slot', 'ApiController@findSlot');
     Route::get('customer/{id}', 'ApiController@findCustomer');

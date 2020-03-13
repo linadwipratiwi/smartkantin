@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use MidtransTrait;
+use App\Midtrans\Midtrans;
 use App\Models\Client;
 use App\Models\Vendor;
 use App\Models\Customer;
@@ -105,6 +106,14 @@ class ApiController extends Controller
             "msg" => $string
         ]);
     }
+
+    public static function gopayCancel(Request $request){
+        $transaction_id=$request->input('transaction_id');
+        $url= GopayTransaction::where('refer_type_id',$transaction_id)->first()->url_cancel;
+        $result= Midtrans::gopayChargeCancel($url);
+        return response()->json($result);
+    }
+
 
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
