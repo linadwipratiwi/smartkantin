@@ -110,7 +110,9 @@ class ApiController extends Controller
     public static function gopayCancel(Request $request){
         $transaction_id=$request->input('transaction_id');
         $url= GopayTransaction::where('refer_type_id',$transaction_id)->first()->url_cancel;
-        $result= Midtrans::gopayChargeCancel($url);
+        $respon= Midtrans::gopayChargeCancel($url);
+        $result= json_decode($respon, true);
+
         return response()->json($result);
     }
 

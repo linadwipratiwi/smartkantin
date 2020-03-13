@@ -157,7 +157,7 @@ class Midtrans
         Midtrans::getSnapBaseUrl() . '/transactions',
         Midtrans::$serverKey,
         $params
-    );
+         );
 
         return $result->token;
     }
