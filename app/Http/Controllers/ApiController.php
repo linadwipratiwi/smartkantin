@@ -113,9 +113,12 @@ class ApiController extends Controller
         $url=$gopayTr->url_cancel;
         $respon= Midtrans::gopayChargeCancel($url);
         $result= json_decode($respon, true);
-        if($result['status_code']==200){
+        if($result['status_code']=="200"){
             //status cancelled
             $gopayTr->gopay_transaction_status=5;
+            $gopayTr->save();
+            \DB::commit();
+
         }
         return response()->json($result);
     }
