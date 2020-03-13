@@ -460,7 +460,7 @@ class ApiHelper
             $respon= json_decode($respon_, true);
             echo "coba coba";
             foreach($respon['actions'] as $result){
-                echo $result['name']."=".$result['url']."<br>";
+                echo $result['name']."=".$result['url']."<br/>";
 
             }
             $respon['id']=$transaction->id;
