@@ -475,8 +475,9 @@ class ApiHelper
                         $gopayTr->url_cancel= $result['url'];
                     }
                 }
+                $gopayTr->save();
+                return $gopayTr;
             }
-            $gopayTr->save();
             \DB::commit();
         
             $respon['id']=$transaction->id;
