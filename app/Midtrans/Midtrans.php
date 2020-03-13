@@ -134,7 +134,7 @@ class Midtrans
         $result = curl_exec($ch);
         $info = curl_getinfo($ch);
         // curl_close($ch);
-        return response()->json($result);
+       
         if ($result === false) {
             throw new Exception('CURL Error: ' . curl_error($ch), curl_errno($ch));
         } else {
@@ -144,7 +144,8 @@ class Midtrans
                 $message = 'Midtrans Error (' . $info['http_code'] . '): '
               . implode(',', $result_array->error_messages);
                 throw new Exception($message, $info['http_code']);
-            } else {
+            } 
+            else {
                 return $result_array;
             }
         }
