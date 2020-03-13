@@ -459,9 +459,23 @@ class ApiHelper
             $respon_= self::gopay($transaction->id);
             $respon= json_decode($respon_, true);
             echo "coba coba";
-            foreach($respon['actions'] as $result){
-                echo $result['name']."=".$result['url']. "\xA";
-
+            $gopayTr= GopayTransaction::find($respon['order_id']);
+            if($gopayTr){
+                foreach($respon['actions'] as $result){
+                    echo $result['name']."=".$result['url']. "\xA";
+                    if($result['name']=="generate-qr-code"){
+                        $gopayTr->url_qrcode= $result['url'];
+                    }
+                    else if($result['name']=="deeplink-redirect"){
+                        $gopayTr->url_deeplink= $result['url'];
+                    }
+                    else if($result['name']=="get-status"){
+                        $gopayTr->url_get_status= $result['url'];
+                    }
+                    else if($result['name']=="cancel"){
+                        $gopayTr->url_cancel= $result['url'];
+                    }
+                }
             }
             $respon['id']=$transaction->id;
 
