@@ -581,9 +581,12 @@ class ApiHelper
             $transfer_saldo->fee_topup_value = $client->fee_topup_gopay_value;
             $total_topup = $transfer_saldo->fee_topup_value + $saldo;
         }
-        if ($transfer_saldo->fee_topup_type == 'percent') {
+        else if ($transfer_saldo->fee_topup_type == 'percent') {
             $transfer_saldo->fee_topup_percent = $client->fee_topup_gopay_percent;
             $total_topup = ($saldo * $client->fee_topup_gopay_percent / 100) + $saldo;
+        }
+        else{
+            $total_topup = $transfer_saldo->fee_topup_value + $saldo;
         }
 
         $transfer_saldo->total_topup = $total_topup;
