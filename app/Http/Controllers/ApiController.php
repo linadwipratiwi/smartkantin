@@ -121,7 +121,13 @@ class ApiController extends Controller
                 'msg'=>'no reference id'
             ]);
         }
+        if(!$gopayTr){
+            return response()->json([
+                'status'=>0,
+                'msg'=>'not found transaction'
+            ]);
 
+        }
         $url=$gopayTr->url_cancel;
         $respon= Midtrans::gopayChargeCancel($url);
         $result= json_decode($respon, true);
