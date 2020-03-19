@@ -643,7 +643,27 @@ class ApiHelper
             $respon_ = $midtrans->gopayCharge($transaction_data);
             $respon = json_decode($respon_, true);
             $respon['id'] = $transfer_saldo->id;
-
+            $gopayTr= GopayTransaction::find($respon['order_id']);
+            if($gopayTr){
+                foreach($respon['actions'] as $result){
+                    // echo $result['name']."=".$result['url']. "\xA";
+                    if($result['name']=="generate-qr-code"){
+                        $gopayTr->url_qrcode= $result['url'];
+                    }
+                    else if($result['name']=="deeplink-redirect"){
+                        $gopayTr->url_deeplink= $result['url'];
+                    }
+                    else if($result['name']=="get-status"){
+                        $gopayTr->url_get_status= $result['url'];
+                    }
+                    else if($result['name']=="cancel"){
+                        $gopayTr->url_cancel= $result['url'];
+                    }
+                }
+                //status transaction pending
+                $gopayTr->gopay_transaction_status=3;
+                $gopayTr->save();
+            }
             return($respon);
         } catch (Exception $e) {
             return $e->getMessage;
