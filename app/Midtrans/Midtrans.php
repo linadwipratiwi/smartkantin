@@ -137,7 +137,8 @@ class Midtrans
        
         if ($result === false) {
             throw new Exception('CURL Error: ' . curl_error($ch), curl_errno($ch));
-        } else {
+        } 
+        else {
             $result_array = json_decode($result);
             // dd($info);
             if ($info['http_code'] != 200) {

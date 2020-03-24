@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
+use App\Models\DanaTransaction;
 use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
@@ -140,7 +141,12 @@ class ApiController extends Controller
         return response()->json($result);
     }
 
-
+    /**Handler dana respon */
+    public function danaRespon(Request $request){
+        $danaTr= new DanaTransaction;
+        $danaTr->dana_status_message= response()->json($request->response);
+        $danaTr->save();
+    }
     /** Hadler gopay respon */
     public function gopayRespon(Request $request)
     {
@@ -195,6 +201,7 @@ class ApiController extends Controller
             }
         }
     }
+
 
     /** Topup transaction */
     public function topupTransaction(Request $request)

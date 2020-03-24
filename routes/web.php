@@ -32,6 +32,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::get('other/withdraw', 'OtherController@withdraw');
     Route::resource('kartu-sakti', 'KartuSaktiController');
     Route::get('client/grid', 'ClientController@grid');
+    Route::get('client/{id}/edit-share','ClientController@editShareOwner');
     Route::resource('client', 'ClientController');
     Route::resource('firmware', 'FirmwareController');
     Route::resource('category', 'CategoryController');

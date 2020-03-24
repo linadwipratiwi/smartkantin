@@ -31,6 +31,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="table-wrap">

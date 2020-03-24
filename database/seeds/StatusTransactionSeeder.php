@@ -30,18 +30,23 @@ class StatusTransactionSeeder extends Seeder
         $this->output->writeln('<info>--- StatusTransaction Seeder Started ---</info>');
         $data = array(
             [
+                'kode_status'=>1,
                 'keterangan' => 'success delivered'
             ],
             [
+                'kode_status'=>0,
                 'keterangan' => 'failed'
             ],
             [
+                'kode_status'=>3,
                 'keterangan' => 'waiting deliver'
             ],
             [
+                'kode_status'=>2,
                 'keterangan' => 'waiting payment'
             ],
             [
+                'kode_status'=>4,
                 'keterangan' => 'canceled'
 
             ]

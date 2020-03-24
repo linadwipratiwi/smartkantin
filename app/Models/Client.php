@@ -43,19 +43,23 @@ class Client extends Model
         if (!$vending_machine) {
             return null;
         }
-
         $slot = $vending_machine->slots->first();
         if (!$slot) {
             return null;
         }
-
         return $slot->profitPlatform();
     }
 
     /** Get total income dari client */
     public function shareIncome()
     {
-        return VendingMachineTransaction::search()->where('client_id', $this->id)->sum('profit_platform');
+        // $transaction=VendingMachineTransaction::where('client_id', $this->id);
+        // $total=0;
+        // foreach($transaction as $tr){
+        //     $total+= $tr->food->profit_platform_value;
+        // }
+        // return  $total;
+        return VendingMachineTransaction::search()->where('client_id',$this->id)->sum('profit_platform');
     }
 
     /** Get total transaksi dari client
@@ -63,6 +67,7 @@ class Client extends Model
      */
     public function totalTransaction($status=3)
     {
+
         return VendingMachineTransaction::search()->where('client_id', $this->id)
             ->where(function ($q) use ($status) {
                 if ($status != 3) {

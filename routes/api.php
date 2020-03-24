@@ -57,6 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 /** API vending machine */
 Route::post('gopay/notification', 'ApiController@gopayRespon'); /** gopay respon */
+Route::post('dana/notification','ApiController@danaRespon');
 Route::group(['prefix' => 'v1'], function () {
   Route::group(['prefix' => 'vending-machine'], function () {
     Route::post('gopay_cancel','ApiController@gopayCancel');

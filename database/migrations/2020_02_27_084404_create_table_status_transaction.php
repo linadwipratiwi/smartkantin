@@ -16,6 +16,7 @@ class CreateTableStatusTransaction extends Migration
         //
         Schema::create('status_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('kode_status');
             $table->string('keterangan');
             $table->timestamps();
         });

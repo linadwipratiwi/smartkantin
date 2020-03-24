@@ -27,6 +27,10 @@ class VendingMachineTransaction extends Model
         return $this->belongsTo('App\Models\Client', 'client_id');
     }
 
+    public function statusTransaction(){
+        return $this->belongsTo('App\Models\StatusTransaction','kode_transaksi');
+    }
+    
     public function customer()
     {
         return $this->belongsTo('App\Models\Customer', 'customer_id');
@@ -62,7 +66,7 @@ class VendingMachineTransaction extends Model
      */
     public function scopeSuccess($q)
     {
-        $q->where('vending_machine_transactions.status_transaction', 1);
+        $q->where('vending_machine_transactions.status_transaction', 1)->orwhere('vending_machine_transactions.status_transaction', 3);
     }
 
     /**
@@ -120,6 +124,32 @@ class VendingMachineTransaction extends Model
         }
 
         return $q;
+    }
+
+    public static function getProfitPlatformType($a){
+        
+        $type= ($a->food->profit_platform_type)?$a->food->profit_platform_type: $a->client->profit_platform_type;
+        return $type;
+    }
+    public static function getProfitPlatformValue($a){
+        $value=($a->food->profit_platform_value)?$a->food->profit_platform_value: $a->client->profit_platform_value;
+        return $value;
+    }
+    public static function getProfitPlatformPercent($a){
+        $percent=($a->food->profit_platform_percent)?$a->food->profit_platform_percent: $a->client->profit_platform_percent;
+        return $percent;
+    }
+    public static function getProfitPlatform($a){
+        
+        $type= ($a->food->profit_platform_type)?$a->food->profit_platform_type: $a->client->profit_platform_type;
+        $value=($a->food->profit_platform_value)?$a->food->profit_platform_value: $a->client->profit_platform_value;
+        $percent=($a->food->profit_platform_percent)?$a->food->profit_platform_percent: $a->client->profit_platform_percent;
+        if ($type == "percent"){
+            return $percent* $a->food->profit_client/100;
+        }
+        else{
+            return $value;
+        }
     }
 
     public function isPreorder()

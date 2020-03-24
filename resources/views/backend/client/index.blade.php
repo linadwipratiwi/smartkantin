@@ -77,6 +77,11 @@
                                                 <a href="{{url('client/'.$client->id.'/edit')}}" data-toggle="tooltip" data-original-title="Edit">
                                                     <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i class="fa fa-pencil"></i></button>
                                                 </a>
+                                                
+                                                <a href="{{url('client/'.$client->id.'/edit-share')}}" data-toggle="tooltip" data-original-title="Share owner">
+                                                    <button class="btn btn-default btn-icon-anim btn-square btn-sm"><i style="color:black" class="fa fa-tools"></i></button>
+                                                </a>
+
                                                 <a onclick="secureDelete('{{url('client/'.$client->id)}}', '#tr-{{$client->id}}')" data-toggle="tooltip" data-original-title="Close">
                                                     <button class="btn btn-info btn-icon-anim btn-square  btn-sm"><i class="icon-trash"></i></button>                                                    
                                                 </a>
