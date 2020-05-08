@@ -14,7 +14,8 @@
         "maatwebsite/excel": "~2.1.0",
         "nikolaynesov/laravel-roles": "~2.2.0",
         "simplesoftwareio/simple-qrcode": "~2",
-        "tymon/jwt-auth": "^0.5.12"
+        "tymon/jwt-auth": "^0.5.12",
+        "yajra/laravel-datatables-oracle": "~8.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

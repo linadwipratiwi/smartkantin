@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\PermissionUser;
 use Illuminate\Database\Eloquent\Model;
 
 class PermissionUser extends Model
@@ -21,6 +20,6 @@ class PermissionUser extends Model
 
     public function scopeJoinPermission($q)
     {
-        $q->join('permissions', 'permissions.id', '=', $this->table.'.permission_id');
+        $q->join('permissions', 'permissions.id', '=', $this->table . '.permission_id');
     }
 }

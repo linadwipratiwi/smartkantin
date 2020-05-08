@@ -4,8 +4,8 @@ namespace App\Helpers;
 
 use App\Helpers;
 use App\Models\Customer;
-use App\Helpers\ApiHelper;
 use App\Midtrans\Midtrans;
+use App\Models\Category;
 use App\Models\KartuSakti;
 use Illuminate\Support\Str;
 use App\Models\StockMutation;
@@ -14,6 +14,8 @@ use App\Models\VendingMachine;
 use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
+use Exception;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ApiHelper
 {
@@ -28,9 +30,9 @@ class ApiHelper
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $slot_alias = $request->input('slot_alias');
-        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $type = $request->input('type') ?: 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
-        
+
         /** Cek apakah kartu sakti */
         $kartu_sakti = KartuSakti::where('card_number', $customer_identity_number)->first();
         if ($kartu_sakti) {
@@ -39,7 +41,7 @@ class ApiHelper
                 'data' => 'maintenance'
             ]);
         }
-        
+
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
         if (!$customer) {
@@ -85,12 +87,12 @@ class ApiHelper
 
         if ($vending_machine_slot->stock < 1) {
             if ($type == 'mini') {
-                return '0:Stock '.$vending_machine_slot->food_name .' is empty';
+                return '0:Stock ' . $vending_machine_slot->food_name . ' is empty';
             }
 
             return json_encode([
                 'status' => 0,
-                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+                'data' => 'Stock ' . $vending_machine_slot->food_name . ' is empty'
             ]);
         }
 
@@ -106,16 +108,16 @@ class ApiHelper
         $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
         $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
         $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
-        $transaction->food_id = $vending_machine_slot->food->id;  
-        
-         
-        $transaction->profit_platform_type= VendingMachineTransaction::getProfitPlatformType($transaction);
-        $transaction->profit_platform_percent= VendingMachineTransaction::getProfitPlatformPercent($transaction);
-        $transaction->profit_platform_value= VendingMachineTransaction::getProfitPlatformValue($transaction);
+        $transaction->food_id = $vending_machine_slot->food->id;
+
+
+        $transaction->profit_platform_type = VendingMachineTransaction::getProfitPlatformType($transaction);
+        $transaction->profit_platform_percent = VendingMachineTransaction::getProfitPlatformPercent($transaction);
+        $transaction->profit_platform_value = VendingMachineTransaction::getProfitPlatformValue($transaction);
         // // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
-        $transaction->profit_platform = VendingMachineTransaction::getProfitPlatform($transaction); 
+        $transaction->profit_platform = VendingMachineTransaction::getProfitPlatform($transaction);
         // $transaction->profit_platform_value?$transaction->profit_platform_value:($transaction->selling_price_client * $transaction->profit_platform_percent / 100);
-        
+
         $transaction->selling_price_vending_machine = $selling_price_vending_machine;
         $transaction->quantity = 1;
         $transaction->status_transaction = 1;
@@ -125,7 +127,7 @@ class ApiHelper
         $vending_machine->flaging_transaction = Str::random(10);
         $vending_machine->saldo += $vending_machine_slot->food->selling_price_client;
         $vending_machine->save();
-        
+
         try {
             $transaction->save();
             /** Kurangi saldo customer */
@@ -148,7 +150,7 @@ class ApiHelper
 
             $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
             if ($type == 'mini') {
-                return '1:'.$transaction->id.':'.$transaction->customer->name;
+                return '1:' . $transaction->id . ':' . $transaction->customer->name;
             }
 
             return json_encode([
@@ -171,7 +173,7 @@ class ApiHelper
     public static function transactionFail($request)
     {
         $transaction_id = $request->input('transaction_id');
-        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $type = $request->input('type') ?: 'normal'; // normal, mini
 
         \DB::beginTransaction();
         /**
@@ -220,7 +222,7 @@ class ApiHelper
 
         \DB::commit();
         if ($type == 'mini') {
-            return '1:'.$transaction->customer->name;
+            return '1:' . $transaction->customer->name;
         }
 
         return json_encode([
@@ -254,18 +256,18 @@ class ApiHelper
     public static function createCustomer($request)
     {
         $name = $request->input('name');
-        $identity_type = $request->input('identity_type') ? : 'ktp';
+        $identity_type = $request->input('identity_type') ?: 'ktp';
         $identity_number = $request->input('identity_number');
-        $email = $request->input('email') ? : null;
-        $phone = $request->input('phone')  ? : null;
-        $saldo = $request->input('saldo')  ? : null;
-        $card_number = $request->input('card_number')  ? : null;
-        $saldo_pens = $request->input('saldo_pens')  ? : null;
-        $address = $request->input('address') ? : null;
+        $email = $request->input('email') ?: null;
+        $phone = $request->input('phone')  ?: null;
+        $saldo = $request->input('saldo')  ?: null;
+        $card_number = $request->input('card_number')  ?: null;
+        $saldo_pens = $request->input('saldo_pens')  ?: null;
+        $address = $request->input('address') ?: null;
         $vending_machine_alias = $request->input('vending_machine_alias');
-        
+
         $type = $request->input('type') == 'mini' ? 'mini' : 'normal';
-        
+
         $vending_machine = VendingMachine::where('alias', $vending_machine_alias)->first();
         if (!$vending_machine) {
             if ($type == 'mini') {
@@ -279,7 +281,7 @@ class ApiHelper
         }
 
         $customer = Customer::where('identity_number', $identity_number)->first();
-        $customer = $customer ? : new Customer;
+        $customer = $customer ?: new Customer;
         $customer->name = $name;
         $customer->identity_type = $identity_type;
         $customer->identity_number = $identity_number;
@@ -299,9 +301,9 @@ class ApiHelper
         $customer->register_at_client_id = $vending_machine->client_id;
         $customer->register_at_vending_machine_id = $vending_machine->id;
         $customer->save();
-        
+
         if ($type == 'mini') {
-            return '1:'.$customer->name.':'.$customer->id.':'.$customer->phone;
+            return '1:' . $customer->name . ':' . $customer->id . ':' . $customer->phone;
         }
 
         return json_encode([
@@ -315,9 +317,9 @@ class ApiHelper
     {
         $customer_identity_number = $request->input('customer_identity_number');
         $slot_alias = $request->input('slot_alias');
-        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $type = $request->input('type') ?: 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
-        
+
         /** Cek apakah kartu sakti */
         $kartu_sakti = KartuSakti::where('card_number', $customer_identity_number)->first();
         if ($kartu_sakti) {
@@ -349,7 +351,7 @@ class ApiHelper
         if ($vending_machine_slot->stock < 1) {
             return json_encode([
                 'status' => 0,
-                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+                'data' => 'Stock ' . $vending_machine_slot->food_name . ' is empty'
             ]);
         }
 
@@ -367,8 +369,8 @@ class ApiHelper
         $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
         $transaction->profit_platform_type = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_type : $vending_machine_slot->client_id->profit_platform_type;
         $transaction->profit_platform_percent = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_percent : $vending_machine_slot->client_id->profit_platform_percent;
-        $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value :$vending_machine_slot->client_id->profit_platform_value;
-        
+        $transaction->profit_platform_value = $vending_machine_slot->food ? $vending_machine_slot->food->profit_platform_value : $vending_machine_slot->client_id->profit_platform_value;
+
         // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
         $transaction->profit_platform = $client->profit_platform_value;
         if ($transaction->profit_platform_type == 'percent') {
@@ -392,7 +394,7 @@ class ApiHelper
             return json_encode([
                 'status' => 0,
                 'data' => 'Transaction failed'
-                
+
             ]);
         }
     }
@@ -401,7 +403,7 @@ class ApiHelper
     public static function gopayTransactionAnonim($request)
     {
         $slot_alias = $request->input('slot_alias');
-        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $type = $request->input('type') ?: 'normal'; // normal, mini
         $payment_type = $request->input('payment_type') == 'gopay' ? 'gopay' : 'saldo'; // normal, mini
 
         /** Cek slot vending machine */
@@ -417,7 +419,7 @@ class ApiHelper
         if ($vending_machine_slot->stock < 1) {
             return json_encode([
                 'status' => 0,
-                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+                'data' => 'Stock ' . $vending_machine_slot->food_name . ' is empty'
             ]);
         }
 
@@ -432,14 +434,14 @@ class ApiHelper
         $transaction->hpp = $vending_machine_slot->food ? $vending_machine_slot->food->hpp : 0;
         $transaction->food_name = $vending_machine_slot->food ? $vending_machine_slot->food->name : null;
         $transaction->selling_price_client = $vending_machine_slot->food ? $vending_machine_slot->food->selling_price_client : null;
-        $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;  
-        $transaction->profit_platform_type= VendingMachineTransaction::getProfitPlatformPercent($transaction);
-        $transaction->profit_platform_percent= VendingMachineTransaction::getProfitPlatformPercent($transaction);
-        $transaction->profit_platform_value= VendingMachineTransaction::getProfitPlatformValue($transaction);
+        $transaction->profit_client = $vending_machine_slot->food ? $vending_machine_slot->food->profit_client : null;
+        $transaction->profit_platform_type = VendingMachineTransaction::getProfitPlatformPercent($transaction);
+        $transaction->profit_platform_percent = VendingMachineTransaction::getProfitPlatformPercent($transaction);
+        $transaction->profit_platform_value = VendingMachineTransaction::getProfitPlatformValue($transaction);
         // // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
-        $transaction->profit_platform = VendingMachineTransaction::getProfitPlatform($transaction); 
+        $transaction->profit_platform = VendingMachineTransaction::getProfitPlatform($transaction);
         // $transaction->profit_platform_value?$transaction->profit_platform_value:($transaction->selling_price_client * $transaction->profit_platform_percent / 100);
-         // $transaction->selling_price_vending_machine = (int)(($vending_machine_slot->food->selling_price_vending_machine)*1.1);
+        // $transaction->selling_price_vending_machine = (int)(($vending_machine_slot->food->selling_price_vending_machine)*1.1);
         $transaction->quantity = 1;
         $transaction->status_transaction = 2; // pending
 
@@ -448,39 +450,36 @@ class ApiHelper
         $vending_machine->flaging_transaction = Str::random(10);
         $vending_machine->saldo += $vending_machine_slot->food->selling_price_client;
         $vending_machine->save();
-        
+
         try {
             $transaction->save();
-            
-            $respon_= self::gopay($transaction->id);
-            $respon= json_decode($respon_, true);
+
+            $respon_ = self::gopay($transaction->id);
+            $respon = json_decode($respon_, true);
             // echo "coba coba";
-            $gopayTr= GopayTransaction::find($respon['order_id']);
-            if($gopayTr){
-                foreach($respon['actions'] as $result){
+            $gopayTr = GopayTransaction::find($respon['order_id']);
+            if ($gopayTr) {
+                foreach ($respon['actions'] as $result) {
                     // echo $result['name']."=".$result['url']. "\xA";
-                    if($result['name']=="generate-qr-code"){
-                        $gopayTr->url_qrcode= $result['url'];
-                    }
-                    else if($result['name']=="deeplink-redirect"){
-                        $gopayTr->url_deeplink= $result['url'];
-                    }
-                    else if($result['name']=="get-status"){
-                        $gopayTr->url_get_status= $result['url'];
-                    }
-                    else if($result['name']=="cancel"){
-                        $gopayTr->url_cancel= $result['url'];
+                    if ($result['name'] == "generate-qr-code") {
+                        $gopayTr->url_qrcode = $result['url'];
+                    } else if ($result['name'] == "deeplink-redirect") {
+                        $gopayTr->url_deeplink = $result['url'];
+                    } else if ($result['name'] == "get-status") {
+                        $gopayTr->url_get_status = $result['url'];
+                    } else if ($result['name'] == "cancel") {
+                        $gopayTr->url_cancel = $result['url'];
                     }
                 }
                 //status transaction pending
-                $gopayTr->gopay_transaction_status=3;
+                $gopayTr->gopay_transaction_status = 3;
                 $gopayTr->save();
             }
             \DB::commit();
-        
-            $respon['id']=$transaction->id;
 
-            return($respon);
+            $respon['id'] = $transaction->id;
+
+            return ($respon);
         } catch (\Throwable $th) {
             return json_encode([
                 'status' => 0,
@@ -489,13 +488,13 @@ class ApiHelper
         }
     }
 
-   
-    
+
+
     /** Create QR Code Gopay */
     public static function gopay($id)
     {
         $transaction = VendingMachineTransaction::findOrFail($id);
-        
+
         /** init gopay transaction id */
         $gopay_transaction = GopayTransaction::init($transaction, $id, $transaction->selling_price_vending_machine);
         $customer = $transaction->customer;
@@ -531,7 +530,7 @@ class ApiHelper
             'unit'       => 'hour',
             'duration'   => 2
         );
-        
+
         $transaction_data = array(
             'payment_type' => 'gopay',
             'transaction_details' => $transaction_details,
@@ -577,12 +576,10 @@ class ApiHelper
         if ($transfer_saldo->fee_topup_type == 'value') {
             $transfer_saldo->fee_topup_value = $client->fee_topup_gopay_value;
             $total_topup = $transfer_saldo->fee_topup_value + $saldo;
-        }
-        else if ($transfer_saldo->fee_topup_type == 'percent') {
+        } else if ($transfer_saldo->fee_topup_type == 'percent') {
             $transfer_saldo->fee_topup_percent = $client->fee_topup_gopay_percent;
             $total_topup = ($saldo * $client->fee_topup_gopay_percent / 100) + $saldo;
-        }
-        else{
+        } else {
             $total_topup = $transfer_saldo->fee_topup_value + $saldo;
         }
 
@@ -628,42 +625,78 @@ class ApiHelper
             'unit'       => 'hour',
             'duration'   => 2
         );
-        
+
         $transaction_data = array(
             'payment_type' => 'gopay',
             'transaction_details' => $transaction_details,
             'item_details' => $items,
             'customer_details' => $customer_details
         );
-    
+
         try {
             $respon_ = $midtrans->gopayCharge($transaction_data);
             $respon = json_decode($respon_, true);
             $respon['id'] = $transfer_saldo->id;
-            $gopayTr= GopayTransaction::find($respon['order_id']);
-            if($gopayTr){
-                foreach($respon['actions'] as $result){
+            $gopayTr = GopayTransaction::find($respon['order_id']);
+            if ($gopayTr) {
+                foreach ($respon['actions'] as $result) {
                     // echo $result['name']."=".$result['url']. "\xA";
-                    if($result['name']=="generate-qr-code"){
-                        $gopayTr->url_qrcode= $result['url'];
-                    }
-                    else if($result['name']=="deeplink-redirect"){
-                        $gopayTr->url_deeplink= $result['url'];
-                    }
-                    else if($result['name']=="get-status"){
-                        $gopayTr->url_get_status= $result['url'];
-                    }
-                    else if($result['name']=="cancel"){
-                        $gopayTr->url_cancel= $result['url'];
+                    if ($result['name'] == "generate-qr-code") {
+                        $gopayTr->url_qrcode = $result['url'];
+                    } else if ($result['name'] == "deeplink-redirect") {
+                        $gopayTr->url_deeplink = $result['url'];
+                    } else if ($result['name'] == "get-status") {
+                        $gopayTr->url_get_status = $result['url'];
+                    } else if ($result['name'] == "cancel") {
+                        $gopayTr->url_cancel = $result['url'];
                     }
                 }
                 //status transaction pending
-                $gopayTr->gopay_transaction_status=3;
+                $gopayTr->gopay_transaction_status = 3;
                 $gopayTr->save();
             }
-            return($respon);
+            return ($respon);
         } catch (Exception $e) {
             return $e->getMessage;
         }
+    }
+
+    //nyoba
+    public static function categories($request)
+    {
+        $category_name = $request->input('name');
+        $category_type = $request->input('type');
+        $category = new Category;
+        $category->name = $category_name;
+        $category->type = $category_type;
+        $category->save();
+        // $category = Category::find('id'=> 1);
+        // $category = new Category;
+        // $category->$name = $category_name;
+        // $category->$type = $category_type;
+        // $category->save();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'berhasil'
+        ]);
+    }
+
+    public static function categoryUpdate($category, $request)
+    {
+
+        $category_name = $request->input('name');
+        $category_type = $request->input('type');
+
+        $data = Category::find($category->id);
+        $data->name = $category_name;
+        $data->type = $category_type;
+
+        $category->save();
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'berhasil'
+        ]);
     }
 }

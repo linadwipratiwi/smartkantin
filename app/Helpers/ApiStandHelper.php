@@ -83,7 +83,7 @@ class ApiStandHelper
         $customer_identity_number = $request->input('customer_identity_number');
         $item_id = $request->input('item_id');
         $quantity = $request->input('quantity');
-        $type = $request->input('type') ? : 'normal'; // normal, mini
+        $type = $request->input('type') ?: 'normal'; // normal, mini
 
         /** Cek customer ada apa tidak */
         $customer = Customer::where('identity_number', $customer_identity_number)->first();
@@ -114,12 +114,12 @@ class ApiStandHelper
 
         if ($vending_machine_slot->stock < $quantity) {
             if ($type == 'mini') {
-                return '0:Stock '.$vending_machine_slot->food_name .' is empty';
+                return '0:Stock ' . $vending_machine_slot->food_name . ' is empty';
             }
 
             return json_encode([
                 'status' => 0,
-                'data' => 'Stock '.$vending_machine_slot->food_name .' is empty'
+                'data' => 'Stock ' . $vending_machine_slot->food_name . ' is empty'
             ]);
         }
 
@@ -136,7 +136,7 @@ class ApiStandHelper
         $transaction->profit_platform_type = $vending_machine_slot->profit_platform_type;
         $transaction->profit_platform_percent = $vending_machine_slot->profit_platform_percent;
         $transaction->profit_platform_value = $vending_machine_slot->profit_platform_value;
-        
+
         // jumlah keutungan real untuk platform. Secara default ambil dari value, namun jika profit type percent, maka dijumlah ulang
         $transaction->profit_platform = $vending_machine_slot->profit_platform_value;
         if ($transaction->profit_platform_type == 'percent') {
@@ -149,8 +149,7 @@ class ApiStandHelper
 
         /** Update flaging transaksi. Digunakan untuk Smansa */
         $vending_machine = $transaction->vendingMachine;
-        $vending_machine->flaging_transaction = Str::random(10);
-        ;
+        $vending_machine->flaging_transaction = Str::random(10);;
         $vending_machine->save();
 
         try {
@@ -160,7 +159,7 @@ class ApiStandHelper
 
             $transaction = VendingMachineTransaction::where('id', $transaction->id)->with('customer')->first();
             if ($type == 'mini') {
-                return '1:'.$transaction->id.':'.$transaction->customer->name;
+                return '1:' . $transaction->id . ':' . $transaction->customer->name;
             }
 
             return json_encode([

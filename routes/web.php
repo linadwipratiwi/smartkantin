@@ -32,7 +32,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::get('other/withdraw', 'OtherController@withdraw');
     Route::resource('kartu-sakti', 'KartuSaktiController');
     Route::get('client/grid', 'ClientController@grid');
-    Route::get('client/{id}/edit-share','ClientController@editShareOwner');
+    Route::get('client/{id}/edit-share', 'ClientController@editShareOwner');
     Route::resource('client', 'ClientController');
     Route::resource('firmware', 'FirmwareController');
     Route::resource('category', 'CategoryController');
@@ -51,7 +51,7 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
         Route::get('{id}/stock/export', 'StockMutationController@export');
         Route::resource('{id}/stock', 'StockMutationController');
     });
-    
+
     // Setting
     Route::resource('setting', 'SettingController');
 
@@ -66,11 +66,10 @@ Route::group(['namespace' => 'Backend', 'middleware' => ['auth', 'role:administr
     Route::get('gopay-transaction', 'ReportController@gopayTransaction');
     Route::get('transaction', 'ReportController@transaction');
     Route::get('report', 'ReportController@report');
-    
 });
 
 /** Client */
-Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['auth', 'role:client']], function () {
+Route::group(['namespace' => 'Frontend', 'prefix' => 'front', 'middleware' => ['auth', 'role:client']], function () {
     Route::get('load-grafik-transaction', 'FrontendController@loadGrafikTransaction');
     Route::get('topup', 'TopupController@index');
     Route::get('/', 'FrontendController@index');
@@ -114,7 +113,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
         Route::resource('{id}/product', 'StandSlotController');
         Route::resource('{id}/stock', 'StockMutationController');
     });
-    
+
     // Setting
     Route::resource('break-time-setting', 'BreakTimeSettingController');
     Route::get('report/transaction/export', 'ReportController@transactionExport');
@@ -125,7 +124,7 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'front','middleware' => ['a
 });
 
 /** Customer */
-Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth', 'role:customer']], function () {
+Route::group(['namespace' => 'Frontend', 'prefix' => 'c', 'middleware' => ['auth', 'role:customer']], function () {
     Route::get('topup/pending/{gopay_transaction_id}', 'Customer\TopupController@pending');
     Route::resource('topup', 'Customer\TopupController');
 
@@ -133,16 +132,15 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'c','middleware' => ['auth'
     Route::get('success-order/{number}', 'PosController@successOrder');
     Route::get('add-to-cart/{id}', 'PosController@_addToCart');
     Route::get('checkout', 'PosController@checkout');
-    
+
     Route::delete('cart/{number}', 'PosController@_destroyItem');
     Route::get('cart', 'PosController@cart');
     Route::get('/', 'PosController@index');
-
 });
 
 /**User vending */
 
-Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth', 'role:user.vending']], function () {
+Route::group(['namespace' => 'Frontend', 'prefix' => 'v', 'middleware' => ['auth', 'role:user.vending']], function () {
     Route::get('topup/pending/{gopay_transaction_id}', 'Customer\TopupController@pending');
     Route::resource('topup', 'Customer\TopupController');
 
@@ -154,15 +152,16 @@ Route::group(['namespace' => 'Frontend', 'prefix' => 'v','middleware' => ['auth'
     Route::get('cart', 'PosVendingController@cart');
     Route::get('/', 'PosVendingController@index');
     Route::get('payment', 'PosVendingController@payment');
-    Route::get('check-payment/{id}','PosVendingController@checkPayment');
-    
-
-
+    Route::get('check-payment/{id}', 'PosVendingController@checkPayment');
 });
 /**coba coba */
-Route::get('coba/{role}','CobaController@index');
+Route::get('coba/{role}', 'CobaController@index');
 
 Route::get('pengajuan', "GuestController@goPengajuan");
 Route::post('/GuestController', "GuestController@formSubmit");
 Auth::routes();
-    
+
+/** coba ajax bahan */
+Route::resource('material', "MaterialController");
+Route::get('produk', 'ProdukController@index');
+Route::get('toko', 'TokoController@index');

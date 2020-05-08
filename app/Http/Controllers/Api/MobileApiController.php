@@ -365,14 +365,13 @@ class MobileApiController extends Controller
         if ($hasher->check($password, $user->password)) {
             // login Success
 
-            
+
             $customer = Customer::where('user_id', $user->id)->first();
             if (!$customer) {
                 return self::returnMessageError("not found customer");
             } else {
                 return self::returnMessageSuccess($customer);
             }
-         
         } else {
             return response()->json([
                 'status' => 0,
@@ -1348,7 +1347,7 @@ class MobileApiController extends Controller
             }
             $hasil[] = $transaction;
         }
-        if (!$hasil) {                                                                               
+        if (!$hasil) {
             $view = view('other.failed-scan-qr-code');
             toaster_success('Hari ini, kamu belum pesan makanan di stand ini');
             return $view;
@@ -1425,67 +1424,66 @@ class MobileApiController extends Controller
             ]);
         }
     }
-    public function transactionByKodepos(Request $request){
-        $identity= $request->input('identity_number');
-        $kode= $request->input('kode_pos');
-        $customer= Customer::where('identity_number',$identity)->first();
-        $transaction= VendingMachineTransaction::where('transaction_number',$kode)->where('status_transaction','3')->get();
-        $total=0;
-        $hasil=[];
-        foreach($transaction as $tr){
-            $total+= $tr->selling_price_vending_machine;
-            $hasil[]=$tr;
+    public function transactionByKodepos(Request $request)
+    {
+        $identity = $request->input('identity_number');
+        $kode = $request->input('kode_pos');
+        $customer = Customer::where('identity_number', $identity)->first();
+        $transaction = VendingMachineTransaction::where('transaction_number', $kode)->where('status_transaction', '3')->get();
+        $total = 0;
+        $hasil = [];
+        foreach ($transaction as $tr) {
+            $total += $tr->selling_price_vending_machine;
+            $hasil[] = $tr;
         }
-        if(!$hasil)
+        if (!$hasil)
             return self::returnMessageError("transaction not found");
-        if(!$customer){
-           return self::returnMessageError("customer not found");
+        if (!$customer) {
+            return self::returnMessageError("customer not found");
         }
-        if($customer->saldo<$total){
+        if ($customer->saldo < $total) {
             return self::returnMessageError("saldo customer kurang");
         }
-        $customer->saldo-= $total;
+        $customer->saldo -= $total;
         DB::beginTransaction();
 
-        try{
+        try {
             $customer->save();
-            foreach($transaction as $tr){
-                $tr->status_transaction=1;
-                $tr->customer_id= $customer->id;
+            foreach ($transaction as $tr) {
+                $tr->status_transaction = 1;
+                $tr->customer_id = $customer->id;
                 $tr->save();
             }
             DB::commit();
-           // return redirect('v/checkout');
+            // return redirect('v/checkout');
             return response()->json([
-                'status'=>1,
-                'msg'=>'success'
+                'status' => 1,
+                'msg' => 'success'
             ]);
-        }
-        catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return self::returnMessageError("transaction failed");
-
         }
     }
     public function findTransactionUpdatedOnIP($ip)
     {
         $transaction = VendingMachineTransaction::whereDate('created_at', date('Y-m-d'))->where('status_transaction', '3')->orderBy('created_at', 'DESC')->get();
-        $hasilKode=0;
-        foreach($transaction as $tr) {
+        $hasilKode = 0;
+        foreach ($transaction as $tr) {
             $kodepos = $tr->transaction_number;
             $dataPos = explode('-', $kodepos);
             $tlgPos = $dataPos[1] . '-' . $dataPos[2] . '-' . $dataPos[3];
             if ($dataPos[5]) {
                 if ($ip == $dataPos[5]) {
-                    $hasilKode=$kodepos;
-                break;
+                    $hasilKode = $kodepos;
+                    break;
                 }
             }
         }
-        if($hasilKode){
+        if ($hasilKode) {
             return response()->json(
                 [
-                    'status'=>1,
-                    'kodepos'=> $hasilKode
+                    'status' => 1,
+                    'kodepos' => $hasilKode
                 ]
             );
             // $transaction= VendingMachineTransaction::where('transaction_number',$hasilKode)->get();
@@ -1501,29 +1499,6 @@ class MobileApiController extends Controller
         return self::returnListMessageError("transaction not found");
     }
 
-<<<<<<< HEAD
-    public function getListStand($clientID){
-        $vending= VendingMachine::where('client_id',$clientID)->where('type',2)->get();
-        return self::returnListMessageSuccess($vending);        
-    }
-
-    public static function returnListMessageSuccess($hasil){
-        $respon=[];
-        foreach($hasil as $h){
-            $h['status']=1;
-            $h['msg']='success';
-            $respon[]=$h;
-        }
-        return response()->json($respon);
-    }
-    public static function returnMessageSuccess($data){
-        $data['status']=1;
-        $data['msg']='success';
-        return response()->json($data);
-    }
-=======
-
->>>>>>> iqom-dev
     public static function returnMessageError($string)
     {
         return response()->json([
@@ -1531,13 +1506,6 @@ class MobileApiController extends Controller
             "msg" => $string
         ]);
     }
-    public static function returnListMessageError($string){
-        return response()->json([[
-            "status"=>0,
-            "msg"=>$string
-        ]]);
-    }
-
     public static function returnListMessageError($string)
     {
         return response()->json([[

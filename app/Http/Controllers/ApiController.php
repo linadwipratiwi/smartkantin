@@ -6,6 +6,7 @@ use MidtransTrait;
 use App\Midtrans\Midtrans;
 use App\Models\Client;
 use App\Models\Vendor;
+use App\Models\Toko;
 use App\Models\Customer;
 use App\Models\Inventory;
 use App\Helpers\ApiHelper;
@@ -14,10 +15,13 @@ use Illuminate\Http\Request;
 use App\Models\TransferSaldo;
 use App\Models\VendingMachine;
 use App\Helpers\ApiStandHelper;
+use App\Models\Category;
 use App\Models\DanaTransaction;
 use App\Models\GopayTransaction;
 use App\Models\VendingMachineSlot;
 use App\Models\VendingMachineTransaction;
+use App\Permissions;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -28,7 +32,7 @@ class ApiController extends Controller
         $resultCount = 100;
 
         $offset = ($page - 1) * $resultCount;
-        
+
         $client = Client::where('name', 'like', '%' . \Input::get('search') . '%')
             ->orderBy('name')
             ->skip($offset)
@@ -63,33 +67,33 @@ class ApiController extends Controller
     /** get status transaction */
     public function statusTransaction($request)
     {
-        $transaction=VendingMachineTransaction::find($request);
+        $transaction = VendingMachineTransaction::find($request);
         if (!$transaction) {
             return response()->json([
-                'status'=>0,
-                'data'=>'no transaction found'
+                'status' => 0,
+                'data' => 'no transaction found'
             ]);
         }
         return response()->json([
-            'status'=>1,
-            'data'=>$transaction->status_transaction
+            'status' => 1,
+            'data' => $transaction->status_transaction
         ]);
     }
 
     /** get status topup */
     public function statusTopup($request)
     {
-        $transaction=TransferSaldo::find($request);
+        $transaction = TransferSaldo::find($request);
         if (!$transaction) {
             return response()->json([
-                  'status'=>0,
-                  'data'=>'no transaction found'
-              ]);
+                'status' => 0,
+                'data' => 'no transaction found'
+            ]);
         }
         return response()->json([
-              'status'=>1,
-              'data'=>$transaction->payment_status
-          ]);
+            'status' => 1,
+            'data' => $transaction->payment_status
+        ]);
     }
 
     /** Transaction detail */
@@ -98,7 +102,7 @@ class ApiController extends Controller
         return VendingMachineTransaction::findOrFail($id);
     }
 
-   
+
 
     public static function returnMessageError($string)
     {
@@ -108,33 +112,33 @@ class ApiController extends Controller
         ]);
     }
 
-    public static function gopayCancel(Request $request){
-        $transaction_id=$request->input('transaction_id');
-        $gopay_id=$request->input('gopay_id');
-        
-        if ($transaction_id)
-          $gopayTr= GopayTransaction::where('refer_type_id',$transaction_id)->first();
-        else if($gopay_id)
-           $gopayTr= GopayTransaction::find($gopay_id);
-        else{
-            return response()->json([
-                'status'=>0,
-                'msg'=>'no reference id'
-            ]);
-        }
-        if(!$gopayTr){
-            return response()->json([
-                'status'=>0,
-                'msg'=>'not found transaction'
-            ]);
+    public static function gopayCancel(Request $request)
+    {
+        $transaction_id = $request->input('transaction_id');
+        $gopay_id = $request->input('gopay_id');
 
+        if ($transaction_id)
+            $gopayTr = GopayTransaction::where('refer_type_id', $transaction_id)->first();
+        else if ($gopay_id)
+            $gopayTr = GopayTransaction::find($gopay_id);
+        else {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'no reference id'
+            ]);
         }
-        $url=$gopayTr->url_cancel;
-        $respon= Midtrans::gopayChargeCancel($url);
-        $result= json_decode($respon, true);
-        if($result['status_code']=="200"){
+        if (!$gopayTr) {
+            return response()->json([
+                'status' => 0,
+                'msg' => 'not found transaction'
+            ]);
+        }
+        $url = $gopayTr->url_cancel;
+        $respon = Midtrans::gopayChargeCancel($url);
+        $result = json_decode($respon, true);
+        if ($result['status_code'] == "200") {
             //status cancelled
-            $gopayTr->gopay_transaction_status=5;
+            $gopayTr->gopay_transaction_status = 5;
             $gopayTr->save();
             \DB::commit();
         }
@@ -142,9 +146,10 @@ class ApiController extends Controller
     }
 
     /**Handler dana respon */
-    public function danaRespon(Request $request){
-        $danaTr= new DanaTransaction;
-        $danaTr->dana_status_message= response()->json($request->response);
+    public function danaRespon(Request $request)
+    {
+        $danaTr = new DanaTransaction;
+        $danaTr->dana_status_message = response()->json($request->response);
         $danaTr->save();
     }
     /** Hadler gopay respon */
@@ -154,7 +159,7 @@ class ApiController extends Controller
         if (!$gopay_transaction) {
             return null;
         }
-        $gopay_transaction->gopay_transaction_status=1;
+        $gopay_transaction->gopay_transaction_status = 1;
         $refer = $gopay_transaction->refer_type::find($gopay_transaction->refer_type_id);
         if (get_class($refer) == get_class(new VendingMachineTransaction)) {
             /** jika refer, adalah vm transaksi */
@@ -183,7 +188,7 @@ class ApiController extends Controller
             if ($request->transaction_status == 'settlement') {
                 $refer->payment_status = 1; // Lunas
                 $refer->save();
-                
+
                 // update saldo customer
                 if ($refer->toType()) {
                     $customer = $refer->toType();
@@ -241,8 +246,8 @@ class ApiController extends Controller
     /** Find slot by alias */
     public function findSlot(Request $request)
     {
-        $type = $request->type ? : 'mini';
-        $alias = $request->alias ? : 'null';
+        $type = $request->type ?: 'mini';
+        $alias = $request->alias ?: 'null';
 
         $slot = VendingMachineSlot::where('alias', $alias)->first();
         if (!$slot) {
@@ -257,7 +262,7 @@ class ApiController extends Controller
         }
 
         if ($type == 'mini') {
-            return '1:'.$slot->food_name.':'.$slot->selling_price_vending_machine;
+            return '1:' . $slot->food_name . ':' . $slot->selling_price_vending_machine;
         }
 
         return response()->json([
@@ -293,15 +298,15 @@ class ApiController extends Controller
                 'data' => "vending machine not found"
             ]);
         }
-        $slots=$vending->slots;
-        $hasil=[];
+        $slots = $vending->slots;
+        $hasil = [];
         foreach ($slots as $slot) {
-            $vendingSlot=VendingMachineSlot::find($slot->id);
+            $vendingSlot = VendingMachineSlot::find($slot->id);
             if ($vendingSlot) {
-                $food= $vendingSlot->food;
-                $slotjson= json_decode($slot, true);
-                $slotjson['food_master']=$food;
-                $hasil[]=$slotjson;
+                $food = $vendingSlot->food;
+                $slotjson = json_decode($slot, true);
+                $slotjson['food_master'] = $food;
+                $hasil[] = $slotjson;
             }
         }
         return response()->json([
@@ -340,5 +345,61 @@ class ApiController extends Controller
     public function getFlagTransactionClient($username)
     {
         return ApiStandHelper::getFlagClient($username);
+    }
+
+
+    //nyoba
+    public function getPermissions($id)
+    {
+        $data = Permissions::where('id', $id)->get();
+        return response()->json($data);
+    }
+
+    public function getMaterials($id)
+    {
+        $data = Toko::where('id', $id)->get();
+        return response()->json($data);
+    }
+
+    public function insertCategories(Request $request)
+    {
+        return ApiHelper::categories($request);
+        // $category_name = $request->input('name');
+        // $category_name = $request->input('type');
+        // $category = Category::where('id', 1)->get();
+        // if ($category) {
+        // $category = new Category;
+        // $category->name = $category_name;
+        // $category->name = $category_type;
+        // $category->save();
+
+        // return response()->json([
+        //     'status' => 1,
+        //     'msg' => 'berhasil'
+        // ]);
+        // // }
+    }
+
+    public function updateCategories(Request $request)
+    {
+        $category_name = $request->input('name');
+        $category_type = $request->input('type');
+        $category_id = $request->input('id');
+
+        //$data = Category::find($category->id);
+        $data = Category::where('id', $category_id)->first();
+        if ($data) {
+            $data->name = $category_name;
+            $data->type = $category_type;
+
+            $data->save();
+            DB::commit();
+        }
+
+
+        return response()->json([
+            'status' => 1,
+            'msg' => 'berhasil'
+        ]);
     }
 }
